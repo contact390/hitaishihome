@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>  
+
+  <header style="box-shadow: 0 4px 8px rgba(107, 24, 24, 0.1); position: sticky; top: 0; z-index: 1000;">
+    <!-- Top Navigation -->
+    <nav style="background-color: #a621db; color: white; padding: 15px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: auto; flex-wrap: nowrap; gap: 20px;">
+            <!-- Logo -->
+            <a href="index.html" style="color: white; font-size: 24px; text-decoration: none; white-space: nowrap; flex-shrink: 0;">
+                <i class="fas fa-house"></i> Hitaishi Homes
+            </a>
+    
+         <!-- Search Bar -->
+<div style="display: flex; align-items: center; flex: 1 1 auto; min-width: 200px; max-width: 500px; position: relative;">
+    <input type="search" id="searchInput" placeholder="Search property..." 
+           style="padding: 8px; border: none; border-radius: 5px 0 0 5px; width: 100%; min-width: 150px;">
+    <button id="searchButton" style="padding: 8px 12px; background: white; border: none; border-radius: 0 5px 5px 0; cursor: pointer; flex-shrink: 0;">
+        <i class="fa fa-search" style="color: rgb(243, 151, 114);"></i>
+    </button>
+    <div id="suggestions" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background: white; color: black;  z-index: -1000; max-height: 250px; overflow-y: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); box-sizing: border-box; border-radius: 0 0 5px 5px;"></div>
+</div>
+
+<script>
+// Comprehensive search index with proper URLs
+const searchIndex = [
+    // Property Types
+    { keyword: 'house', url: 'Buy.html?type=house' },
+    { keyword: 'apartment', url: 'highriseapartments.html' },
+    { keyword: 'villa', url: 'villas.html' },
+    { keyword: 'plot', url: 'lands.html' },
+    { keyword: 'commercial', url: 'commercial.html' },
+    { keyword: 'farmhouse', url: 'farmhouse.html' },
+    { keyword: 'shop', url: 'commercial.html?type=shop' },
+    { keyword: 'land', url: 'lands.html' },
+    { keyword: 'flat', url: 'Buy.html?type=flat' },
+    { keyword: 'penthouse', url: 'Buy.html?type=penthouse' },
+    { keyword: 'duplex', url: 'Buy.html?type=duplex' },
+
+    // Cities
+    { keyword: 'mumbai', url: 'Buy.html?city=mumbai' },
+    { keyword: 'delhi', url: 'Buy.html?city=delhi' },
+    { keyword: 'bangalore', url: 'Buy.html?city=bangalore' },
+    { keyword: 'chennai', url: 'Buy.html?city=chennai' },
+    { keyword: 'hyderabad', url: 'Buy.html?city=hyderabad' },
+    { keyword: 'pune', url: 'Buy.html?city=pune' },
+    { keyword: 'kolkata', url: 'Buy.html?city=kolkata' },
+
+    // Features
+    { keyword: 'furnished', url: 'Buy.html?feature=furnished' },
+    { keyword: 'ready to move', url: 'Buy.html?feature=ready' },
+    { keyword: 'luxury', url: 'villas.html' },
+
+    // Services
+    { keyword: 'buy', url: 'Buy.html' },
+    { keyword: 'sell', url: 'Sell.html' },
+    { keyword: 'rent', url: 'Rent.html' },
+    { keyword: 'loan', url: 'services.html#loan' },
+    { keyword: 'legal', url: 'services.html#legal' },
+
+    // Pages
+    { keyword: 'about', url: 'about.html' },
+    { keyword: 'contact', url: 'contact.html' },
+    { keyword: 'login', url: 'login.html' },
+    { keyword: 'register', url: 'register.html' }
+];
+
+// Search function
+function performSearch(query) {
+    query = query.toLowerCase().trim();
+    if (!query) return [];
+
+    const terms = query.split(' ');
+    const matches = searchIndex.filter(item => {
+        const itemKeywords = item.keyword.toLowerCase().split(' ');
+        return terms.some(term =>
+            itemKeywords.some(kw => kw.includes(term))
+        );
+    });
+
+    matches.sort((a, b) => {
+        const aExact = a.keyword.toLowerCase() === query;
+        const bExact = b.keyword.toLowerCase() === query;
+        return bExact - aExact || b.keyword.length - a.keyword.length;
+    });
+
+    return matches;
+}
+
+// Handle search action
+function handleSearch() {
+    const query = document.getElementById('searchInput').value;
+    const matches = performSearch(query);
+
+    if (matches.length > 0) {
+        window.location.href = matches[0].url;
+    } else {
+        window.location.href = `Buy.html?search=${encodeURIComponent(query)}`;
+    }
+}
+
+// Show autocomplete suggestions
+function showSuggestions(query) {
+    const suggestions = performSearch(query);
+    const container = document.getElementById('suggestions');
+    container.innerHTML = '';
+
+    if (suggestions.length === 0) {
+        container.style.display = 'none';
+        return;
+    }
+
+    suggestions.slice(0, 5).forEach(item => {
+        const div = document.createElement('div');
+        div.textContent = item.keyword;
+        div.style.padding = '8px 16px';
+        div.style.cursor = 'pointer';
+        div.style.borderBottom = '1px solid #eee';
+        div.style.background = 'white';
+        div.onclick = () => window.location.href = item.url;
+        div.onmouseover = () => div.style.background = '#f5f5f5';
+        div.onmouseout = () => div.style.background = 'white';
+        container.appendChild(div);
+    });
+
+    container.style.display = 'block';
+}
+
+// Event listeners
+document.getElementById('searchButton').addEventListener('click', handleSearch);
+document.getElementById('searchInput').addEventListener('input', function () {
+    showSuggestions(this.value);
+});
+document.getElementById('searchInput').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') handleSearch();
+});
+
+// Hide suggestions on click outside
+document.addEventListener('click', function (e) {
+    if (!e.target.closest('#searchInput') && !e.target.closest('#suggestions')) {
+        document.getElementById('suggestions').style.display = 'none';
+    }
+});
+
+// Prevent body scroll when input is focused (optional)
+document.getElementById('searchInput').addEventListener('focus', () => {
+    document.body.style.overflow = 'hidden';
+});
+document.getElementById('searchInput').addEventListener('blur', () => {
+    setTimeout(() => { // delay to allow click on suggestion
+        document.body.style.overflow = '';
+    }, 200);
+});
+</script>
+
+    
+            <!-- Navigation Links -->
+            <div style="display: flex; gap: 15px; align-items: center; flex-shrink: 0; white-space: nowrap;">
+                <a href="builders.html" style="color: black; text-decoration: none; font-size: 16px;">Real Estate Builders</a>
+                <a href="highriseapartments.html" style="color: black; text-decoration: none; font-size: 16px;">High Rise Apartments</a>
+                <a href="Sell.html" style="color: black; text-decoration: none; font-size: 16px;">Post Property <i class="fas fa-paper-plane"></i></a>
+            </div> 
+     
+            <div style="display: flex; gap: 15px; align-items: center; flex-shrink: 0;">
+                <a href="#" title="Facebook" style="color: white; font-size: 28px;"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" title="Twitter" style="color: white; font-size: 28px;"><i class="fab fa-twitter"></i></a>
+                <a href="#" title="Instagram" style="color: white; font-size: 28px;"><i class="fab fa-instagram"></i></a>
+                <a href="#" title="LinkedIn" style="color: white; font-size: 28px;"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" title="YouTube" style="color: white; font-size: 28px;"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </nav> 
+
+        </div>
+     
+            <!-- Navigation Links -->
+            <!-- <div style="display: flex; gap: 15px; align-items: center; flex-shrink: 0; white-space: nowrap;">
+                <a href="builders.html" style="color: black; text-decoration: none; font-size: 16px;">Real Estate Builders</a>
+                <a href="highriseapartments.html" style="color: black; text-decoration: none; font-size: 16px;">High Rise Apartments</a>
+                <a href="Sell.html" style="color: black; text-decoration: none; font-size: 16px;">Post Property <i class="fas fa-paper-plane"></i></a>
+            </div>
+    
+           
+            <div style="display: flex; gap: 15px; align-items: center; flex-shrink: 0;">
+                <a href="#" title="Facebook" style="color: white; font-size: 28px;"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" title="Twitter" style="color: white; font-size: 28px;"><i class="fab fa-twitter"></i></a>
+                <a href="#" title="Instagram" style="color: white; font-size: 28px;"><i class="fab fa-instagram"></i></a>
+                <a href="#" title="LinkedIn" style="color: white; font-size: 28px;"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" title="YouTube" style="color: white; font-size: 28px;"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </nav> -->
+
+    <!-- Bottom Navigation -->
+    <nav style="background-color: #f8f8f8; position: sticky; top: 0; z-index: 1000;">
+      <div style="max-width: 1200px; margin: auto; padding: 10px 15px;">
+        <ul style="display: flex; flex-wrap: wrap; list-style: none; padding: 0; margin: 0; justify-content: center; gap: 15px;">
+          <li style="position: relative;">
+            <a href="index.html" style="text-decoration: none; color: #000; padding: 10px; display: block;">Home</a>
+          </li>
+
+          <li style="position: relative;">
+            <a href="Buy.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Buy <i class="fas fa-angle-down"></i></a>
+            <ul style="position: absolute; background-color: #fff; list-style: none; padding: 10px 0; margin: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; min-width: 180px; top: 100%; left: 0;">
+              <li><a href="buy.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Houses</a></li>
+              <li><a href="buy.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Plots</a></li>
+              <li><a href="buy.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Flats</a></li>
+              <li><a href="buy.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Villas</a></li>
+              <li><a href="buy.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Shops</a></li>
+              <li><a href="buy.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Ready to move</a></li>
+              <li><a href="buy.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Furnished</a></li>
+              <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Commercial</a></li>
+              <li><a href="lands.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Agriculture Lands</a></li>
+              <li><a href="lands.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Layouts</a></li>
+            </ul>
+          </li>
+
+          <li style="position: relative;">
+            <a href="Sell.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Sell <i class="fas fa-angle-down"></i></a>
+            <ul style="position: absolute; background-color: #fff; list-style: none; padding: 10px 0; margin: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; min-width: 180px; top: 100%; left: 0;">
+              <li><a href="postRent.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Post Property</a></li>
+              <li><a href="Sell.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Dashboard</a></li>
+              <li><a href="Sell.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Villas</a></li>
+              <li><a href="Sell.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Flats</a></li>
+              <li><a href="Sell.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Plots</a></li>
+              <li><a href="Sell.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Furnished</a></li>
+              <li><a href="Sell.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Ready to move</a></li>
+              <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Commercial</a></li>
+              <li><a href="farmhouse.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Farm Houses</a></li>
+              <li><a href="lands.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Layouts</a></li>
+            </ul>
+          </li>
+
+          <li style="position: relative;">
+            <a href="Rent.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Rent <i class="fas fa-angle-down"></i></a>
+            <ul style="position: absolute; background-color: #fff; list-style: none; padding: 10px 0; margin: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; min-width: 180px; top: 100%; left: 0;">
+              <li><a href="Rent.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Houses</a></li>
+              <li><a href="highriseapartments.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Flats</a></li>
+              <li><a href="Rent.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Furnished</a></li>
+              <li><a href="Rent.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Villas</a></li>
+              <li><a href="farmhouse.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Farm Houses</a></li>
+              <li><a href="lands.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Layouts</a></li>
+              <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Commercial</a></li>
+            </ul>
+          </li>
+
+          <li style="position: relative;">
+            <a href="about.html" style="text-decoration: none; color: #000; padding: 10px; display: block;">About Us</a>
+          </li>
+
+            <li style="position: relative;">
+                    <a href="villas.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Villas<i class="fas fa-angle-down"></i></a>
+                    <ul style="position: absolute; background-color: #fff; list-style: none; padding: 10px 0; margin: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; min-width: 180px; top: 100%; left: 0;">
+                        <li><a href="villas.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Houses</a></li>
+                        <li><a href="villas.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Villas</a></li>
+                        <li><a href="lands.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Plots</a></li>
+                        <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Flats</a></li>
+                        <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Shop</a></li>
+                        <li><a href="find_agent.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Ready to move</a></li>
+                        <li><a href="Buy.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Furnished</a></li>
+                    </ul>
+            </li>
+
+
+            <li style="position: relative;">
+                    <a href="commercial.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Commercial<i class="fas fa-angle-down"></i></a>
+                    <ul style="position: absolute; background-color: #fff; list-style: none; padding: 10px 0; margin: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; min-width: 180px; top: 100%; left: 0;">
+                        <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Houses</a></li>
+                        <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Villas</a></li>
+                        <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Plots</a></li>
+                        <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Flats</a></li>
+                        <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Shop</a></li>
+                        <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Ready to move</a></li>
+                        <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Furnished</a></li>
+                    </ul>
+            </li>
+                
+            <li style="position: relative;">
+                    <a href="farmhouse.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Farm Houses<i class="fas fa-angle-down"></i></a>
+                    <ul style="position: absolute; background-color: #fff; list-style: none; padding: 10px 0; margin: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; min-width: 180px; top: 100%; left: 0;">
+                        <li><a href="farmhouse.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Farm Houses</a></li>
+                        <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Layouts</a></li>
+                   </ul>
+            </li>
+
+            <li style="position: relative;">
+              <a href="lands.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Agriculture Lands</a>
+            </li>
+
+            <li style="position: relative;">
+              <a href="about.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">About Us</a>
+            </li>
+
+            <li style="position: relative;">
+                <a href="contact.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Contact Us</a>
+            </li>
+
+            <li style="position: relative;">
+              <a href="login.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Login</a>
+              <ul style="position: absolute; background-color: #fff; list-style: none; padding: 10px 0; margin: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; min-width: 180px; top: 100%; left: 0;">
+                <li><a href="Login.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Login</a></li>
+                <li><a href="register.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Register</a></li>
+              </ul>
+            </li>
+
+        </ul>
+      </div>
+    </nav>
+    <script>
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      </script>
+  </header>
+
+  <section class="hero" style="background:url('https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHx8MA%3D%3D') no-repeat center center/cover;padding:5rem 2rem;color:white;text-align:center;">
+    <h1 style="font-size:3rem;margin-bottom:1rem;">Welcome to  our Hitaishi Real Estate</h1>
+    
+    <div id="propertyTypeButtons" style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+        <input type="hidden" id="type" name="type" required>
+      
+        <button type="button" class="type-btn" data-value="house"
+          style="padding: 0.5rem 1rem; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
+          House
+        </button>
+      
+        <button type="button" class="type-btn" data-value="apartment"
+          style="padding: 0.5rem 1rem; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
+          Apartment
+        </button>
+      
+        <button type="button" class="type-btn" data-value="commercial"
+          style="padding: 0.5rem 1rem; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
+          Commercial
+        </button>
+      
+        <button type="button" class="type-btn" data-value="villa"
+          style="padding: 0.5rem 1rem; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
+          Villa
+        </button>
+      
+        <button type="button" class="type-btn" data-value="flat"
+          style="padding: 0.5rem 1rem; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
+          Flat
+        </button>
+      
+        <button type="button" class="type-btn" data-value="land"
+          style="padding: 0.5rem 1rem; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
+          Land
+        </button>
+      </div>
+      
+      <script>
+        const buttons = document.querySelectorAll('.type-btn');
+        const hiddenInput = document.getElementById('type');
+      
+        buttons.forEach(button => {
+          button.addEventListener('click', () => {
+            buttons.forEach(btn => {
+              btn.style.backgroundColor = ''; // reset all
+              btn.style.color = '';
+            });
+      
+            button.style.backgroundColor = '#3b82f6';
+            button.style.color = 'white';
+      
+            hiddenInput.value = button.getAttribute('data-value');
+          });
+        });
+      </script>
+      
+      
+    <div style="margin-top: 10px;">
+      <input type="text" placeholder="enter your search.." style="flex:1;padding:0.5rem;border:1px solid #ccc;border-radius:4px;">
+      <select style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+        <option value="">Select City</option>
+        <option value="delhi">Delhi</option>
+        <option value="mumbai">Mumbai</option>
+        <option value="bangalore">Bangalore</option>
+        <option value="chennai">Chennai</option>
+        <option value="hyderabad">Hyderabad</option>
+      </select>
+      <button style="background:#f39c12;border:none;padding:0.5rem 1rem;color:white;border-radius:4px;cursor:pointer;"><i class="fa fa-search"></i></button>
+      
+    
+    </div>
+  </section>
+
+  <section class="services" style="padding:2rem;text-align:center;">
+    <h2 style="margin-bottom:2rem;">Our Services</h2>
+    <div class="service-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;">
+      <div class="service-item" style="padding:1.5rem;border-radius:10px;color:white;background:#3498db;transition:transform 0.3s ease;">
+        <i class="fa fa-home" style="font-size:2rem;margin-bottom:1rem;"></i>
+        <h3>Buy Property</h3>
+        <p>Find your dream home from our listings.</p>
+      </div>
+      <div class="service-item" style="padding:1.5rem;border-radius:10px;color:white;background:#e67e22;transition:transform 0.3s ease;">
+        <i class="fa fa-key" style="font-size:2rem;margin-bottom:1rem;"></i>
+        <h3>Rent Property</h3>
+        <p>Explore rental homes and apartments in top locations.</p>
+      </div>
+      <div class="service-item" style="padding:1.5rem;border-radius:10px;color:white;background:#27ae60;transition:transform 0.3s ease;">
+        <i class="fa fa-building" style="font-size:2rem;margin-bottom:1rem;"></i>
+        <h3>Commercial Spaces</h3>
+        <p>Get the best spaces for your business needs.</p>
+      </div>
+      <div class="service-item" style="padding:1.5rem;border-radius:10px;color:white;background:#9b59b6;transition:transform 0.3s ease;">
+        <i class="fa fa-cogs" style="font-size:2rem;margin-bottom:1rem;"></i>
+        <h3>Property Management</h3>
+        <p>Hassle-free management of your real estate assets.</p>
+      </div>
+      <div class="service-item" style="padding:1.5rem;border-radius:10px;color:white;background:#34495e;transition:transform 0.3s ease;">
+        <i class="fa fa-gavel" style="font-size:2rem;margin-bottom:1rem;"></i>
+        <h3>Legal Assistance</h3>
+        <p>Expert legal advice for safe and transparent transactions.</p>
+      </div>
+      <div class="service-item" style="padding:1.5rem;border-radius:10px;color:white;background:#1abc9c;transition:transform 0.3s ease;">
+        <i class="fa fa-paint-brush" style="font-size:2rem;margin-bottom:1rem;"></i>
+        <h3>Interior Design</h3>
+        <p>Stylish and functional interiors for your home or office.</p>
+      </div>
+      <div class="service-item" style="padding:1.5rem;border-radius:10px;color:white;background:#d35400;transition:transform 0.3s ease;">
+        <i class="fa fa-credit-card" style="font-size:2rem;margin-bottom:1rem;"></i>
+        <h3>Loan Assistance</h3>
+        <p>Get financial help and the best home loan offers.</p>
+      </div>
+    </div>
+  </section>
+  
+
+  <section class="listings" style="padding:2rem;">
+    <h2 style="text-align:center;">Latest Listings</h2>
+    <div class="listing-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;">
+      
+      <!-- Existing Listings -->
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/3bhk_apartment_realestate.png" alt="3bhk_apartment_hitaishi_realestate" style="width:100%;height:200px;object-fit:cover;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>3 BHK Apartment</h3>
+          <p>₹75 Lakhs - Mumbai</p>
+        </div>
+      </div>
+  
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/villas_realestate.png" alt="Property 2" style="width:100%;height:200px;object-fit:cover;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>Villa in Bangalore</h3>
+          <p>₹1.2 Cr - Bangalore</p>
+        </div>
+      </div>
+  
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/office_space_realestate.png" alt="office_space_hitaishi_realestate" style="width:100%;height:200px;object-fit:cover;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>Office Space</h3>
+          <p>₹60 Lakhs - Pune</p>
+        </div>
+      </div>
+  
+      <!-- New Listings -->
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/pent house with seaview_realesate.png" alt="" loading="lazy" style="height: 200px; width: auto;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>Penthouse with Sea View</h3>
+          <p>₹2.5 Cr - Goa</p>
+        </div>
+      </div>
+  
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/studio_apartment_realestate.png" alt="Property 5" style="width:100%;height:200px;object-fit:cover;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>Studio Apartment</h3>
+          <p>₹35 Lakhs - Hyderabad</p>
+        </div>
+      </div>
+  
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/Form_house_realestate.png" alt="Form house in realestate" style="width:100%;height:200px;object-fit:cover;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>Farmhouse Retreat</h3>
+          <p>₹90 Lakhs - Outskirts of Delhi</p>
+        </div>
+      </div>
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/modern_flAt_realestate.png" alt="Property 7" style="width:100%;height:200px;object-fit:cover;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>Modern Flat</h3>
+          <p>₹55 Lakhs - Chennai</p>
+        </div>
+      </div>
+  
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/Luxury_duplex_realestate.png" alt="Property 8" style="width:100%;height:200px;object-fit:cover;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>Luxury Duplex</h3>
+          <p>₹1.8 Cr - Kolkata</p>
+        </div>
+      </div>
+      
+  </section>
+  <div style="margin-left: 45%;  justify-content: center; margin-top: 1rem;">
+    <a href="#" style=" display: inline-block; padding: 0.75rem 1.5rem; background: #3b82f6; color: white; border-radius: 6px; text-decoration: none; font-weight: 500; transition: background 0.3s;">
+      View More
+    </a>
+  </div> <br><br>
+  
+
+  <footer style="background-color:#2b2d42;color:#fff;padding:60px 20px 30px;font-family:'Poppins',sans-serif;">
+    <div style="max-width: auto;">
+        <!-- Main Footer Row - Now using CSS Grid for equal height columns -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:40px;margin-bottom:40px;align-items:start;">
+            <!-- Left Side - Hitashi Homes Text -->
+            <div style="display:flex;flex-direction:column;height:100%;">
+                <h2 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:20px;color:#e63946;text-transform:uppercase;">Hitashi RealEstate</h2>
+                <p style="color:#ccc;line-height:1.6;margin-bottom:20px;flex-grow:1;">Your premier destination for all real estate needs. From residential to commercial, we have the perfect property for you. Whether you're looking for luxury villas, budget apartments, or profitable commercial investments, our expert team is here to guide you through every step of your real estate journey. Experience hassle-free transactions, verified listings, and personalized service tailored just for you.</p>
+            </div>
+  
+            <!-- Middle Section - Property Columns (50% width) -->
+            <div style="flex:2; min-width:500px; display:flex; gap:40px; justify-content:space-between;">
+                <!-- Residential Column -->
+                <div style="flex:1;">
+                    <h3 style="font-size:1.2rem;margin-bottom:20px;color:#e63946;text-transform:uppercase;">Residential</h3>
+                    <ul style="list-style-type:none;padding:0;margin:0;">
+                        <li style="margin-bottom:12px;"><a href="highriseapartments.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">HighRise Apartments</a></li>
+                        <li style="margin-bottom:12px;"><a href="villa.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Villas</a></li>
+                        <li style="margin-bottom:12px;"><a href="farmhouse.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Farm Houses</a></li>
+                        <li style="margin-bottom:12px;"><a href="builders.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">RealEstate Builders</a></li>
+                        <li style="margin-bottom:12px;"><a href="lands.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Land Development Sites</a></li>
+                        <li style="margin-bottom:12px;"><a href="Buy.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Buy</a></li>
+                        <li><a href="#" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Rent</a></li>
+                    </ul>
+                </div>
+  
+                <!-- Commercial Column -->
+                <div style="flex:1;">
+                    <h3 style="font-size:1.2rem;margin-bottom:20px;color:#e63946;text-transform:uppercase;">Commercial</h3>
+                    <ul style="list-style-type:none;padding:0;margin:0;">
+                        <li style="margin-bottom:12px;"><a href="office.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Offices</a></li>
+                        <li style="margin-bottom:12px;"><a href="retails.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Retails</a></li>
+                        <li style="margin-bottom:12px;"><a href="malls.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Malls</a></li>
+                        <li style="margin-bottom:12px;"><a href="functionhalls.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Function Halls</a></li>
+                        <li style="margin-bottom:12px;"><a href="hospitals" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Hospitals</a></li>
+                        <li style="margin-bottom:12px;"><a href="postRent.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Post for Rent</a></li>
+                        <li><a href="lands.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Agriculture Lands</a></li>
+                    </ul>
+                </div>
+  
+                <!-- Company Column -->
+                <div style="flex:1;">
+                    <h3 style="font-size:1.2rem;margin-bottom:20px;color:#e63946;text-transform:uppercase;">Company</h3>
+                    <ul style="list-style-type:none;padding:0;margin:0;">
+                        <li style="margin-bottom:12px;"><a href="index.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">HomePage</a></li>
+                        <li style="margin-bottom:12px;"><a href="about.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">About Us</a></li>
+                        <li style="margin-bottom:12px;"><a href="Login.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Login</a></li>
+                        <li style="margin-bottom:12px;"><a href="Register.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Register</a></li>
+                        <li style="margin-bottom:12px;"><a href="contact.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Contact</a></li>
+                        <li style="margin-bottom:12px;"><a href="Sell.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Postproperty</a></li>
+                        <li><a href="about.html" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+  
+            <!-- Right Side - Contact Info with Social Icons (25% width) -->
+            <div style="flex:1; min-width:250px; max-width:300px; margin-left:30%;">
+                <div style="display:flex;align-items:center;margin-bottom:20px;">
+                    <img loading="lazy" src="images/home icon.png" alt="Hitashi RealEstate Logo" style="width:50px;height:50px;margin-right:15px;">
+                    <h2 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:#e63946;">Hitashi RealEstate</h2>
+                </div>
+                <div style="margin-bottom:25px;">
+                    <p style="color:#ccc;margin-bottom:10px;"><i class="fas fa-map-marker-alt" style="color:#e63946;margin-right:8px;"></i> 985,Pragathi Nagar,<br>Kukatpally,Hyderabad,500090</p>
+                    <p style="color:#ccc;margin-bottom:10px;"><i class="fas fa-phone" style="color:#e63946;margin-right:8px;"></i> 8790170525</p>
+                    <p style="color:#ccc;"><i class="fas fa-envelope" style="color:#e63946;margin-right:8px;"></i> contact@hitashirealestate.com</p>
+                </div>
+                <!-- Social Media Icons -->
+                <h3 style="font-size:1.1rem;margin-bottom:15px;color:#e63946;">Follow Us</h3>
+                <div style="display:flex;gap:15px;justify-content:flex-start;">
+                    <a href="https://www.facebook.com/" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;background-image:url('https://cdn-icons-png.flaticon.com/512/733/733547.png');background-size:cover;background-position:center;border-radius:50%;transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'"></a>
+                    <a href="https://x.com/?lang=en-in" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;background-image:url('https://cdn-icons-png.flaticon.com/512/733/733579.png');background-size:cover;background-position:center;border-radius:50%;transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'"></a>
+                    <a href="https://www.instagram.com/accounts/login/" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;background-image:url('https://cdn-icons-png.flaticon.com/512/733/733558.png');background-size:cover;background-position:center;border-radius:50%;transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'"></a>
+                    <a href="https://www.linkedin.com/feed/" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;background-image:url('https://cdn-icons-png.flaticon.com/512/174/174857.png');background-size:cover;background-position:center;border-radius:50%;transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'"></a>
+                    <a href="https://www.youtube.com/" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;background-image:url('https://cdn-icons-png.flaticon.com/512/1384/1384060.png');background-size:cover;background-position:center;border-radius:50%;transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'"></a>
+                </div>
+            </div>
+        </div>
+  
+        <!-- Bottom Line -->
+        <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:30px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;">
+        <p style="color:#ccc;margin:0;">&copy; 2025 Hitashi RealEstate. All rights reserved.</p>
+        <div style="display:flex;gap:20px;">
+            <a href="#" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Privacy Policy</a>
+            <a href="#" style="color:#ccc;text-decoration:none;transition:color 0.3s ease;" onmouseover="this.style.color='#e63946'" onmouseout="this.style.color='#ccc'">Terms of Service</a>
+        </div>
+        </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector(".navbar ul");
+    menuToggle.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+      if (navLinks.classList.contains("active")) {
+        navLinks.style.display = "flex";
+        navLinks.style.flexDirection = "column";
+        navLinks.style.background = "#2c3e50";
+        navLinks.style.position = "absolute";
+        navLinks.style.top = "60px";
+        navLinks.style.right = "0";
+        navLinks.style.width = "200px";
+        navLinks.style.zIndex = "99";
+      } else {
+        navLinks.style.display = "none";
+      }
+    });
+    const dropdown = document.querySelector(".dropdown");
+    dropdown.addEventListener("mouseover", () => {
+      const menu = dropdown.querySelector("ul");
+      menu.style.display = "block";
+    });
+    dropdown.addEventListener("mouseout", () => {
+      const menu = dropdown.querySelector("ul");
+      menu.style.display = "none";
+    });
+  </script>
+  
+</body>
+</html>

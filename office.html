@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+
+ <div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("../navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+
+
+
+
+
+    <!-- Hero Section with Animated Background Slideshow -->
+<section id="offices-hero" style="position:relative;height:60vh;color:#fff;text-align:center;overflow:hidden;">
+    <!-- Background Images (will be animated) -->
+    <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('https://images.unsplash.com/photo-1521737711867-e3b97375f902');background-size:cover;background-position:center;animation:fade 12s infinite;opacity:1;"></div>
+    <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('https://images.unsplash.com/photo-1497366811353-6870744d04b2');background-size:cover;background-position:center;animation:fade 12s infinite 4s;opacity:0;"></div>
+    <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('background_office\ space.png');background-size:cover;background-position:center;animation:fade 12s infinite 8s;opacity:0;"></div>
+    
+    <!-- Content -->
+    <div style="position:relative;z-index:10;max-width:1200px;margin:0 auto;padding:120px 20px;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;">
+        <h1 style="font-size:3.5rem;margin-bottom:20px;font-weight:700;text-shadow:0 2px 4px rgba(0,0,0,0.3);">Premium Office Spaces for Your Business Growth</h1>
+        <p style="font-size:1.5rem;margin-bottom:40px;max-width:800px;text-shadow:0 2px 4px rgba(0,0,0,0.3);">Discover modern, flexible workspaces in prime locations with Hitiashi Real Estate's curated selection of premium offices</p>
+        <a href="#office-listings" style="background:#ff6b6b;color:#fff;padding:15px 30px;border-radius:30px;text-decoration:none;font-weight:600;font-size:1.1rem;transition:all 0.3s ease;box-shadow:0 4px 6px rgba(0,0,0,0.1);" onmouseover="this.style.backgroundColor='#ff5252';this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 8px rgba(0,0,0,0.15)'" onmouseout="this.style.backgroundColor='#ff6b6b';this.style.transform='translateY(0)';this.style.boxShadow='0 4px 6px rgba(0,0,0,0.1)'">Explore Available Spaces</a>
+    </div>
+
+    <!-- Animation Styles -->
+    <style>
+        @keyframes fade {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            30% { opacity: 1; }
+            40% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+    </style>
+</section>
+    <!-- Office Listings -->
+    <section id="office-listings" style="padding:80px 20px;">
+        <div style="max-width:1200px;margin:0 auto;"><h2 style="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Featured Office Spaces</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(350px, 1fr));gap:40px;">
+            <div class="office-card" style="border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);transition:all 0.5s ease;opacity:0;transform:translateY(20px);animation:fadeInUp 0.6s ease forwards;"><img src="images/devtown_officespace.png" alt="Downtown Executive Suite" style="width:100%;height:250px;object-fit:cover;">
+                <div style="padding:25px;background:#fff;"><h3 style="font-size:1.5rem;margin-bottom:10px;color:#333;">Downtown Executive Suite</h3><p style="color:#ff6b00;font-weight:600;margin-bottom:15px;">$3,500/month</p>
+                    <p style="color:#666;margin-bottom:20px;line-height:1.6;">1200 sqft premium office with panoramic city views and private meeting rooms.</p>
+                    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;">
+                        <span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">3 Meeting Rooms</span>
+                        <span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">10 Workstations</span>
+                        <span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">Parking</span>
+                    </div>
+                    <a href="#contact" style="background:#ff6b00;color:#fff;padding:12px 25px;border-radius:5px;text-decoration:none;font-weight:600;display:inline-block;transition:all 0.3s ease;" onmouseover="this.style.background='#e05d00';this.style.transform='translateY(-2px)';this.style.boxShadow='0 5px 10px rgba(0,0,0,0.1)'" onmouseout="this.style.background='#ff6b00';this.style.transform='translateY(0)';this.style.boxShadow='none'">Schedule Tour</a>
+                </div>
+            </div>
+            <div class="office-card" style="border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);transition:all 0.5s ease;opacity:0;transform:translateY(20px);animation:fadeInUp 0.6s ease forwards 0.2s;"><img src="images/techhub_office space.png" alt="Tech Hub Coworking Space" style="width:100%;height:250px;object-fit:cover;">
+                <div style="padding:25px;background:#fff;"><h3 style="font-size:1.5rem;margin-bottom:10px;color:#333;">Tech Hub Coworking Space</h3>
+                    <p style="color:#ff6b00;font-weight:600;margin-bottom:15px;">$800/desk/month</p><p style="color:#666;margin-bottom:20px;line-height:1.6;">Flexible memberships in a vibrant tech-focused environment with premium amenities.</p>
+                    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;"><span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">Hot Desks</span>
+                        <span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">Event Space</span><span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">Cafeteria</span>
+                    </div>
+                    <a href="#contact" style="background:#ff6b00;color:#fff;padding:12px 25px;border-radius:5px;text-decoration:none;font-weight:600;display:inline-block;transition:all 0.3s ease;" onmouseover="this.style.background='#e05d00';this.style.transform='translateY(-2px)';this.style.boxShadow='0 5px 10px rgba(0,0,0,0.1)'" onmouseout="this.style.background='#ff6b00';this.style.transform='translateY(0)';this.style.boxShadow='none'">Schedule Tour</a>
+                </div>
+            </div>
+            <div class="office-card" style="border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);transition:all 0.5s ease;opacity:0;transform:translateY(20px);animation:fadeInUp 0.6s ease forwards 0.4s;"><img src="images/corporate headquarters_office space.png" alt="Corporate Headquarters Floor" style="width:100%;height:250px;object-fit:cover;">
+                <div style="padding:25px;background:#fff;"><h3 style="font-size:1.5rem;margin-bottom:10px;color:#333;">Corporate Headquarters Floor</h3>
+                    <p style="color:#ff6b00;font-weight:600;margin-bottom:15px;">$15,000/month</p><p style="color:#666;margin-bottom:20px;line-height:1.6;">Entire 5000 sqft floor with custom build-out options for established enterprises.</p><div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;">
+                        <span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">Custom Layout</span>
+                        <span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">50 Workstations</span>
+                        <span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">Executive Lounge</span>
+                    </div>
+                    <a href="#contact" style="background:#ff6b00;color:#fff;padding:12px 25px;border-radius:5px;text-decoration:none;font-weight:600;display:inline-block;transition:all 0.3s ease;" onmouseover="this.style.background='#e05d00';this.style.transform='translateY(-2px)';this.style.boxShadow='0 5px 10px rgba(0,0,0,0.1)'" onmouseout="this.style.background='#ff6b00';this.style.transform='translateY(0)';this.style.boxShadow='none'">Schedule Tour</a>
+                </div>
+            </div>
+            <div class="office-card" style="border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);transition:all 0.5s ease;opacity:0;transform:translateY(20px);animation:fadeInUp 0.6s ease forwards 0.6s;"><img src="images/studio loft_office space.png" alt="Creative Studio Loft" style="width:100%;height:250px;object-fit:cover;">
+                <div style="padding:25px;background:#fff;"><h3 style="font-size:1.5rem;margin-bottom:10px;color:#333;">Creative Studio Loft</h3>
+                    <p style="color:#ff6b00;font-weight:600;margin-bottom:15px;">$2,200/month</p>
+                    <p style="color:#666;margin-bottom:20px;line-height:1.6;">1800 sqft open-concept loft with exposed brick and natural light, perfect for creative teams.</p>
+                    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;"><span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">Open Layout</span>
+                        <span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">15 Workstations</span>
+                        <span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">Kitchenette</span>
+                    </div>
+                    <a href="#contact" style="background:#ff6b00;color:#fff;padding:12px 25px;border-radius:5px;text-decoration:none;font-weight:600;display:inline-block;transition:all 0.3s ease;" onmouseover="this.style.background='#e05d00';this.style.transform='translateY(-2px)';this.style.boxShadow='0 5px 10px rgba(0,0,0,0.1)'" onmouseout="this.style.background='#ff6b00';this.style.transform='translateY(0)';this.style.boxShadow='none'">Schedule Tour</a>
+                </div>
+            </div>
+            <div class="office-card" style="border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);transition:all 0.5s ease;opacity:0;transform:translateY(20px);animation:fadeInUp 0.6s ease forwards 0.8s;"><img src="images/surban business_office space.png" alt="Suburban Business Center" style="width:100%;height:250px;object-fit:cover;">
+                <div style="padding:25px;background:#fff;"><h3 style="font-size:1.5rem;margin-bottom:10px;color:#333;">Suburban Business Center</h3>
+                    <p style="color:#ff6b00;font-weight:600;margin-bottom:15px;">$1,800/month</p>
+                    <p style="color:#666;margin-bottom:20px;line-height:1.6;">Professional 1000 sqft office suite in convenient suburban location with ample parking.</p>
+                    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;">
+                        <span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">2 Offices</span>
+                        <span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">Open Area</span>
+                        <span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">Free Parking</span>
+                    </div>
+                    <a href="#contact" style="background:#ff6b00;color:#fff;padding:12px 25px;border-radius:5px;text-decoration:none;font-weight:600;display:inline-block;transition:all 0.3s ease;" onmouseover="this.style.background='#e05d00';this.style.transform='translateY(-2px)';this.style.boxShadow='0 5px 10px rgba(0,0,0,0.1)'" onmouseout="this.style.background='#ff6b00';this.style.transform='translateY(0)';this.style.boxShadow='none'">Schedule Tour</a>
+                </div>
+            </div>
+            <div class="office-card" style="border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);transition:all 0.5s ease;opacity:0;transform:translateY(20px);animation:fadeInUp 0.6s ease forwards 1s;"><img src="images/water_front_officespace.png" alt="Waterfront Executive Office" style="width:100%;height:250px;object-fit:cover;">
+                <div style="padding:25px;background:#fff;"><h3 style="font-size:1.5rem;margin-bottom:10px;color:#333;">Waterfront Executive Office</h3>
+                    <p style="color:#ff6b00;font-weight:600;margin-bottom:15px;">$4,500/month</p>
+                    <p style="color:#666;margin-bottom:20px;line-height:1.6;">Luxurious 1500 sqft corner office with waterfront views and premium finishes.</p>
+                    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;">
+                        <span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">Private Balcony</span>
+                        <span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">Executive Bath</span>
+                        <span style="background:#f0f0f0;padding:5px 10px;border-radius:20px;font-size:0.8rem;">Concierge</span>
+                    </div>
+                    <a href="#contact" style="background:#ff6b00;color:#fff;padding:12px 25px;border-radius:5px;text-decoration:none;font-weight:600;display:inline-block;transition:all 0.3s ease;" onmouseover="this.style.background='#e05d00';this.style.transform='translateY(-2px)';this.style.boxShadow='0 5px 10px rgba(0,0,0,0.1)'" onmouseout="this.style.background='#ff6b00';this.style.transform='translateY(0)';this.style.boxShadow='none'">Schedule Tour</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<style>@keyframes fadeInUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}.office-card:hover{transform:translateY(-10px) !important;box-shadow:0 15px 30px rgba(0,0,0,0.15) !important;}</style>
+
+    <!-- Office Benefits -->
+    <section id="office-benefits" style="padding:80px 20px;background:#f9f9f9;">
+        <div style="max-width:1200px;margin:0 auto;">
+            <h2 style="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Why Choose Our Office Spaces?</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:30px;">
+                <div style="background:#fff;padding:30px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+                    <i class="fas fa-wifi" style="font-size:2.5rem;color:#ff6b00;margin-bottom:20px;"></i>
+                    <h3 style="font-size:1.5rem;margin-bottom:15px;color:#333;">High-Speed Connectivity</h3>
+                    <p style="color:#666;line-height:1.6;">Fiber optic internet with redundant backups for uninterrupted business operations.</p>
+                </div>
+                <div style="background:#fff;padding:30px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+                    <i class="fas fa-map-marker-alt" style="font-size:2.5rem;color:#ff6b00;margin-bottom:20px;"></i>
+                    <h3 style="font-size:1.5rem;margin-bottom:15px;color:#333;">Prime Locations</h3>
+                    <p style="color:#666;line-height:1.6;">Strategic business addresses with excellent transport links and visibility.</p>
+                </div>
+                <div style="background:#fff;padding:30px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+                    <i class="fas fa-shield-alt" style="font-size:2.5rem;color:#ff6b00;margin-bottom:20px;"></i>
+                    <h3 style="font-size:1.5rem;margin-bottom:15px;color:#333;">24/7 Security</h3>
+                    <p style="color:#666;line-height:1.6;">Advanced surveillance systems and trained security personnel for complete safety.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Office Amenities -->
+    <section id="office-amenities" style="padding:80px 20px;background:#f9f9f9;">
+        <div style="max-width:1200px;margin:0 auto;">
+            <h2 style="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Premium Office Amenities</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:30px;">
+                <div style="text-align:center;">
+                    <i class="fas fa-coffee" style="font-size:2rem;color:#ff6b00;margin-bottom:15px;"></i>
+                    <h3 style="font-size:1.25rem;margin-bottom:10px;color:#333;">Gourmet Pantry</h3>
+                    <p style="color:#666;">Premium coffee, teas, and snacks available throughout the day</p>
+                </div>
+                <div style="text-align:center;">
+                    <i class="fas fa-concierge-bell" style="font-size:2rem;color:#ff6b00;margin-bottom:15px;"></i>
+                    <h3 style="font-size:1.25rem;margin-bottom:10px;color:#333;">Concierge Service</h3>
+                    <p style="color:#666;">Dedicated support for mail, packages, and business services</p>
+                </div>
+                <div style="text-align:center;">
+                    <i class="fas fa-dumbbell" style="font-size:2rem;color:#ff6b00;margin-bottom:15px;"></i>
+                    <h3 style="font-size:1.25rem;margin-bottom:10px;color:#333;">Fitness Center</h3>
+                    <p style="color:#666;">On-site gym with showers and locker facilities</p>
+                </div>
+                <div style="text-align:center;">
+                    <i class="fas fa-car" style="font-size:2rem;color:#ff6b00;margin-bottom:15px;"></i>
+                    <h3 style="font-size:1.25rem;margin-bottom:10px;color:#333;">Secure Parking</h3>
+                    <p style="color:#666;">Covered parking with EV charging stations available</p>
+                </div>
+            </div>
+        </div>
+    </section>
+ <!-- Virtual Tour -->
+ <section id="virtual-tour" style="padding:80px 20px;background:linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url('https://example.com/office-building.jpg');background-size:cover;background-position:center;color:#fff;text-align:center;">
+    <div style="max-width:800px;margin:0 auto;">
+        <h2 style="font-size:2.5rem;margin-bottom:20px;">Experience Our Spaces Virtually</h2>
+        <p style="font-size:1.25rem;margin-bottom:30px;line-height:1.6;">Can't visit in person? Take our interactive 3D virtual tour to explore our office spaces from anywhere.</p>
+        <a href="#" style="background:#fff;color:#333;padding:15px 30px;border-radius:5px;text-decoration:none;font-weight:600;display:inline-block;transition:all 0.3s ease;" onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='#fff'">Launch Virtual Tour</a>
+    </div>
+</section>
+
+    <section id="location-map" style="padding:80px 20px;background:#f8f9fa;">
+        <div style="max-width:1200px;margin:0 auto;">
+            <h2 style="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Our Office Locations</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;">
+                <div>
+                    <h3 style="font-size:1.8rem;margin-bottom:20px;color:#333;">Strategic Locations Across the City</h3>
+                    <p style="color:#666;margin-bottom:30px;line-height:1.6;">Our office spaces are strategically located in prime business districts with excellent transportation links, dining options, and amenities nearby. Whether you need to be in the financial heart of the city or the growing tech corridor, we have options to suit your business needs.</p>
+                    <ul style="list-style-type:none;padding:0;">
+                        <li style="margin-bottom:15px;display:flex;align-items:flex-start;">
+                            <i class="fas fa-check-circle" style="color:#ff6b6b;margin-right:10px;font-size:1.2rem;margin-top:3px;"></i>
+                            <span style="color:#666;">Central Business District locations</span>
+                        </li>
+                        <li style="margin-bottom:15px;display:flex;align-items:flex-start;">
+                            <i class="fas fa-check-circle" style="color:#ff6b6b;margin-right:10px;font-size:1.2rem;margin-top:3px;"></i>
+                            <span style="color:#666;">Easy access to public transportation</span>
+                        </li>
+                        <li style="margin-bottom:15px;display:flex;align-items:flex-start;">
+                            <i class="fas fa-check-circle" style="color:#ff6b6b;margin-right:10px;font-size:1.2rem;margin-top:3px;"></i>
+                            <span style="color:#666;">Walking distance to restaurants and services</span>
+                        </li>
+                        <li style="display:flex;align-items:flex-start;">
+                            <i class="fas fa-check-circle" style="color:#ff6b6b;margin-right:10px;font-size:1.2rem;margin-top:3px;"></i>
+                            <span style="color:#666;">Prestigious addresses for your business</span>
+                        </li>
+                    </ul>
+                </div>
+                <div style="height:400px;background:#ddd;border-radius:10px;overflow:hidden;position:relative;">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215373510833!2d-73.98784492423938!3d40.75798597138947!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes%20Square!5e0!3m2!1sen!2sus!4v1620000000000!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Flexible Plans -->
+    <section id="flexible-plans" style="padding:80px 20px;">
+        <div style="max-width:1200px;margin:0 auto;">
+            <h2 style="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Flexible Office Solutions</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:30px;">
+                <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+                    <div style="background:#ff6b00;color:#fff;padding:20px;text-align:center;">
+                        <h3 style="font-size:1.5rem;margin-bottom:5px;">Coworking Membership</h3>
+                        <p style="font-size:1.1rem;">Ideal for startups and freelancers</p>
+                    </div>
+                    <div style="padding:30px;">
+                        <p style="color:#666;line-height:1.6;margin-bottom:25px;">Access to shared workspaces with all amenities included and flexible terms.</p>
+                        <ul style="color:#666;line-height:1.8;list-style-type:none;padding-left:0;margin-bottom:30px;">
+                            <li style="margin-bottom:10px;"><i class="fas fa-check" style="color:#ff6b00;margin-right:10px;"></i> Hot desks or dedicated desks</li>
+                            <li style="margin-bottom:10px;"><i class="fas fa-check" style="color:#ff6b00;margin-right:10px;"></i> Meeting room credits</li>
+                            <li style="margin-bottom:10px;"><i class="fas fa-check" style="color:#ff6b00;margin-right:10px;"></i> Month-to-month flexibility</li>
+                            <li style="margin-bottom:10px;"><i class="fas fa-check" style="color:#ff6b00;margin-right:10px;"></i> Community events</li>
+                        </ul>
+                        <p style="font-size:1.5rem;color:#333;font-weight:600;text-align:center;">From $300/month</p>
+                    </div>
+                </div>
+                <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);position:relative;">
+                    <div style="position:absolute;top:10px;right:10px;background:#333;color:#fff;padding:5px 10px;border-radius:20px;font-size:0.8rem;font-weight:600;">MOST POPULAR</div>
+                    <div style="background:#333;color:#fff;padding:20px;text-align:center;">
+                        <h3 style="font-size:1.5rem;margin-bottom:5px;">Private Offices</h3>
+                        <p style="font-size:1.1rem;">Perfect for growing teams</p>
+                    </div>
+                    <div style="padding:30px;">
+                        <p style="color:#666;line-height:1.6;margin-bottom:25px;">Fully furnished private offices with customizable layouts and premium features.</p>
+                        <ul style="color:#666;line-height:1.8;list-style-type:none;padding-left:0;margin-bottom:30px;">
+                            <li style="margin-bottom:10px;"><i class="fas fa-check" style="color:#333;margin-right:10px;"></i> Lockable private spaces</li>
+                            <li style="margin-bottom:10px;"><i class="fas fa-check" style="color:#333;margin-right:10px;"></i> 2-50 person capacities</li>
+                            <li style="margin-bottom:10px;"><i class="fas fa-check" style="color:#333;margin-right:10px;"></i> Flexible lease terms</li>
+                            <li style="margin-bottom:10px;"><i class="fas fa-check" style="color:#333;margin-right:10px;"></i> Branding opportunities</li>
+                        </ul>
+                        <p style="font-size:1.5rem;color:#333;font-weight:600;text-align:center;">From $1,200/month</p>
+                    </div>
+                </div>
+                <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+                    <div style="background:#ff6b00;color:#fff;padding:20px;text-align:center;">
+                        <h3 style="font-size:1.5rem;margin-bottom:5px;">Custom Buildouts</h3>
+                        <p style="font-size:1.1rem;">Tailored for established companies</p>
+                    </div>
+                    <div style="padding:30px;">
+                        <p style="color:#666;line-height:1.6;margin-bottom:25px;">Completely customized office spaces designed to your exact specifications.</p>
+                        <ul style="color:#666;line-height:1.8;list-style-type:none;padding-left:0;margin-bottom:30px;">
+                            <li style="margin-bottom:10px;"><i class="fas fa-check" style="color:#ff6b00;margin-right:10px;"></i> Entire floors available</li>
+                            <li style="margin-bottom:10px;"><i class="fas fa-check" style="color:#ff6b00;margin-right:10px;"></i> Architectural services</li>
+                            <li style="margin-bottom:10px;"><i class="fas fa-check" style="color:#ff6b00;margin-right:10px;"></i> Long-term lease options</li>
+                            <li style="margin-bottom:10px;"><i class="fas fa-check" style="color:#ff6b00;margin-right:10px;"></i> Premium buildout materials</li>
+                        </ul>
+                        <p style="font-size:1.5rem;color:#333;font-weight:600;text-align:center;">Custom Pricing</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Comparison Table -->
+    <section id="comparison" style="padding:80px 20px;background:#f9f9f9;">
+        <div style="max-width:1200px;margin:0 auto;">
+            <h2 style="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Office Space Comparison</h2>
+            <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;background:#fff;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+                    <thead>
+                        <tr style="background:#333;color:#fff;">
+                            <th style="padding:15px;text-align:left;width:25%;">Feature</th>
+                            <th style="padding:15px;text-align:center;">Coworking</th>
+                            <th style="padding:15px;text-align:center;">Private Office</th>
+                            <th style="padding:15px;text-align:center;">Custom Space</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom:1px solid #eee;">
+                            <td style="padding:15px;font-weight:600;">Minimum Commitment</td>
+                            <td style="padding:15px;text-align:center;">1 month</td>
+                            <td style="padding:15px;text-align:center;">3 months</td>
+                            <td style="padding:15px;text-align:center;">1 year</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #eee;">
+                            <td style="padding:15px;font-weight:600;">Space Size</td>
+                            <td style="padding:15px;text-align:center;">1 desk</td>
+                            <td style="padding:15px;text-align:center;">100-2500 sqft</td>
+                            <td style="padding:15px;text-align:center;">2500+ sqft</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #eee;">
+                            <td style="padding:15px;font-weight:600;">Custom Branding</td>
+                            <td style="padding:15px;text-align:center;"><i class="fas fa-times" style="color:#ff6b00;"></i></td>
+                            <td style="padding:15px;text-align:center;">Limited</td>
+                            <td style="padding:15px;text-align:center;"><i class="fas fa-check" style="color:#ff6b00;"></i></td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #eee;">
+                            <td style="padding:15px;font-weight:600;">Meeting Room Access</td>
+                            <td style="padding:15px;text-align:center;">Credits</td>
+                            <td style="padding:15px;text-align:center;">Included</td>
+                            <td style="padding:15px;text-align:center;">Custom</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:15px;font-weight:600;">IT Infrastructure</td>
+                            <td style="padding:15px;text-align:center;">Shared</td>
+                            <td style="padding:15px;text-align:center;">Dedicated</td>
+                            <td style="padding:15px;text-align:center;">Custom</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <!-- Sustainability -->
+   <section id="sustainability" style="padding:80px 20px;background:#fff;">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;">
+        <!-- Image Column (replacing black space) -->
+        <div style="height:100%;border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <img src="images/sustainable workspace_office space.png" alt="Sustainable office building" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        
+        <!-- Content Column -->
+        <div>
+            <h2 style="font-size:2.5rem;margin-bottom:20px;color:#333;">Sustainable Workspaces</h2>
+            <p style="color:#666;line-height:1.6;margin-bottom:30px;">Hitiashi is committed to environmentally responsible office spaces that support both productivity and planetary health.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));gap:20px;">
+                <div style="background:#f9f9f9;padding:20px;border-radius:8px;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+                    <i class="fas fa-leaf" style="font-size:2rem;color:#ff6b00;margin-bottom:10px;"></i>
+                    <p style="color:#666;font-size:0.9rem;margin:0;">LEED Certified</p>
+                </div>
+                <div style="background:#f9f9f9;padding:20px;border-radius:8px;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+                    <i class="fas fa-solar-panel" style="font-size:2rem;color:#ff6b00;margin-bottom:10px;"></i>
+                    <p style="color:#666;font-size:0.9rem;margin:0;">Solar Power</p>
+                </div>
+                <div style="background:#f9f9f9;padding:20px;border-radius:8px;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+                    <i class="fas fa-recycle" style="font-size:2rem;color:#ff6b00;margin-bottom:10px;"></i>
+                    <p style="color:#666;font-size:0.9rem;margin:0;">Waste Reduction</p>
+                </div>
+                <div style="background:#f9f9f9;padding:20px;border-radius:8px;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+                    <i class="fas fa-tint" style="font-size:2rem;color:#ff6b00;margin-bottom:10px;"></i>
+                    <p style="color:#666;font-size:0.9rem;margin:0;">Water Conservation</p>
+                </div>
+                <!-- New Card 1 -->
+                <div style="background:#f9f9f9;padding:20px;border-radius:8px;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+                    <i class="fas fa-bicycle" style="font-size:2rem;color:#ff6b00;margin-bottom:10px;"></i>
+                    <p style="color:#666;font-size:0.9rem;margin:0;">Bike Facilities</p>
+                </div>
+                <!-- New Card 2 -->
+                <div style="background:#f9f9f9;padding:20px;border-radius:8px;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+                    <i class="fas fa-wind" style="font-size:2rem;color:#ff6b00;margin-bottom:10px;"></i>
+                    <p style="color:#666;font-size:0.9rem;margin:0;">Natural Ventilation</p>
+                </div>
+            </div>
+        </div>
+    </div>
+   </section>
+    <!-- FAQ -->
+    <section id="faq" style="padding:80px 20px;background:#f9f9f9;">
+        <div style="max-width:800px;margin:0 auto;">
+            <h2 style="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Frequently Asked Questions</h2>
+            <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+                <div style="padding:20px 30px;border-bottom:1px solid #eee;cursor:pointer;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block'">
+                    <h3 style="font-size:1.25rem;color:#333;display:flex;justify-content:space-between;align-items:center;">What's included in the office rental? <i class="fas fa-chevron-down" style="color:#ff6b00;"></i></h3>
+                </div>
+                <div style="padding:0 30px 20px;display:none;">
+                    <p style="color:#666;line-height:1.6;">All Hitiashi office rentals include high-speed internet, utilities, cleaning services, access to shared amenities (like pantries and lounges), and basic maintenance. Private offices also include furniture and meeting room access. See specific listings for complete details.</p>
+                </div>
+                <div style="padding:20px 30px;border-bottom:1px solid #eee;cursor:pointer;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block'">
+                    <h3 style="font-size:1.25rem;color:#333;display:flex;justify-content:space-between;align-items:center;">Can I customize my office space? <i class="fas fa-chevron-down" style="color:#ff6b00;"></i></h3>
+                </div>
+                <div style="padding:0 30px 20px;display:none;">
+                    <p style="color:#666;line-height:1.6;">Private offices allow limited customization like artwork and branding elements. Custom buildouts offer complete design flexibility including wall configurations, flooring, lighting, and branded environments. Our design team will work with you to create your ideal workspace.</p>
+                </div>
+                <div style="padding:20px 30px;border-bottom:1px solid #eee;cursor:pointer;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block'">
+                    <h3 style="font-size:1.25rem;color:#333;display:flex;justify-content:space-between;align-items:center;">What are the lease terms? <i class="fas fa-chevron-down" style="color:#ff6b00;"></i></h3>
+                </div>
+                <div style="padding:0 30px 20px;display:none;">
+                    <p style="color:#666;line-height:1.6;">We offer flexible terms to match your needs: coworking spaces are month-to-month, private offices have 3-month minimums with discounts for longer commitments, and custom spaces typically require 1-3 year leases depending on buildout requirements.</p>
+                </div>
+                <div style="padding:20px 30px;cursor:pointer;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block'">
+                    <h3 style="font-size:1.25rem;color:#333;display:flex;justify-content:space-between;align-items:center;">How does parking work? <i class="fas fa-chevron-down" style="color:#ff6b00;"></i></h3>
+                </div>
+                <div style="padding:0 30px 20px;display:none;">
+                    <p style="color:#666;line-height:1.6;">All locations offer parking options. Coworking members can purchase daily parking passes or monthly permits. Private offices include 1-2 dedicated spots depending on size, with additional spots available. Custom spaces include negotiated parking allocations. EV charging is available at all locations.</p>
+                </div>
+            </div>
+        </div>
+    </section>   
+    <!-- Team Spaces -->
+    <section id="team-spaces" style="padding:80px 20px;">
+        <div style="max-width:1200px;margin:0 auto;">
+            <h2 style="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Designed for Team Success</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:30px;">
+                <div style="text-align:center;">
+                    <div style="height:200px;background:#eee;border-radius:10px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-users" style="font-size:3rem;color:#ff6b00;"></i>
+                    </div>
+                    <h3 style="font-size:1.5rem;margin-bottom:15px;color:#333;">Collaboration Areas</h3>
+                    <p style="color:#666;">Open lounges and breakout spaces to spark creativity and teamwork</p>
+                </div>
+                <div style="text-align:center;">
+                    <div style="height:200px;background:#eee;border-radius:10px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-project-diagram" style="font-size:3rem;color:#ff6b00;"></i>
+                    </div>
+                    <h3 style="font-size:1.5rem;margin-bottom:15px;color:#333;">Tech-Enabled</h3>
+                    <p style="color:#666;">Smart conference rooms with video conferencing and presentation tech</p>
+                </div>
+                <div style="text-align:center;">
+                    <div style="height:200px;background:#eee;border-radius:10px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-lightbulb" style="font-size:3rem;color:#ff6b00;"></i>
+                    </div>
+                    <h3 style="font-size:1.5rem;margin-bottom:15px;color:#333;">Creative Zones</h3>
+                    <p style="color:#666;">Whiteboard walls and ideation spaces for brainstorming sessions</p>
+                </div>
+                <div style="text-align:center;">
+                    <div style="height:200px;background:#eee;border-radius:10px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-phone-alt" style="font-size:3rem;color:#ff6b00;"></i>
+                    </div>
+                    <h3 style="font-size:1.5rem;margin-bottom:15px;color:#333;">Phone Booths</h3>
+                    <p style="color:#666;">Soundproof pods for private calls and focused work</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Neighborhood Guide -->
+    <section id="neighborhood" style="padding:80px 20px;background:#f9f9f9;">
+        <div style="max-width:1200px;margin:0 auto;">
+            <h2 style="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Explore the Neighborhood</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:30px;">
+                <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+                    <img src="images/dining_officespace.png" alt="Local Dining" style="width:100%;height:180px;object-fit:cover;">
+                    <div style="padding:20px;">
+                        <h3 style="font-size:1.25rem;margin-bottom:10px;color:#333;">Dining Options</h3>
+                        <p style="color:#666;margin-bottom:15px;line-height:1.6;">From quick cafés to executive lunch spots, find perfect options for any business need.</p>
+                        <a href="#" style="color:#ff6b00;font-weight:600;text-decoration:none;">View Restaurant Guide →</a>
+                    </div>
+                </div>
+                <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+                    <img src="images/transportation_office space.png" alt="Transportation" style="width:100%;height:180px;object-fit:cover;">
+                    <div style="padding:20px;">
+                        <h3 style="font-size:1.25rem;margin-bottom:10px;color:#333;">Transportation</h3>
+                        <p style="color:#666;margin-bottom:15px;line-height:1.6;">Subway, bus, and parking information to help clients and employees arrive easily.</p>
+                        <a href="#" style="color:#ff6b00;font-weight:600;text-decoration:none;">View Transit Map →</a>
+                    </div>
+                </div>
+                <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+                    <img src="images/business services_office space.png" alt="Local Services" style="width:100%;height:180px;object-fit:cover;">
+                    <div style="padding:20px;">
+                        <h3 style="font-size:1.25rem;margin-bottom:10px;color:#333;">Business Services</h3>
+                        <p style="color:#666;margin-bottom:15px;line-height:1.6;">Print shops, shipping centers, and other essential services within walking distance.</p>
+                        <a href="#" style="color:#ff6b00;font-weight:600;text-decoration:none;">View Services Directory →</a>
+                    </div>
+                </div>
+                <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+                    <img src="images/entertainment_office space.png" alt="Entertainment" style="width:100%;height:180px;object-fit:cover;">
+                    <div style="padding:20px;">
+                        <h3 style="font-size:1.25rem;margin-bottom:10px;color:#333;">Entertainment</h3>
+                        <p style="color:#666;margin-bottom:15px;line-height:1.6;">After-work spots for team building or entertaining clients in the area.</p>
+                        <a href="#" style="color:#ff6b00;font-weight:600;text-decoration:none;">View Nightlife Guide →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- Blog Preview -->
+<section id="blog-preview" style="padding:80px 20px;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 style="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Office Space Insights</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:30px;">
+            <div style="border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+                <img src="images/office_designtrends.png" alt="Office Design Trends" style="width:100%;height:200px;object-fit:cover;">
+                <div style="padding:25px;background:#fff;">
+                    <h3 style="font-size:1.5rem;margin-bottom:15px;color:#333;">2023 Office Design Trends for Productivity</h3>
+                    <p style="color:#666;margin-bottom:20px;line-height:1.6;">Explore the latest in workspace design that boosts employee satisfaction and output.</p>
+                    <a href="#" style="color:#ff6b00;font-weight:600;text-decoration:none;">Read More →</a>
+                </div>
+            </div>
+            <div style="border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+                <img src="images/hybrid work_office space.png" alt="Hybrid Work" style="width:100%;height:200px;object-fit:cover;">
+                <div style="padding:25px;background:#fff;">
+                    <h3 style="font-size:1.5rem;margin-bottom:15px;color:#333;">Optimizing Your Space for Hybrid Work</h3>
+                    <p style="color:#666;margin-bottom:20px;line-height:1.6;">Strategies to create flexible offices that support both in-person and remote teams.</p>
+                    <a href="#" style="color:#ff6b00;font-weight:600;text-decoration:none;">Read More →</a>
+                </div>
+            </div>
+            <div style="border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+                <img src="images/talent_acqisation-office space.png" alt="Location Strategy" style="width:100%;height:200px;object-fit:cover;">
+                <div style="padding:25px;background:#fff;">
+                    <h3 style="font-size:1.5rem;margin-bottom:15px;color:#333;">How Office Location Impacts Talent Acquisition</h3>
+                    <p style="color:#666;margin-bottom:20px;line-height:1.6;">Why your business address matters more than ever in today's competitive job market.</p>
+                    <a href="#" style="color:#ff6b00;font-weight:600;text-decoration:none;">Read More →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Testimonials -->
+<section id="testimonials" style="padding:80px 20px;background:#f9f9f9;overflow:hidden;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 style="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">What Our Clients Say</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:30px;position:relative;">
+            <!-- Testimonial 1 -->
+            <div class="testimonial-card" style="background:#fff;padding:30px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.1);opacity:0;transform:translateY(30px);animation:fadeInUp 0.8s ease forwards 0.3s;">
+                <div style="display:flex;align-items:center;margin-bottom:20px;">
+                    <img src="images/sarah johnson_office space.png" alt="Sarah Johnson" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-right:15px;">
+                    <div>
+                        <h3 style="font-size:1.25rem;margin-bottom:5px;color:#333;">Sarah Johnson</h3>
+                        <p style="color:#666;font-size:0.9rem;">CEO, TechSolutions</p>
+                    </div>
+                </div>
+                <p style="color:#666;line-height:1.6;font-style:italic;">"Moving our headquarters to a Hitiashi office space transformed our company culture. The premium amenities and central location have been game-changers for recruitment and client meetings."</p>
+                <div style="color:#ffcc00;margin-top:15px;">
+                    ★★★★★
+                </div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="testimonial-card" style="background:#fff;padding:30px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.1);opacity:0;transform:translateY(30px);animation:fadeInUp 0.8s ease forwards 0.6s;">
+                <div style="display:flex;align-items:center;margin-bottom:20px;">
+                    <img src="images/michel_chen_office space.png" alt="Michael Chen" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-right:15px;">
+                    <div>
+                        <h3 style="font-size:1.25rem;margin-bottom:5px;color:#333;">Michael Chen</h3>
+                        <p style="color:#666;font-size:0.9rem;">Founder, GreenStart</p>
+                    </div>
+                </div>
+                <p style="color:#666;line-height:1.6;font-style:italic;">"The flexible lease terms allowed us to scale up as we grew, without the usual commercial real estate headaches. The Hitiashi team truly understands modern business needs."</p>
+                <div style="color:#ffcc00;margin-top:15px;">
+                    ★★★★★
+                </div>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="testimonial-card" style="background:#fff;padding:30px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.1);opacity:0;transform:translateY(30px);animation:fadeInUp 0.8s ease forwards 0.9s;">
+                <div style="display:flex;align-items:center;margin-bottom:20px;">
+                    <img src="images/dravid_office space.png" alt="David Rodriguez" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-right:15px;">
+                    <div>
+                        <h3 style="font-size:1.25rem;margin-bottom:5px;color:#333;">David Rodriguez</h3>
+                        <p style="color:#666;font-size:0.9rem;">Director, Global Consulting</p>
+                    </div>
+                </div>
+                <p style="color:#666;line-height:1.6;font-style:italic;">"Our clients are consistently impressed when they visit our Hitiashi office. The professional atmosphere and attention to detail make a strong first impression."</p>
+                <div style="color:#ffcc00;margin-top:15px;">
+                    ★★★★☆
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes rotateCards {
+        0%, 100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        33% {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        66% {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+    }
+    
+    .testimonial-card {
+        transition: all 0.5s ease;
+    }
+    
+    .testimonial-card:hover {
+        transform: translateY(-5px) !important;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+    }
+</style>
+
+<script>
+    // Continuous rotation animation
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.testimonial-card');
+        let currentIndex = 0;
+        
+        function rotateTestimonials() {
+            // Reset all cards
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.animation = 'none';
+            });
+            
+            // Animate the next card
+            cards[currentIndex].style.animation = 'fadeInUp 0.8s ease forwards';
+            
+            // Update index for next iteration
+            currentIndex = (currentIndex + 1) % cards.length;
+            
+            // Repeat every 5 seconds
+            setTimeout(rotateTestimonials, 5000);
+        }
+        
+        // Start the rotation after initial animations complete
+        setTimeout(rotateTestimonials, 3000);
+    });
+</script>
+    <!-- Contact CTA -->
+    <section id="contact" style="padding:80px 20px;background:linear-gradient(135deg, #ff6b00 0%, #ff8f00 100%);color:#fff;text-align:center;">
+        <div style="max-width:800px;margin:0 auto;">
+            <h2 style="font-size:2.5rem;margin-bottom:20px;">Ready to Find Your Perfect Office?</h2>
+            <p style="font-size:1.25rem;margin-bottom:30px;line-height:1.6;">Our space experts will help you identify the ideal workspace solution for your business needs and budget.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:20px;margin-bottom:30px;">
+                <a href="tel:+18005551234" style="background:#fff;color:#ff6b00;padding:15px 25px;border-radius:5px;text-decoration:none;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px;"><i class="fas fa-phone"></i> (800) 555-1234</a>
+                <a href="mailto:offices@hitiashi.com" style="background:#fff;color:#ff6b00;padding:15px 25px;border-radius:5px;text-decoration:none;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px;"><i class="fas fa-envelope"></i> offices@hitiashi.com</a>
+            </div>
+            <p style="font-size:1.1rem;">Or visit our leasing center at 123 Business District, Suite 100</p>
+        </div>
+    </section>
+
+
+
+
+
+
+  <div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+
+
+
+
+
+
+</body>
+</html>

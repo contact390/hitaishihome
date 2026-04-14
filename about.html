@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+<div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("../navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+
+
+<!-- 1. Hero About Section with Animated Background -->
+<section style="position:relative;height:60vh;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#fff;padding:0 20px;">
+    <!-- Background Slideshow -->
+    <div style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;">
+        <div style="position:absolute;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url('about\ _realestate.png') center/cover;animation:slideFade 24s infinite;"></div>
+        <div style="position:absolute;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url('about_realestate2.png') center/cover;animation:slideFade 24s infinite 6s;"></div>
+        <div style="position:absolute;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url('about_realestate3.png') center/cover;animation:slideFade 24s infinite 12s;"></div>
+        <div style="position:absolute;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url('about_realestate4.png') center/cover;animation:slideFade 24s infinite 18s;"></div>
+    </div>
+    
+    <!-- Content -->
+    <h1 style="font-size:2.5rem;margin:0;text-shadow:2px 2px 5px rgba(0,0,0,0.5);opacity:0;animation:fadeIn 1.5s ease-out 0.5s forwards;">About<span style="color:#e74c3c;"> Hitiashi Real Estate</span></h1>
+    <p style="font-size:1.2rem;max-width:800px;margin:20px 0 30px;text-shadow:1px 1px 3px rgba(0,0,0,0.5);opacity:0;animation:fadeIn 1.5s ease-out 1s forwards;">Your trusted partner for premium properties and exceptional service since 2005</p>
+    <a href="#mission" style="background:#e74c3c;color:#fff;padding:12px 30px;border-radius:50px;text-decoration:none;font-weight:600;transition:all 0.3s;opacity:0;animation:fadeIn 1.5s ease-out 1.5s forwards;" onmouseover="this.style.background='#fff';this.style.color='#e74c3c'" onmouseout="this.style.background='#e74c3c';this.style.color='#fff'">Explore Our Journey</a>
+
+    <!-- Animation Styles -->
+    <style>
+        @keyframes slideFade {
+            0% { opacity:0; }
+            10% { opacity:1; }
+            25% { opacity:1; }
+            35% { opacity:0; }
+            100% { opacity:0; }
+        }
+        @keyframes fadeIn {
+            from { opacity:0; transform:translateY(20px); }
+            to { opacity:1; transform:translateY(0); }
+        }
+    </style>
+</section>
+
+<!-- 2. Company Overview -->
+<section id="overview" style="padding:80px 20px;background:#fff;">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:60px;align-items:center;">
+        <div>
+            <h2 class="section-title">About Hitaishi</span></h2>
+            <p style="font-size:1.1rem;margin-bottom:20px;color:#555;">Founded in 2005 by Mr. Rajesh Hitiashi, our company started as a small brokerage firm with just three employees. Today, we've grown into one of the most respected real estate brands in the region.</p>
+            <p style="font-size:1.1rem;margin-bottom:20px;color:#555;">>What began as a passion for connecting people with their dream homes has evolved into a full-service real estate powerhouse serving thousands of satisfied clients.</p>
+            <div style="display:flex;gap:20px;margin-top:30px;">
+                <div style="text-align:center;">
+                    <div style="font-size:2.5rem;font-weight:700;color:#e67e22;">20+</div>
+                    <div style="color:#7f8c8d;">Years Experience</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:2.5rem;font-weight:700;color:#e67e22;">200+</div>
+                    <div style="color:#7f8c8d;">Projects Completed</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:2.5rem;font-weight:700;color:#e67e22;">12</div>
+                    <div style="color:#7f8c8d;">States Presence</div>
+                </div>
+            </div>
+        </div>
+        <div style="position:relative;">
+            <img src="images/about ceo_realestate.png" alt="Hitaishi Founder" style="width:100%;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.1);">
+            <div style="position:absolute;bottom:-20px;right:-20px;background:#e67e22;color:#fff;padding:15px 25px;border-radius:5px;">
+                <div style="font-weight:600;">Mr. Rajesh Verma</div>
+                <div style="font-size:0.9rem;">Founder & CEO</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. Mission & Vision -->
+<section id="mission" style="padding:80px 20px;background:#f8f9fa;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title">Our Purpose</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;">
+            <div style="background:#fff;padding:40px 30px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.05);text-align:center;">
+                <div style="width:80px;height:80px;background:#e67e22;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;">
+                    <img src="images/mission_realestate.png" alt="Mission" style="width:40px;filter:brightness(0) invert(1);">
+                </div>
+                <h3 style="margin:0 0 15px;color:#2c3e50;">Our Mission</h3>
+                <p style="color:#555;">To create sustainable farm communities that harmonize luxury living with agricultural productivity, preserving India's rural heritage while embracing modern ecological practices.</p>
+            </div>
+            <div style="background:#fff;padding:40px 30px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.05);text-align:center;">
+                <div style="width:80px;height:80px;background:#e67e22;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;">
+                    <img src="images/vision_realestate.png" alt="Vision" style="width:40px;filter:brightness(0) invert(1);">
+                </div>
+                <h3 style="margin:0 0 15px;color:#2c3e50;">Our Vision</h3>
+                <p style="color:#555;">To be India's most trusted farm property developer, transforming the concept of rural living through innovative design, sustainable practices, and community-focused development.</p>
+            </div>
+            <div style="background:#fff;padding:40px 30px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.05);text-align:center;">
+                <div style="width:80px;height:80px;background:#e67e22;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;">
+                    <img src="images/values_realestate.png" alt="Values" style="width:40px;filter:brightness(0) invert(1);">
+                </div>
+                <h3 style="margin:0 0 15px;color:#2c3e50;">Our Values</h3>
+                <p style="color:#555;">Sustainability, Integrity, Innovation, Community, and Excellence guide every project we undertake and every relationship we build with our clients.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Mission, Vision & Values - Enhanced with Additional Cards -->
+<section id="mission-vision" style="padding: 20px 0; background: #f8f9fa;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        
+        <!-- Mission Section -->
+<section id="our-mission" style="padding:40px 20px;margin-bottom:40px;">
+    <div style="max-width:800px;margin:0 auto;text-align:center;">
+        <h2 class="section-title">Our Mission</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;text-align:left;">
+            <div style="background:#f9f9f9;padding:20px;border-radius:8px;border-left:4px solid #e67e22;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="color:#e67e22;margin-top:0;font-size:1.2rem;">Sustainable Development</h3>
+                <p style="margin-bottom:0;color:#555;">Create eco-friendly farm communities that balance modern living with environmental preservation through renewable energy, water conservation, and organic farming.</p>
+            </div>
+            <div style="background:#f9f9f9;padding:20px;border-radius:8px;border-left:4px solid #e67e22;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="color:#e67e22;margin-top:0;font-size:1.2rem;">Rural Empowerment</h3>
+                <p style="margin-bottom:0;color:#555;">Revitalize rural economies by creating employment opportunities and preserving traditional farming knowledge while introducing modern agricultural techniques.</p>
+            </div>
+            <div style="background:#f9f9f9;padding:20px;border-radius:8px;border-left:4px solid #e67e22;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="color:#e67e22;margin-top:0;font-size:1.2rem;">Luxury Meets Nature</h3>
+                <p style="margin-bottom:0;color:#555;">Redefine countryside living by blending premium amenities with natural landscapes, offering serene retreats without compromising on comfort.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Vision Section -->
+<section id="our-vision" style="padding:40px 20px;margin-bottom:40px;background:#fff;">
+    <div style="max-width:800px;margin:0 auto;text-align:center;">
+        <h2 style="font-size:2rem;margin-bottom:20px;color:#2c3e50;">Our Vision</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;">
+            <div style="background:#f8f9fa;padding:20px;border-radius:8px;border-top:4px solid #3498db;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="color:#3498db;margin-top:0;font-size:1.2rem;">Industry Leadership</h3>
+                <p style="margin-bottom:0;color:#555;">Become India's most innovative farm property developer, setting benchmarks in sustainable rural development and agro-tourism.</p>
+            </div>
+            <div style="background:#f8f9fa;padding:20px;border-radius:8px;border-top:4px solid #3498db;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="color:#3498db;margin-top:0;font-size:1.2rem;">National Impact</h3>
+                <p style="margin-bottom:0;color:#555;">Transform 50,000 acres of land into thriving farm communities across India by 2035, creating a movement back to sustainable rural living.</p>
+            </div>
+            <div style="background:#f8f9fa;padding:20px;border-radius:8px;border-top:4px solid #3498db;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="color:#3498db;margin-top:0;font-size:1.2rem;">Global Recognition</h3>
+                <p style="margin-bottom:0;color:#555;">Establish India as a global model for integrating agriculture with residential development through our pioneering projects.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+        <!-- Core Values -->
+<section style="padding:60px 20px;max-width:1200px;margin:0 auto;">
+    <h2 class="section-title">Our Core Values</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;">
+        <div style="background:#fff;border:1px solid #eee;padding:25px;border-radius:8px;flex:1;min-width:200px;text-align:center;">
+            <h3 style="color:#3498db;font-size:1.3rem;">Integrity</h3>
+            <p>Honest, transparent dealings in every transaction</p>
+        </div>
+        <div style="background:#fff;border:1px solid #eee;padding:25px;border-radius:8px;flex:1;min-width:200px;text-align:center;">
+            <h3 style="color:#3498db;font-size:1.3rem;">Excellence</h3>
+            <p>Uncompromising quality in all we do</p>
+        </div>
+        <div style="background:#fff;border:1px solid #eee;padding:25px;border-radius:8px;flex:1;min-width:200px;text-align:center;">
+            <h3 style="color:#3498db;font-size:1.3rem;">Innovation</h3>
+            <p>Pioneering new real estate solutions</p>
+        </div>
+        <div style="background:#fff;border:1px solid #eee;padding:25px;border-radius:8px;flex:1;min-width:200px;text-align:center;">
+            <h3 style="color:#3498db;font-size:1.3rem;">Community</h3>
+            <p>Building better neighborhoods together</p>
+        </div>
+    </div>
+</section>
+
+    </div>
+</section>
+<!-- 4. Company Timeline -->
+<section style="padding:80px 20px;background:#f8f9fa;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title">Hitiashi Real Estate Timeline</h2>
+        <!-- <p style="text-align:center;max-width:800px;margin:0 auto 50px;font-size:1.1rem;">Discover our remarkable journey from a local real estate agency to becoming one of India's most trusted property partners since 2005.</p> -->
+        
+        <div style="position:relative;">
+            <!-- Timeline line -->
+            <div style="position:absolute;left:50%;top:0;bottom:0;width:4px;background:#e74c3c;transform:translateX(-50%);z-index:1;"></div>
+            
+            <!-- Timeline items -->
+            <div style="display:flex;margin-bottom:50px;position:relative;z-index:2;">
+                <div style="width:50%;padding-right:60px;text-align:right;">
+                    <h3 style="margin:0 0 10px;color:#e74c3c;font-size:1.5rem;">2005</h3>
+                    <p style="background:#fff;padding:20px;border-radius:10px;margin:0;box-shadow:0 5px 15px rgba(0,0,0,0.05);border-left:4px solid #e74c3c;">
+                        <strong>Foundation:</strong> Established in Mumbai with our first office in Nariman Point, specializing in luxury residential properties.
+                    </p>
+                </div>
+                <div style="width:50%;"></div>
+                <div style="position:absolute;left:50%;top:20px;width:20px;height:20px;background:#e74c3c;border:4px solid #fff;border-radius:50%;transform:translateX(-50%);"></div>
+            </div>
+            <div style="display:flex;margin-bottom:50px;position:relative;z-index:2;">
+                <div style="width:50%;"></div>
+                <div style="width:50%;padding-left:60px;">
+                    <h3 style="margin:0 0 10px;color:#e74c3c;font-size:1.5rem;">2010</h3>
+                    <p style="background:#fff;padding:20px;border-radius:10px;margin:0;box-shadow:0 5px 15px rgba(0,0,0,0.05);border-right:4px solid #e74c3c;">
+                        <strong>Expansion:</strong> Launched commercial real estate division and expanded to 5 major Indian cities including Delhi and Bangalore.
+                    </p>
+                </div>
+                <div style="position:absolute;left:50%;top:20px;width:20px;height:20px;background:#e74c3c;border:4px solid #fff;border-radius:50%;transform:translateX(-50%);"></div>
+            </div>
+            
+            <div style="display:flex;margin-bottom:50px;position:relative;z-index:2;">
+                <div style="width:50%;padding-right:60px;text-align:right;">
+                    <h3 style="margin:0 0 10px;color:#e74c3c;font-size:1.5rem;">2015</h3>
+                    <p style="background:#fff;padding:20px;border-radius:10px;margin:0;box-shadow:0 5px 15px rgba(0,0,0,0.05);border-left:4px solid #e74c3c;">
+                        <strong>Innovation:</strong> Introduced virtual property tours and became early adopters of digital real estate technology in India.
+                    </p>
+                </div>
+                <div style="width:50%;"></div>
+                <div style="position:absolute;left:50%;top:20px;width:20px;height:20px;background:#e74c3c;border:4px solid #fff;border-radius:50%;transform:translateX(-50%);"></div>
+            </div>
+            
+            <div style="display:flex;margin-bottom:50px;position:relative;z-index:2;">
+                <div style="width:50%;"></div>
+                <div style="width:50%;padding-left:60px;">
+                    <h3 style="margin:0 0 10px;color:#e74c3c;font-size:1.5rem;">2018</h3>
+                    <p style="background:#fff;padding:20px;border-radius:10px;margin:0;box-shadow:0 5px 15px rgba(0,0,0,0.05);border-right:4px solid #e74c3c;">
+                        <strong>Recognition:</strong> Awarded "Best Real Estate Brand" by Property Awards India for exceptional customer service.
+                    </p>
+                </div>
+                <div style="position:absolute;left:50%;top:20px;width:20px;height:20px;background:#e74c3c;border:4px solid #fff;border-radius:50%;transform:translateX(-50%);"></div>
+            </div>
+            
+            <div style="display:flex;position:relative;z-index:2;">
+                <div style="width:50%;padding-right:60px;text-align:right;">
+                    <h3 style="margin:0 0 10px;color:#e74c3c;font-size:1.5rem;">2023</h3>
+                    <p style="background:#fff;padding:20px;border-radius:10px;margin:0;box-shadow:0 5px 15px rgba(0,0,0,0.05);border-left:4px solid #e74c3c;">
+                        <strong>Leadership:</strong> Now serving 15+ cities with ₹2,500+ crore in annual transactions and 150+ expert agents.
+                    </p>
+                </div>
+                <div style="width:50%;"></div>
+                <div style="position:absolute;left:50%;top:20px;width:20px;height:20px;background:#e74c3c;border:4px solid #fff;border-radius:50%;transform:translateX(-50%);"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Team Section -->
+<section style="background:#f8f9fa;padding:60px 20px;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title">Meet Our Leadership Team</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:30px;justify-content:center;">
+            <div style="background:#fff;padding:20px;border-radius:8px;box-shadow:0 5px 15px rgba(0,0,0,0.05);width:250px;text-align:center;">
+                <img src="images/about ceo_realestate.png" alt="Rajesh Hitiashi, Founder & CEO" style="width:150px;height:150px;border-radius:50%;object-fit:cover;margin-bottom:15px;">
+                <h3 style="color:#2c3e50;font-size:1.3rem;">Rajesh Hitiashi</h3>
+                <p style="color:#e74c3c;font-weight:bold;">Founder & CEO</p>
+                <p>25+ years real estate experience</p>
+            </div>
+            <div style="background:#fff;padding:20px;border-radius:8px;box-shadow:0 5px 15px rgba(0,0,0,0.05);width:250px;text-align:center;">
+                <img src="images/priya sharma_realestate.png" alt="Priya Sharma, CFO" style="width:150px;height:150px;border-radius:50%;object-fit:cover;margin-bottom:15px;">
+                <h3 style="color:#2c3e50;font-size:1.3rem;">Priya Sharma</h3>
+                <p style="color:#e74c3c;font-weight:bold;">Chief Financial Officer</p>
+                <p>Financial strategy expert</p>
+            </div>
+            <div style="background:#fff;padding:20px;border-radius:8px;box-shadow:0 5px 15px rgba(0,0,0,0.05);width:250px;text-align:center;">
+                <img src="images/amit patel_realestate.png" alt="Amit Patel, COO" style="width:150px;height:150px;border-radius:50%;object-fit:cover;margin-bottom:15px;">
+                <h3 style="color:#2c3e50;font-size:1.3rem;">Amit Patel</h3>
+                <p style="color:#e74c3c;font-weight:bold;">Chief Operations Officer</p>
+                <p>Operational efficiency specialist</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- 6. Hitiashi Green Real Estate Initiatives -->
+<section style="padding:80px 20px;background:#f8f9fa;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h1 class="section-title">Hitiashi's Sustainable Real Estate Vision</h1>
+        <!-- <p style="text-align:center;max-width:800px;margin:0 auto 50px;font-size:1.1rem;color:#555;">Discover how Hitiashi Real Estate integrates eco-friendly practices across our residential and commercial projects in Mumbai, Delhi, and Bangalore since 2005.</p> -->
+        
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+            <!-- Card 1 -->
+            <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.05);transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='none'">
+                <div style="height:180px;overflow:hidden;">
+                    <img src="images/Hitiashi LEED Gold Certified Office_realestate.png" alt="Hitiashi LEED Gold Certified Office Tower in Mumbai" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+                <div style="padding:25px;">
+                    <h2 style="margin:0 0 15px;color:#2c3e50;font-size:1.3rem;">LEED Platinum Developments</h2>
+                    <p style="color:#555;margin:0;">All Hitiashi commercial properties meet strict LEED Platinum standards, achieving 45% better energy efficiency than conventional buildings.</p>
+                    <p style="color:#e74c3c;font-weight:bold;margin:15px 0 0;">Featured Project: Hitiashi Business Park</p>
+                </div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.05);transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='none'">
+                <div style="height:180px;overflow:hidden;">
+                    <img src="images/Hitiashi Solar_powered_realestate.png" alt="" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+                <div style="padding:25px;">
+                    <h2 style="margin:0 0 15px;color:#2c3e50;font-size:1.3rem;">Renewable Energy Solutions</h2>
+                    <p style="color:#555;margin:0;">Our residential towers feature integrated solar panels that provide 65% of common area electricity needs, reducing carbon footprint.</p>
+                    <p style="color:#e74c3c;font-weight:bold;margin:15px 0 0;">Featured Project: Hitiashi Green Heights</p>
+                </div>
+            </div>
+            
+            <!-- Card 3 -->
+            <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.05);transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='none'">
+                <div style="height:180px;overflow:hidden;">
+                    <img src="images/smart water_realestate.png" alt="H in Delhi" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+                <div style="padding:25px;">
+                    <h2 style="margin:0 0 15px;color:#2c3e50;font-size:1.3rem;">Water Conservation</h2>
+                    <p style="color:#555;margin:0;">Advanced rainwater harvesting and greywater recycling systems reduce water consumption by 55% across Hitiashi properties.</p>
+                    <p style="color:#e74c3c;font-weight:bold;margin:15px 0 0;">Featured Project: Hitiashi Riverfront</p>
+                </div>
+            </div>
+            
+            <!-- Card 4 -->
+            <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.05);transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='none'">
+                <div style="height:180px;overflow:hidden;">
+                    <img src="images/sustainable_realestate.png" alt="Hitiashi Sustainable Construction Materials" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+                <div style="padding:25px;">
+                    <h2 style="margin:0 0 15px;color:#2c3e50;font-size:1.3rem;">Sustainable Materials</h2>
+                    <p style="color:#555;margin:0;">We use recycled steel, fly ash bricks, and low-VOC paints in 95% of Hitiashi construction projects for healthier living.</p>
+                    <p style="color:#e74c3c;font-weight:bold;margin:15px 0 0;">Featured Project: Hitiashi EcoVillas</p>
+                </div>
+            </div>
+            
+            <!-- Card 5 -->
+            <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.05);transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='none'">
+                <div style="height:180px;overflow:hidden;">
+                    <img src="images/smart_home _realestate.jpg" alt="Hitiashi Energy Efficient Smart Home Technology" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+                <div style="padding:25px;">
+                    <h2 style="margin:0 0 15px;color:#2c3e50;font-size:1.3rem;">Smart Home Technology</h2>
+                    <p style="color:#555;margin:0;">Hitiashi's IoT-enabled homes automatically optimize energy use, reducing costs by 35% for our residents.</p>
+                    <p style="color:#e74c3c;font-weight:bold;margin:15px 0 0;">Featured Project: Hitiashi TechResidence</p>
+                </div>
+            </div>
+            
+            <!-- Card 6 -->
+            <div style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.05);transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='none'">
+                <div style="height:180px;overflow:hidden;">
+                    <img src="images/urban green spaces_realestate.jpg" alt="Hitiashi Urban Green Spaces and Parks" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+                <div style="padding:25px;">
+                    <h2 style="margin:0 0 15px;color:#2c3e50;font-size:1.3rem;">Urban Green Spaces</h2>
+                    <p style="color:#555;margin:0;">30% of every Hitiashi development is dedicated to parks, vertical gardens, and urban forests that improve air quality.</p>
+                    <p style="color:#e74c3c;font-weight:bold;margin:15px 0 0;">Featured Project: Hitiashi Oxygen</p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align:center;margin-top:50px;">
+            <a href="/sustainability-initiatives" title="Hitiashi Real Estate Sustainability Programs" style="display:inline-block;background:#e74c3c;color:#fff;padding:15px 30px;border-radius:50px;text-decoration:none;font-weight:bold;font-size:1.1rem;transition:all 0.3s ease;border:2px solid #e74c3c;" onmouseover="this.style.background='transparent';this.style.color='#e74c3c'" onmouseout="this.style.background='#e74c3c';this.style.color='#fff'">View Our Complete Green Building Portfolio</a>
+        </div>
+    </div>
+</section>
+
+<!-- 7. Hitiashi Real Estate Awards & Recognition -->
+<section style="padding:80px 20px;background:#fff;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title">Hitiashi's Industry Recognition</h2>
+        <!-- <p style="text-align:center;max-width:800px;margin:0 auto 50px;font-size:1.1rem;color:#555;">Recognized as one of India's most awarded real estate developers, Hitiashi has earned prestigious accolades for excellence in sustainable development and innovative design.</p> -->
+        
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:40px;align-items:start;">
+            <!-- Award 1 -->
+            <div id="award1" style="background:#f8f9fa;border-radius:10px;padding:30px;text-align:center;transition:all 0.5s ease;opacity:0;transform:translateY(30px);box-shadow:0 5px 15px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 10px 20px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 5px 15px rgba(0,0,0,0.05)'">
+                <div style="height:100px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+                    <img src="images/platinum_award_reaiestate.jpg" alt="Hitiashi Real Estate - LEED Platinum Developer Award 2023" style="max-height:100%;max-width:100%;object-fit:contain;">
+                </div>
+                <h3 style="color:#e74c3c;margin:0 0 10px;font-size:1.2rem;">LEED Platinum Developer 2023</h3>
+                <p style="color:#555;margin:0;font-size:0.95rem;">Awarded by Indian Green Building Council for our sustainable commercial projects in Mumbai and Bangalore.</p>
+            </div>
+            
+            <!-- Award 2 -->
+            <div id="award2" style="background:#f8f9fa;border-radius:10px;padding:30px;text-align:center;transition:all 0.5s ease;opacity:0;transform:translateY(30px);box-shadow:0 5px 15px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 10px 20px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 5px 15px rgba(0,0,0,0.05)'">
+                <div style="height:100px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+                    <img src="images/luxury award_realestate.jpg" alt="Hitiashi Real Estate - Best Luxury Developer Award 2022" style="max-height:100%;max-width:100%;object-fit:contain;">
+                </div>
+                <h3 style="color:#e74c3c;margin:0 0 10px;font-size:1.2rem;">Best Luxury Developer 2022</h3>
+                <p style="color:#555;margin:0;font-size:0.95rem;">Recognized by Property Awards India for Hitiashi Grandeur, our premium residential project in Delhi.</p>
+            </div>
+            
+            <!-- Award 3 -->
+            <div id="award3" style="background:#f8f9fa;border-radius:10px;padding:30px;text-align:center;transition:all 0.5s ease;opacity:0;transform:translateY(30px);box-shadow:0 5px 15px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 10px 20px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 5px 15px rgba(0,0,0,0.05)'">
+                <div style="height:100px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+                    <img src="images/innovative_realestate.jpg" alt="Hitiashi Real Estate - Most Innovative Project Award 2021" style="max-height:100%;max-width:100%;object-fit:contain;">
+                </div>
+                <h3 style="color:#e74c3c;margin:0 0 10px;font-size:1.2rem;">Most Innovative Project 2021</h3>
+                <p style="color:#555;margin:0;font-size:0.95rem;">Honored for Hitiashi SmartCity, our IoT-enabled township development in Hyderabad.</p>
+            </div>
+            
+            <!-- Award 4 -->
+            <div id="award4" style="background:#f8f9fa;border-radius:10px;padding:30px;text-align:center;transition:all 0.5s ease;opacity:0;transform:translateY(30px);box-shadow:0 5px 15px rgba(0,0,0,0.05);" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 10px 20px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 5px 15px rgba(0,0,0,0.05)'">
+                <div style="height:100px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+                    <img src="images/award2_realestate.jpg" alt="Hitiashi Real Estate - Best CSR Initiative Award 2020" style="max-height:100%;max-width:100%;object-fit:contain;">
+                </div>
+                <h3 style="color:#e74c3c;margin:0 0 10px;font-size:1.2rem;">Best CSR Initiative 2020</h3>
+                <p style="color:#555;margin:0;font-size:0.95rem;">Awarded for our affordable housing program benefiting 500+ families in rural Maharashtra.</p>
+            </div>
+        </div>
+        
+        <div id="view-all-btn" style="text-align:center;margin-top:50px;opacity:0;transition:opacity 0.5s ease 1.5s;">
+            <a href="/awards" title="View All Hitiashi Real Estate Awards" style="display:inline-block;background:#e74c3c;color:#fff;padding:12px 30px;border-radius:50px;text-decoration:none;font-weight:bold;font-size:1rem;transition:all 0.3s ease;border:2px solid #e74c3c;" onmouseover="this.style.background='transparent';this.style.color='#e74c3c'" onmouseout="this.style.background='#e74c3c';this.style.color='#fff'">View All Awards & Achievements</a>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to check if element is in viewport
+    function isInViewport(element) {
+        const rect = element.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    }
+
+    // Function to animate elements
+    function animateElements() {
+        const awards = [
+            document.getElementById('award1'),
+            document.getElementById('award2'),
+            document.getElementById('award3'),
+            document.getElementById('award4')
+        ];
+        
+        const btn = document.getElementById('view-all-btn');
+        
+        if (isInViewport(awards[0])) {
+            // Animate awards one by one
+            awards.forEach((award, index) => {
+                setTimeout(() => {
+                    award.style.opacity = '1';
+                    award.style.transform = 'translateY(0)';
+                }, index * 300);
+            });
+            
+            // Animate button after all awards
+            setTimeout(() => {
+                btn.style.opacity = '1';
+            }, 1500);
+        }
+    }
+
+    // Initial check
+    animateElements();
+
+    // Check on scroll
+    window.addEventListener('scroll', animateElements);
+});
+</script>
+<!-- 8. Hitiashi Client Testimonials -->
+<section style="padding:80px 20px;background:#f8f9fa;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title">Why Clients Choose Hitiashi</h2>
+        <!-- <p style="text-align:center;max-width:800px;margin:0 auto 50px;font-size:1.1rem;color:#555;">Hear from our satisfied clients about their experiences with Hitiashi Real Estate's premium properties and exceptional service.</p> -->
+        
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+            <div style="background:#fff;padding:30px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.05);position:relative;">
+                <div style="color:#e74c3c;font-size:1.5rem;margin-bottom:15px;">★★★★★</div>
+                <p style="font-style:italic;margin-bottom:25px;position:relative;padding-left:20px;">
+                    <span style="position:absolute;left:0;color:#e74c3c;font-size:2rem;line-height:1;">"</span>
+                    "Hitiashi helped us find our perfect luxury apartment in Mumbai. Their market knowledge and negotiation skills saved us ₹50 lakhs on our purchase."
+                </p>
+                <div style="display:flex;align-items:center;">
+                    <img src="images/rahulkapoor_realestate.jpg" alt="Rahul Kapoor - Hitiashi Real Estate Client" style="width:60px;height:60px;border-radius:50%;margin-right:15px;object-fit:cover;border:2px solid #e74c3c;">
+                    <div>
+                        <p style="font-weight:600;margin:0;color:#2c3e50;">Rahul Kapoor</p>
+                        <p style="margin:0;color:#7f8c8d;font-size:0.9rem;">Luxury Apartment Buyer, Mumbai</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background:#fff;padding:30px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.05);position:relative;">
+                <div style="color:#e74c3c;font-size:1.5rem;margin-bottom:15px;">★★★★★</div>
+                <p style="font-style:italic;margin-bottom:25px;position:relative;padding-left:20px;">
+                    <span style="position:absolute;left:0;color:#e74c3c;font-size:2rem;line-height:1;">"</span>
+                    "As NRIs, we needed a trustworthy partner for our Bangalore investment. Hitiashi's end-to-end service made the entire process seamless from overseas."
+                </p>
+                <div style="display:flex;align-items:center;">
+                    <img src="images/neha_realestate.jpg" alt="Neha & Sameer Patel - Hitiashi NRI Clients" style="width:60px;height:60px;border-radius:50%;margin-right:15px;object-fit:cover;border:2px solid #e74c3c;">
+                    <div>
+                        <p style="font-weight:600;margin:0;color:#2c3e50;">Neha & Sameer Patel</p>
+                        <p style="margin:0;color:#7f8c8d;font-size:0.9rem;">NRI Investors, Bangalore</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background:#fff;padding:30px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.05);position:relative;">
+                <div style="color:#e74c3c;font-size:1.5rem;margin-bottom:15px;">★★★★★</div>
+                <p style="font-style:italic;margin-bottom:25px;position:relative;padding-left:20px;">
+                    <span style="position:absolute;left:0;color:#e74c3c;font-size:2rem;line-height:1;">"</span>
+                    "The commercial space Hitiashi found for our startup has perfect connectivity and amenities. Their understanding of business needs is unparalleled."
+                </p>
+                <div style="display:flex;align-items:center;">
+                    <img src="images/arav_realestate.jpg" alt="Aarav Mehta - Hitiashi Commercial Client" style="width:60px;height:60px;border-radius:50%;margin-right:15px;object-fit:cover;border:2px solid #e74c3c;">
+                    <div>
+                        <p style="font-weight:600;margin:0;color:#2c3e50;">Aarav Mehta</p>
+                        <p style="margin:0;color:#7f8c8d;font-size:0.9rem;">Tech Startup Founder, Delhi</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- 9. Hitiashi Project Portfolio -->
+<section style="padding:80px 20px;background:#fff;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title">Hitiashi Signature Projects</h2>
+        <!-- <p style="text-align:center;max-width:800px;margin:0 auto 50px;font-size:1.1rem;color:#555;">Explore our landmark developments across India's premier locations.</p> -->
+        
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:25px;">
+            <a href="/projects/hitiashi-grandeur" style="position:relative;height:300px;border-radius:10px;overflow:hidden;display:block;text-decoration:none;">
+                <img src="images/grandeur_realestate.jpg" alt="Hitiashi Grandeur Luxury Apartments Mumbai" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.8));padding:20px;color:#fff;">
+                    <h3 style="margin:0;font-size:1.4rem;">Hitiashi Grandeur</h3>
+                    <p style="margin:5px 0 0;font-size:0.9rem;">Luxury Apartments | Mumbai</p>
+                    <p style="margin:5px 0 0;color:#e74c3c;font-weight:600;">View Project →</p>
+                </div>
+            </a>
+            
+            <a href="/projects/hitiashi-techpark" style="position:relative;height:300px;border-radius:10px;overflow:hidden;display:block;text-decoration:none;">
+                <img src="images/techpark_realestate.jpg" alt="Hitiashi TechPark Commercial Complex Bangalore" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.8));padding:20px;color:#fff;">
+                    <h3 style="margin:0;font-size:1.4rem;">Hitiashi TechPark</h3>
+                    <p style="margin:5px 0 0;font-size:0.9rem;">Commercial Complex | Bangalore</p>
+                    <p style="margin:5px 0 0;color:#e74c3c;font-weight:600;">View Project →</p>
+                </div>
+            </a>
+            
+            <a href="/projects/hitiashi-riverfront" style="position:relative;height:300px;border-radius:10px;overflow:hidden;display:block;text-decoration:none;">
+                <img src="images/rivefront_realestate.jpg" alt="Hitiashi Riverfront Premium Villas Delhi" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.8));padding:20px;color:#fff;">
+                    <h3 style="margin:0;font-size:1.4rem;">Hitiashi Riverfront</h3>
+                    <p style="margin:5px 0 0;font-size:0.9rem;">Premium Villas | Delhi NCR</p>
+                    <p style="margin:5px 0 0;color:#e74c3c;font-weight:600;">View Project →</p>
+                </div>
+            </a>
+            
+            <a href="/projects/hitiashi-gardens" style="position:relative;height:300px;border-radius:10px;overflow:hidden;display:block;text-decoration:none;">
+                <img src="images/gardems_realestate.jpg" alt="Hitiashi Gardens Sustainable Township Hyderabad" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.8));padding:20px;color:#fff;">
+                    <h3 style="margin:0;font-size:1.4rem;">Hitiashi Gardens</h3>
+                    <p style="margin:5px 0 0;font-size:0.9rem;">Sustainable Township | Hyderabad</p>
+                    <p style="margin:5px 0 0;color:#e74c3c;font-weight:600;">View Project →</p>
+                </div>
+            </a>
+        </div>
+        
+        <div style="text-align:center;margin-top:50px;">
+            <a href="/projects" title="View All Hitiashi Real Estate Projects" style="display:inline-block;background:#e74c3c;color:#fff;padding:12px 30px;border-radius:50px;text-decoration:none;font-weight:bold;font-size:1rem;transition:all 0.3s ease;border:2px solid #e74c3c;" onmouseover="this.style.background='transparent';this.style.color='#e74c3c'" onmouseout="this.style.background='#e74c3c';this.style.color='#fff'">Explore All Projects</a>
+        </div>
+    </div>
+</section>
+
+<!-- 10. Hitiashi CTA Section -->
+<section style="padding:100px 20px;background:linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url('https://example.com/hitiashi-cta-bg.jpg');background-size:cover;background-position:center;color:#fff;text-align:center;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title" style="color:#eee">Experience the Hitiashi Difference</h2>
+        <!-- <p style="font-size:1.2rem;max-width:700px;margin:0 auto 40px;">Join 10,000+ satisfied clients who trust Hitiashi for their real estate needs across India since 2005.</p> -->
+        <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
+            <a href="/properties" title="Browse Hitiashi Property Listings" style="background:#e74c3c;color:#fff;padding:15px 40px;border-radius:50px;text-decoration:none;font-weight:600;transition:all 0.3s ease;" onmouseover="this.style.background='#fff';this.style.color='#e74c3c'" onmouseout="this.style.background='#e74c3c';this.style.color='#fff'">View Properties</a>
+            <a href="/contact" title="Contact Hitiashi Real Estate" style="background:transparent;color:#fff;padding:15px 40px;border-radius:50px;border:2px solid #fff;text-decoration:none;font-weight:600;transition:all 0.3s ease;" onmouseover="this.style.background='#fff';this.style.color='#2c3e50'" onmouseout="this.style.background='transparent';this.style.color='#fff'">Schedule Consultation</a>
+        </div>
+        <div style="margin-top:40px;display:flex;justify-content:center;gap:30px;flex-wrap:wrap;">
+            <div style="text-align:center;">
+                <p style="font-size:2.5rem;margin:0;color:#e74c3c;font-weight:700;">15+</p>
+                <p style="margin:5px 0 0;">Cities</p>
+            </div>
+            <div style="text-align:center;">
+                <p style="font-size:2.5rem;margin:0;color:#e74c3c;font-weight:700;">250+</p>
+                <p style="margin:5px 0 0;">Projects</p>
+            </div>
+            <div style="text-align:center;">
+                <p style="font-size:2.5rem;margin:0;color:#e74c3c;font-weight:700;">10K+</p>
+                <p style="margin:5px 0 0;">Happy Clients</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+<!-- Footer Section -->
+<div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+
+</body>
+</html>

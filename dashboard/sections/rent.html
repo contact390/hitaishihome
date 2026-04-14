@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rent Properties</title>
+</head>
+
+<body style="font-family:Arial;background:#f3f4f6;margin:0;padding:20px;">
+
+  <h2 style="text-align:center;margin-bottom:25px;font-size:26px;color:#111;">Rent Properties</h2>
+
+  <div id="props" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;padding:10px;"></div>
+
+<script>
+async function loadNewProperties() {
+  const container = document.getElementById("props");
+  container.innerHTML = "Loading...";
+  try {
+    const res = await fetch("http://localhost:5001/api/newproperties");
+    const data = await res.json();
+    if (!data.success) { container.innerHTML = "Failed to load properties"; return; }
+
+    const rentProps = (data.properties || []).filter(p => {
+      const t = (p.type || p.propertyType || '').toString().toLowerCase();
+      return t.includes('rent');
+    });
+
+    if (!rentProps.length) { container.innerHTML = '<div style="font-size:16px;color:#666;">No rent properties found.</div>'; return; }
+    container.innerHTML = '';
+
+    rentProps.forEach(p => {
+      let img = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 120'><rect width='100%' height='100%' fill='#e5e7eb'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#9ca3af' font-size='14'>No Image</text></svg>";
+      if (p.imageUrl) { let stored = p.imageUrl.toString().trim(); stored = stored.replace(/^\/+/, ""); if (!stored.startsWith("uploads")) stored = "uploads/" + stored; img = "http://localhost:5001/" + stored; }
+
+      const gmap = encodeURIComponent(p.address || p.city || "");
+      const mapUrl = `https://www.google.com/maps/search/?api=1&query=${gmap}`;
+
+      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(p))));
+
+      // prepare small detail snippets
+      const amenitiesHtml = (p.amenities && typeof p.amenities === 'string') ? ('<div style="margin-bottom:8px;">' + p.amenities.split(',').slice(0,3).map(a => '<span style="display:inline-block;background:#f1f5f9;padding:6px 8px;border-radius:999px;font-size:12px;margin-right:6px;color:#334155;border:1px solid #eef2ff">' + a.trim() + '</span>').join('') + '</div>') : '';
+      const shortDesc = p.shortDescription ? ('<div style="font-size:13px;color:#6b7280;margin-bottom:8px;">' + (p.shortDescription.length>100? p.shortDescription.slice(0,100)+'...':p.shortDescription) + '</div>') : '';
+      const ownerLine = ('<div style="font-size:13px;color:#374151;margin-bottom:8px;"><strong>Owner:</strong> ' + (p.ownerName || p.owner || p.sellerName || '') + (p.contactMobile?('<span style="color:#64748b"> • '+p.contactMobile+'</span>'):'') + '</div>');
+
+      const card = `
+      <div class="prop-card" onclick="window.location.href='product.html?data=${encodeURIComponent(encoded)}'" style="width:300px;background:white;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,0.12);overflow:hidden;cursor:pointer;transition:all .25s;" onmouseover="this.style.transform='scale(1.04)';this.style.boxShadow='0 8px 20px rgba(0,0,0,0.20)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 14px rgba(0,0,0,0.12)';">
+        <div style="width:100%; height:190px; position:relative;"><img src="${img}" style="width:100%; height:100%; object-fit:cover;"><div onclick="event.stopPropagation(); toggleHeart(this,'${p.id}')" style="position:absolute; top:10px; right:10px; background:white; width:40px; height:40px; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:22px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.25); transition:.2s;">🤍</div></div>
+        <div style="padding:15px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><div style="font-size:14px;"><b>Type:</b> ${p.type || ''}</div><div style="font-size:14px;"><b>Property:</b> ${p.propertyType || ''}</div></div>
+          <div style="font-size:14px; margin-bottom:8px;"><b>Bedrooms:</b> ${p.bedrooms || ''}</div>
+          <div style="font-size:14px; margin-bottom:6px;"><b>City:</b> ${p.city || ''}</div>
+          <div style="font-size:13px;color:#475569;margin-bottom:8px;">${(p.locality?('<strong>Locality:</strong> '+p.locality):'')}${(p.builtUpArea?(' &nbsp; | &nbsp; <strong>Built:</strong> '+p.builtUpArea):'')}</div>
+          ${amenitiesHtml}
+          ${shortDesc}
+          ${ownerLine}
+          <a href="${mapUrl}" target="_blank" style="text-decoration:none;"><div style="font-size:14px;color:#1d4ed8;margin-bottom:12px;display:flex;align-items:center;gap:6px;"><img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" style="width:16px;height:16px;">${p.address || 'Open in Google Maps'}</div></a>
+          <div style="display:flex; justify-content:space-between; margin-bottom:12px;"><div style="font-size:16px; color:#059669; font-weight:bold;">₹ ${p.price || ''}</div><div style="font-size:14px;"><b>Pincode:</b> ${p.pincode || ''}</div></div>
+          <button onclick="event.stopPropagation(); openForm('${p.id}','${p.title || ''}', true)" style="width:100%;padding:12px;margin-top:12px;background:#059669;color:white;border:none;border-radius:8px;font-size:15px;cursor:pointer;transition:0.3s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">Rent Now</button>
+        </div>
+      </div>`;
+
+      container.innerHTML += card;
+    });
+  } catch (err) { console.error(err); container.innerHTML = 'Error loading properties.'; }
+}
+
+async function toggleHeart(el, propertyId, p) {
+  if (!el) return; const user = JSON.parse(localStorage.getItem('user') || 'null'); if (!user || !user.id) { alert('Please login'); return; }
+  const currentlyLiked = el.getAttribute('data-liked') === '1';
+  if (!currentlyLiked) { el.innerText = '❤️'; el.setAttribute('data-liked','1'); el.style.color='red'; el.style.background='white'; el.style.borderRadius='50%'; el.style.transition='transform .12s ease'; el.style.transform='scale(1.08)'; setTimeout(()=>el.style.transform='scale(1)',140); }
+  else { el.innerText='🤍'; el.setAttribute('data-liked','0'); el.style.color='#888'; el.style.transform='scale(1.03)'; setTimeout(()=>el.style.transform='scale(1)',120); }
+  try {
+    if (!currentlyLiked) {
+      const res = await fetch('http://localhost:5001/api/newproperties/interest',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.id,propertyListingId:propertyId})});
+      const j = await res.json(); if (!j.success) { el.innerText='🤍'; el.setAttribute('data-liked','0'); el.style.color='#888'; alert(j.message||'Failed to add interest'); return; }
+      window.dispatchEvent(new CustomEvent('interestAdded',{detail:{propertyId}}));
+    } else {
+      const res = await fetch('http://localhost:5001/api/newproperties/interest',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.id,propertyListingId:propertyId})});
+      const j = await res.json(); if (!j.success) { el.innerText='❤️'; el.setAttribute('data-liked','1'); el.style.color='red'; alert(j.message||'Failed to remove interest'); return; }
+      window.dispatchEvent(new CustomEvent('interestRemoved',{detail:{propertyId}}));
+    }
+  } catch (err) { console.error('toggleHeart error',err); if (!currentlyLiked){ el.innerText='🤍'; el.setAttribute('data-liked','0'); el.style.color='#888'; } else { el.innerText='❤️'; el.setAttribute('data-liked','1'); el.style.color='red'; } alert('Connection error'); }
+}
+
+loadNewProperties();
+
+/* PRODUCT DETAIL MODAL (shared for Buy/Rent) */
+const productDetailHtml = `
+<div id="detailModal" onclick="if(event.target.id==='detailModal') closeDetail()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;justify-content:center;align-items:center;padding:20px;overflow:auto;">
+  <div style="position:relative;background:#fff;max-width:1100px;width:100%;border-radius:12px;box-shadow:0 10px 40px rgba(2,6,23,0.35);display:flex;flex-direction:row;gap:24px;padding:20px;">
+    <div style="flex:1;min-width:300px;">
+      <div style="border-radius:10px;overflow:hidden;background:#f3f4f6;">
+        <img id="detailMainImg" src="" style="width:100%;height:420px;object-fit:cover;display:block;" />
+      </div>
+      <div id="detailThumbs" style="display:flex;gap:10px;margin-top:12px;overflow:auto;">
+      </div>
+    </div>
+    <div style="flex:1.1;min-width:320px;display:flex;flex-direction:column;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+        <div>
+          <h2 id="detailTitle" style="margin:0 0 6px 0;font-size:20px;color:#0f172a"></h2>
+          <div id="detailCategory" style="color:#475569;font-size:13px;margin-bottom:8px;"></div>
+        </div>
+        <div style="text-align:right;">
+          <div id="detailAvailability" style="font-weight:700;color:#065f46;"></div>
+          <div style="margin-top:6px;color:#667085;font-size:13px;">Trusted seller <span id="trustIcons"></span></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;margin-top:10px;align-items:center;">
+        <div style="font-size:18px;color:#059669;font-weight:800;">Buy: <span id="detailBuyPrice"></span></div>
+        <div style="font-size:15px;color:#0ea5e9;font-weight:700;">Rent: <span id="detailRentPrice"></span></div>
+      </div>
+
+      <div id="detailSpecs" style="margin-top:12px;background:#f8fafc;border:1px solid #e6eef6;padding:12px;border-radius:8px;color:#0f172a;font-size:13px;"></div>
+
+      <div style="margin-top:12px;flex:1;overflow:auto;">
+        <h4 style="margin:0 0 6px 0;color:#0f172a;font-size:15px;">Short description</h4>
+        <div id="detailShortDesc" style="color:#374151;font-size:14px;margin-bottom:12px;"></div>
+        <h4 style="margin:0 0 6px 0;color:#0f172a;font-size:15px;">Details</h4>
+        <div id="detailLongDesc" style="color:#475569;font-size:13px;line-height:1.45;"></div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+        <button id="ctaBuy" style="flex:1;padding:12px;background:#0b63e5;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:700;">Buy Now</button>
+        <button id="ctaRent" style="flex:1;padding:12px;background:#059669;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:700;">Rent Now</button>
+        <button id="ctaCart" style="padding:12px;background:#111827;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:700;">Add to Cart</button>
+        <button id="ctaContact" style="padding:12px;background:#ef4444;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:700;">Contact Seller</button>
+        <button id="ctaCancel" style="padding:12px;background:#6b7280;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:700;">Cancel</button>
+      </div>
+
+      <div style="margin-top:14px;display:flex;align-items:center;gap:12px;">
+        <div id="sellerCard" style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;border:1px solid #e6eef6;">
+          <img id="sellerAvatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width:56px;height:56px;border-radius:50%;object-fit:cover;" />
+          <div>
+            <div id="sellerName" style="font-weight:700;color:#0f172a"></div>
+            <div id="sellerContact" style="color:#475569;font-size:13px"></div>
+          </div>
+        </div>
+        <div style="margin-left:auto;color:#64748b;font-size:13px;">Security: <span style="color:#065f46;font-weight:700;">Verified</span></div>
+      </div>
+    </div>
+  </div>
+</div>`;
+
+document.body.insertAdjacentHTML('beforeend', productDetailHtml);
+
+function closeDetail(){ const m=document.getElementById('detailModal'); if(m) m.style.display='none'; }
+
+function openDetail(encodedProp, isRentFlag){
+  try{
+    const prop = JSON.parse(decodeURIComponent(escape(atob(encodedProp))));
+    document.getElementById('propertyId').value = prop.id || prop._id || '';
+    document.getElementById('isRent').value = isRentFlag ? 'true' : 'false';
+    document.getElementById('detailTitle').innerText = prop.title || prop.name || 'Property';
+    document.getElementById('detailCategory').innerText = (prop.propertyType || prop.type || '');
+    const availability = (prop.type||'').toLowerCase().includes('rent') ? 'For Rent' : 'For Sale';
+    document.getElementById('detailAvailability').innerText = availability;
+    document.getElementById('detailBuyPrice').innerText = prop.price ? ('₹ '+prop.price) : 'N/A';
+    document.getElementById('detailRentPrice').innerText = (prop.rentDaily?('Daily: ₹'+prop.rentDaily):'') + (prop.rentMonthly?(' / Monthly: ₹'+prop.rentMonthly):'') || 'N/A';
+    const specs = [];
+    if(prop.size) specs.push('<b>Size:</b> '+prop.size);
+    if(prop.brand) specs.push('<b>Brand:</b> '+prop.brand);
+    if(prop.condition) specs.push('<b>Condition:</b> '+prop.condition);
+    if(prop.location || prop.city) specs.push('<b>Location:</b> '+(prop.location||prop.city));
+    if(prop.warranty) specs.push('<b>Warranty:</b> '+prop.warranty);
+    document.getElementById('detailSpecs').innerHTML = specs.join(' &nbsp; | &nbsp; ') || 'No specifications listed.';
+    document.getElementById('detailShortDesc').innerText = prop.shortDescription || prop.summary || '';
+    document.getElementById('detailLongDesc').innerText = prop.description || prop.longDescription || '';
+    const mainImg = document.getElementById('detailMainImg');
+    const thumbs = document.getElementById('detailThumbs');
+    thumbs.innerHTML = '';
+    let imgs = [];
+    if(prop.images && prop.images.length) imgs = prop.images;
+    else if(prop.imageUrl) imgs = [prop.imageUrl];
+    else imgs = [];
+    if(imgs.length){
+      mainImg.src = (imgs[0].startsWith('http')?imgs[0]:(imgs[0].replace(/^\/+/, '')).startsWith('uploads')?('http://localhost:5001/'+imgs[0].replace(/^\/+/, '')):('http://localhost:5001/uploads/'+imgs[0].replace(/^\/+/, '')));
+      imgs.forEach(src=>{
+        const imgEl = document.createElement('img');
+        imgEl.src = (src.startsWith('http')?src:('http://localhost:5001/'+src.replace(/^\/+/, '')));
+        imgEl.style.width='72px'; imgEl.style.height='56px'; imgEl.style.objectFit='cover'; imgEl.style.borderRadius='8px'; imgEl.style.cursor='pointer';
+        imgEl.onclick = ()=>{ mainImg.src = imgEl.src; };
+        thumbs.appendChild(imgEl);
+      });
+    } else { mainImg.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#e6eef6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#94a3b8">No Image</text></svg>' }
+    document.getElementById('sellerName').innerText = prop.sellerName || prop.ownerName || prop.postedBy || 'Seller';
+    document.getElementById('sellerContact').innerText = prop.sellerPhone || prop.ownerPhone || prop.contact || '';
+    const avatar = document.getElementById('sellerAvatar'); if(prop.sellerAvatar) avatar.src = prop.sellerAvatar;
+    document.getElementById('trustIcons').innerHTML = '<span style="color:#06b6d4;margin-left:6px;font-weight:700;">✓</span>';
+    document.getElementById('ctaBuy').onclick = ()=>{ document.getElementById('isRent').value = 'false'; document.getElementById('propertyId').value = prop.id || prop._id || ''; document.getElementById('formTitle').innerText = 'Buy Property'; document.getElementById('submitButton').style.background = '#0b63e5'; document.getElementById('formPopup').style.display = 'flex'; };
+    document.getElementById('ctaRent').onclick = ()=>{ document.getElementById('isRent').value = 'true'; document.getElementById('propertyId').value = prop.id || prop._id || ''; document.getElementById('formTitle').innerText = 'Rent Property'; document.getElementById('submitButton').style.background = '#059669'; document.getElementById('formPopup').style.display = 'flex'; };
+    document.getElementById('ctaCart').onclick = ()=>{ const cart = JSON.parse(localStorage.getItem('cart'||'[]')||'[]'); cart.push({id:prop.id||prop._id,title:prop.title,price:prop.price}); localStorage.setItem('cart',JSON.stringify(cart)); alert('Added to cart'); };
+    document.getElementById('ctaContact').onclick = ()=>{ document.getElementById('formTitle').innerText = 'Contact Seller'; document.getElementById('formPopup').style.display = 'flex'; };
+    document.getElementById('ctaCancel').onclick = ()=>{ closeDetail(); };
+    document.getElementById('detailModal').style.display = 'flex';
+  }catch(e){ console.error('openDetail decode',e); alert('Unable to open details'); }
+}
+
+/* FORM POPUP (contact form reused by modal CTAs) */
+const formPopupHtml = `
+<div id="formPopup" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:none;justify-content:center;align-items:center;z-index:10001;">
+  <div style="background:white;width:90%;max-width:420px;padding:20px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,0.3);">
+    <h3 id="formTitle" style="text-align:center;margin-bottom:15px;color:#111;"></h3>
+    <form id="propertyForm" style="background:#ffffff;padding:25px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.12);font-family:Arial;">
+      <input type="hidden" id="propertyId"><input type="hidden" id="isRent">
+      <label style="font-weight:bold; font-size:14px; color:#333;">Name</label>
+      <input type="text" id="formName" required style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ccc; border-radius:8px; font-size:15px; transition:0.3s;">
+      <label style="font-weight:bold; font-size:14px; color:#333;">Phone</label>
+      <input type="text" id="formPhone" required maxlength="10" style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ccc; border-radius:8px; font-size:15px; transition:0.3s;">
+      <label style="font-weight:bold; font-size:14px; color:#333;">Email</label>
+      <input type="email" id="formEmail" required style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ccc; border-radius:8px; font-size:15px; transition:0.3s;">
+      <label style="font-weight:bold; font-size:14px; color:#333;">Message</label>
+      <textarea id="formMsg" rows="3" style="width:100%; padding:12px; border:1px solid #ccc; border-radius:8px; font-size:15px; margin-bottom:20px; resize:none; transition:0.3s;"></textarea>
+      <button type="submit" id="submitButton" style="width:100%; padding:14px; background:#16a34a; color:white; border:none; border-radius:10px; margin-top:10px; font-size:17px; cursor:pointer; font-weight:bold; letter-spacing:0.5px; transition:0.3s;">Submit Request</button>
+      <button type="button" onclick="document.getElementById('formPopup').style.display='none'" style="width:100%; padding:12px; background:#ef4444; color:white; border:none; border-radius:10px; margin-top:12px; font-size:16px; cursor:pointer; font-weight:bold; transition:0.3s;">Cancel</button>
+    </form>
+  </div>
+</div>`;
+
+document.body.insertAdjacentHTML('beforeend', formPopupHtml);
+
+document.getElementById('propertyForm').addEventListener('submit', async function(e){ e.preventDefault(); const isRent = document.getElementById('isRent').value === 'true'; const apiEndpoint = isRent ? 'rentproperty' : 'buyproperty'; const actionText = isRent ? 'rent' : 'buy'; const payload = { propertyId: document.getElementById('propertyId').value, name: document.getElementById('formName').value, phone: document.getElementById('formPhone').value, email: document.getElementById('formEmail').value, message: document.getElementById('formMsg').value }; try{ const res = await fetch(`http://localhost:5001/api/${apiEndpoint}`,{ method:'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) }); const data = await res.json(); if (data.success) { alert(`Your ${actionText} request has been submitted!`); document.getElementById('formPopup').style.display='none'; document.getElementById('propertyForm').reset(); } else { alert('Failed: '+data.message); } } catch(err){ console.error('Form submission error:',err); alert('Network error. Please try again.'); } });
+
+function openForm(id,title,isRent){ document.getElementById('propertyId').value = id || ''; document.getElementById('isRent').value = isRent ? 'true' : 'false'; document.getElementById('formTitle').innerText = isRent ? 'Rent Property' : 'Buy Property'; document.getElementById('submitButton').style.background = isRent ? '#059669' : '#0b63e5'; document.getElementById('formPopup').style.display = 'flex'; }
+
+/* responsive styles */
+const resp = document.createElement('style'); resp.textContent = `@media (max-width:480px){#props{display:grid!important;grid-template-columns:1fr!important}.prop-card{width:100%!important}}@media (min-width:481px) and (max-width:768px){#props{display:grid!important;grid-template-columns:1fr 1fr!important}.prop-card{width:100%!important}}@media (min-width:769px) and (max-width:1200px){#props{display:grid!important;grid-template-columns:1fr 1fr 1fr!important}}`; document.head.appendChild(resp);
+</script>
+
+</body>
+</html>

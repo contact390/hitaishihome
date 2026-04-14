@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+  
+<div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("./navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+
+  <section class="relative text-center py-28 px-6 sm:px-10 bg-cover bg-center overflow-hidden" style="background-image: url('images/find_agent_realestate.png');">
+    <!-- Gradient Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70 z-0"></div>
+  
+    <!-- Floating Icons -->
+    <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="House Icon"
+         class="absolute w-16 sm:w-24 opacity-20 top-10 left-[-100px] animate-slide-x-slow z-0">
+    <img src="images/find_agent1_realestate.png" alt="Agent Icon"
+         class="absolute w-16 sm:w-24 opacity-20 bottom-10 right-[-100px] animate-slide-x-slow-reverse z-0">
+  
+    <!-- Floating Blurred Shapes -->
+    <div class="absolute w-64 h-64 bg-purple-500 opacity-30 rounded-full blur-3xl top-0 left-0 animate-pulse-slow z-0"></div>
+    <div class="absolute w-64 h-64 bg-pink-500 opacity-30 rounded-full blur-3xl bottom-0 right-0 animate-pulse-slow z-0"></div>
+  
+    <!-- Content -->
+    <div class="relative z-10 max-w-4xl mx-auto text-white">
+      <h1 class="text-4xl sm:text-5xl font-bold leading-tight mb-6 drop-shadow-md">Top Rated Real Estate Agents Near You – Start Your Property Journey</h1>
+      <p class="max-w-xl mx-auto text-lg mb-8">Find real estate agents near you from our curated list of top-rated professionals ready to help you buy or sell properties quickly and confidently.</p>
+  
+      <!-- Search Box -->
+      <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-6">
+        <input id="searchInput" type="text" placeholder="Search by city or agent name" class="px-4 py-2 rounded-full text-black w-64 sm:w-80 shadow-md focus:outline-none">
+        <button onclick="showAgents()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-full shadow-md transition">Find Agents</button>
+      </div>
+  
+      <!-- Result Display -->
+      <div id="agentList" class="text-lg text-white mt-6 hidden animate-fade-in-slow"></div>
+    </div>
+  
+    <!-- Custom Animations -->
+    <style>
+      @keyframes slideXSlow {
+        0% { transform: translateX(-100px); opacity: 0.1; }
+        50% { transform: translateX(100vw); opacity: 0.3; }
+        100% { transform: translateX(-100px); opacity: 0.1; }
+      }
+  
+      @keyframes slideXSlowReverse {
+        0% { transform: translateX(100px); opacity: 0.1; }
+        50% { transform: translateX(-100vw); opacity: 0.3; }
+        100% { transform: translateX(100px); opacity: 0.1; }
+      }
+  
+      @keyframes pulseSlow {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.1); opacity: 0.4; }
+      }
+  
+      @keyframes fadeInSlow {
+        0% { opacity: 0; transform: translateY(10px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+  
+      .animate-slide-x-slow {
+        animation: slideXSlow 30s linear infinite;
+      }
+  
+      .animate-slide-x-slow-reverse {
+        animation: slideXSlowReverse 30s linear infinite;
+      }
+  
+      .animate-pulse-slow {
+        animation: pulseSlow 12s ease-in-out infinite;
+      }
+  
+      .animate-fade-in-slow {
+        animation: fadeInSlow 1s ease-out forwards;
+      }
+    </style>
+  
+    <!-- Script -->
+    <script>
+      function showAgents() {
+        const agents = [
+          { name: "Ravi Sharma", city: "Bangalore" },
+          { name: "Anita Desai", city: "Mumbai" },
+          { name: "Sandeep Verma", city: "Delhi" },
+          { name: "Preeti Reddy", city: "Hyderabad" },
+          { name: "Rajiv Nair", city: "Kochi" }
+        ];
+  
+        const input = document.getElementById("searchInput").value.toLowerCase();
+        const list = document.getElementById("agentList");
+  
+        const matches = agents.filter(agent =>
+          agent.name.toLowerCase().includes(input) ||
+          agent.city.toLowerCase().includes(input)
+        );
+  
+        if (input === "" || matches.length === 0) {
+          list.innerHTML = `<p class="text-red-300">No matching agents found.</p>`;
+        } else {
+          list.innerHTML = `
+            <p class="mb-2">🔍 Results Found:</p>
+            <ul class="list-disc list-inside text-left max-w-md mx-auto space-y-1">
+              ${matches.map(agent => `<li>${agent.name} - ${agent.city}</li>`).join("")}
+            </ul>
+          `;
+        }
+  
+        list.classList.remove("hidden");
+        list.classList.add("animate-fade-in-slow");
+      }
+    </script>
+  </section>
+  
+  <!-- Agent Cards Section -->
+  <section class="py-16 px-4 bg-white">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl font-semibold text-center mb-12 text-gray-800">Your Search for Top Rated Agents Ends Here</h2>
+      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Sample Agent Card -->
+        <div class="bg-gray-100 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Agent" class="w-full h-56 object-cover" />
+          <div class="p-4">
+            <h3 class="text-xl font-bold text-gray-800">Ravi Sharma</h3>
+            <p class="text-gray-600 mb-2">Bangalore | 10+ years experience</p>
+            <p class="text-gray-700 text-sm mb-4">Specializing in residential properties, this top-rated agent is known for expert negotiation skills and a strong track record of customer satisfaction.</p>
+            <button onclick="location.href='tel:+911234567890'" class="mt-4 w-full bg-pink-600 text-white py-2 rounded hover:bg-pink-700">Contact Agent</button>
+          </div>
+        </div>
+
+        <div class="bg-gray-100 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Agent" class="w-full h-56 object-cover" />
+          <div class="p-4">
+            <h3 class="text-xl font-bold text-gray-800">Anita Desai</h3>
+            <p class="text-gray-600 mb-2">Mumbai | 8 years experience</p>
+            <p class="text-gray-700 text-sm mb-4">Trusted for handling luxury properties and high-end apartments, this agent offers a personalized approach to meet the unique needs of each client.</p>
+            <button onclick="location.href='tel:+911234567890'" class="mt-4 w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700">Contact Agent</button>
+          </div>
+        </div>
+
+        <div class="bg-gray-100 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+          <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Agent" class="w-full h-56 object-cover" />
+          <div class="p-4">
+            <h3 class="text-xl font-bold text-gray-800">Sandeep Verma</h3>
+            <p class="text-gray-600 mb-2">Delhi | 12+ years experience</p>
+            <p class="text-gray-700 text-sm mb-4">An expert in commercial properties and investment deals, this agent delivers consistent results while building lasting client trust.</p>
+            <button onclick="location.href='tel:+911234567890'" class="mt-4 w-full bg-red-600 text-white py-2 rounded hover:bg-indigo-700">Contact Agent</button>
+          </div>
+        </div>
+        
+            <div class="bg-gray-100 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              <img src="https://randomuser.me/api/portraits/men/53.jpg" alt="Agent" class="w-full h-56 object-cover" />
+              <div class="p-4">
+                <h3 class="text-xl font-bold text-gray-800">Arjun Mehta</h3>
+                <p class="text-gray-600 mb-2">Mumbai | 12+ years experience</p>
+                <p class="text-gray-700 text-sm mb-4">Arjun brings deep expertise in metropolitan real estate trends, specializing in fast-paced city property deals and urban investments.</p>
+                <button onclick="location.href='tel:+911234567890'" class="mt-4 w-full bg-orange-600 text-white py-2 rounded hover:bg-green-700">Contact Agent</button>
+              </div>
+      </div>
+      <div class="bg-gray-100 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Agent" class="w-full h-56 object-cover" />
+        <div class="p-4">
+          <h3 class="text-xl font-bold text-gray-800">Neha Kapoor</h3>
+          <p class="text-gray-600 mb-2">delhi | 8 years experience</p>
+          <p class="text-gray-700 text-sm mb-4">Neha is renowned for her impressive portfolio of upscale villas and luxury penthouses across major cities in India, offering premium real estate expertise.</p>
+          <button onclick="location.href='tel:+911234567890'" class="mt-4 w-full bg-yellow-600 text-white py-2 rounded hover:bg-pink-700">Contact Agent</button>        
+        </div>
+      </div>
+      <div class="bg-gray-100 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Agent" class="w-full h-56 object-cover" />
+        <div class="p-4">
+          <h3 class="text-xl font-bold text-gray-800">Amit Rathi</h3>
+          <p class="text-gray-600 mb-2">Hyderabad| 10 years experience</p>
+          <p class="text-gray-700 text-sm mb-4">Amit specializes in strategic property investments, guiding clients to grow their portfolios with high-yield rental properties and long-term returns.</p>
+          <button onclick="location.href='tel:+911234567890'" class="mt-4 w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Contact Agent</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 hidden">
+    <div class="bg-white p-6 rounded-lg w-full max-w-md">
+      <h2 class="text-2xl font-semibold mb-4">Login</h2>
+      <input type="text" id="loginEmail" placeholder="Email" class="w-full mb-3 px-3 py-2 border rounded" />
+      <input type="password" id="loginPassword" placeholder="Password" class="w-full mb-4 px-3 py-2 border rounded" />
+      <button onclick="handleLogin()" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Login</button>
+      <p id="loginMessage" class="mt-3 text-green-600 text-center hidden">Login successful!</p>
+      <button onclick="toggleModal('loginModal')" class="mt-4 text-sm text-gray-600 underline">Close</button>
+    </div>
+  </div>
+
+  <!-- Signup Modal -->
+  <div id="signupModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 hidden">
+    <div class="bg-white p-6 rounded-lg w-full max-w-md">
+      <h2 class="text-2xl font-semibold mb-4">Sign Up</h2>
+      <input type="text" id="signupName" placeholder="Full Name" class="w-full mb-3 px-3 py-2 border rounded" />
+      <input type="email" id="signupEmail" placeholder="Email" class="w-full mb-3 px-3 py-2 border rounded" />
+      <input type="password" id="signupPassword" placeholder="Password" class="w-full mb-4 px-3 py-2 border rounded" />
+      <button onclick="handleSignup()" class="w-full bg-yellow-500 text-black py-2 rounded hover:bg-yellow-600">Sign Up</button>
+      <p id="signupMessage" class="mt-3 text-green-600 text-center hidden">Signup successful!</p>
+      <button onclick="toggleModal('signupModal')" class="mt-4 text-sm text-gray-600 underline">Close</button>
+    </div>
+  </div>
+
+  <!-- Animations CSS -->
+  <style>
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fade-in 1.2s ease-out;
+    }
+  </style>
+
+  <!-- Scripts -->
+  <script>
+    function toggleModal(id) {
+      const modal = document.getElementById(id);
+      modal.classList.toggle('hidden');
+    }
+
+    function handleLogin() {
+      const email = document.getElementById('loginEmail').value;
+      const pass = document.getElementById('loginPassword').value;
+      const msg = document.getElementById('loginMessage');
+      if(email && pass) {
+        msg.classList.remove('hidden');
+        setTimeout(() => { msg.classList.add('hidden'); }, 3000);
+      }
+    }
+
+    function handleSignup() {
+      const name = document.getElementById('signupName').value;
+      const email = document.getElementById('signupEmail').value;
+      const pass = document.getElementById('signupPassword').value;
+      const msg = document.getElementById('signupMessage');
+      if(name && email && pass) {
+        msg.classList.remove('hidden');
+        setTimeout(() => { msg.classList.add('hidden'); }, 3000);
+      }
+    }
+  </script>
+
+<!-- Verified Agents Section (Square Image Layout) -->
+<section class="bg-white py-16" aria-labelledby="verified-agents">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <!-- Square Image Container -->
+      <div class="w-full h-96 relative overflow-hidden rounded-xl shadow-lg">
+        <img src="images/verified_realestate_agent.png" 
+             alt="Certified real estate professional discussing property details" 
+             class="w-full h-full object-cover"
+             loading="lazy"
+             width="600"
+             height="400">
+      </div>
+      
+      <!-- Text Content -->
+      <div class="space-y-6">
+        <h2 id="verified-agents" class="text-4xl font-bold text-gray-900">
+          Trust Our Verified and Certified Real Estate Experts Today
+        </h2>
+        <p class="text-lg text-gray-600">
+          All real estate agents in our trusted network are thoroughly verified through a multi-stage screening process, ensuring professionalism, experience, and client satisfaction, including:
+        </p>
+        
+        <!-- Verification Checklist -->
+        <ul class="space-y-4">
+          <li class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <div>
+              <h3 class="font-semibold text-gray-900">Background Verification</h3>
+              <p class="text-gray-600 text-sm">Comprehensive checks of professional and personal history.</p>
+            </div>
+          </li>
+          
+          <li class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <div>
+              <h3 class="font-semibold text-gray-900">Market Expertise Evaluation </h3>
+              <p class="text-gray-600 text-sm">Assessing in-depth knowledge of local and national real estate trends.</p>
+            </div>
+          </li>
+          
+          <li class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <div>
+              <h3 class="font-semibold text-gray-900">Performance Metrics Analysis</h3>
+              <p class="text-gray-600 text-sm">Tracking success rates, deal closures, and client satisfaction</p>
+            </div>
+          </li>
+        </ul>
+
+        <!-- CTA Button -->
+        <a href="/agents" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors mt-6">
+          Discover Our Team of Certified Agents →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Property Insights, Flexible Plans, Safe Transactions (Three Cards) -->
+<section class="py-10" style="background:#f0f0f0;">
+  <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+      <img src="images/property_insights_realestate.png" alt="Property Insights" class="w-full h-32 object-cover mb-4 rounded-md">
+      <h3 class="text-xl font-bold mb-2">Property Insights</h3>
+      <p class="text-gray-700">Get real-time updates on property market trends and price evaluations, empowering you to make smart, informed real estate decisions</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+      <img src="images/flexible_plans_realestate.png" alt="Flexible Plans" class="w-full h-32 object-cover mb-4 rounded-md">
+      <h3 class="text-xl font-bold mb-2">Flexible Plans</h3>
+      <p class="text-gray-700">Choose from a variety of listing plans tailored to your property goals and budget, designed to meet your specific needs.</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+      <img src="images/safe_transactions_realestate.png" alt="Safe Transactions" class="w-full h-32 object-cover mb-4 rounded-md">
+      <h3 class="text-xl font-bold mb-2">Safe Transactions</h3>
+      <p class="text-gray-700">Enjoy peace of mind with secure communication and safe transactions, ensuring a smooth, worry-free experience between agents and clients.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Explore Properties Section -->
+<section class="bg-purple-100 py-16" aria-labelledby="explore-properties">
+  <div class="max-w-5xl mx-auto px-6 text-center">
+    <h2 id="explore-properties" class="text-4xl font-extrabold text-purple-800 mb-4">Unlock Your Dream Property Today</h2>
+    <p class="text-purple-700 text-lg mb-4">
+      At <strong>Hitaishi Homes</strong>, Explore a diverse selection of verified real estate listings, from apartments and villas to plots and commercial spaces, across the best cities, all curated for your convenience.
+    </p>
+    <p class="text-purple-700 text-base mb-6">
+      Whether you're looking to <strong>buy a home</strong>, <strong>rent an apartment</strong>, or <strong>invest in real estate</strong>,Our powerful search tools and trusted agents guide you at every step. Easily discover properties by location, budget, type, and more, ensuring a tailored real estate experience
+    </p>
+    
+    <!-- CTA Button -->
+    <a href="buy.html" class="inline-block bg-purple-700 hover:bg-purple-800 transition-colors text-white font-medium text-lg py-3 px-8 rounded-full shadow-md">
+      🔍 Start Exploring
+    </a>
+
+    <!-- SEO keyword-rich caption -->
+    <p class="text-sm text-gray-600 mt-6">
+      Affordable Properties for Sale, Premium Flats for Rent & Investment-Ready Land | Hitaishi Homes
+    </p>
+  </div>
+</section>
+
+
+<!-- Client Testimonials (Slider) -->
+<section class="bg-white py-16" aria-labelledby="client-testimonials">
+  <div class="max-w-6xl mx-auto px-6 text-center">
+    <h2 id="client-testimonials" class="text-4xl font-extrabold text-gray-800 mb-10">
+      What Our Clients Are Saying About Us
+    </h2>
+
+    <div id="testimonial-slider" class="relative overflow-hidden">
+      <div id="testimonial-slides" class="flex transition-transform duration-1000 ease-in-out">
+        <!-- Testimonial Cards -->
+        <div class="min-w-full px-4 flex flex-col items-center justify-center">
+          <img src="images/happy_clients_realestate.png" alt="Client A - Homebuyer" class="w-20 h-20 rounded-full mb-4 object-cover" loading="lazy" />
+          <p class="text-gray-700 italic max-w-xl mb-2">Hitaishi Homes made my property search seamless and stress-free. Their agents are professional, knowledgeable, and truly care about helping you find the right home.</p>
+          <p class="text-gray-900 font-semibold">- Client A</p>
+          <div class="text-yellow-500 mt-1">★★★★★</div>
+        </div>
+
+        <div class="min-w-full px-4 flex flex-col items-center justify-center">
+          <img src="images/happy_clients2_realestate.png" alt="Client B - First-time Buyer" class="w-20 h-20 rounded-full mb-4 object-cover" loading="lazy" />
+          <p class="text-gray-700 italic max-w-xl mb-2">“I had the best experience with my agent and found the perfect home for my family. Highly recommend!”</p>
+          <p class="text-gray-900 font-semibold">- Client B</p>
+          <div class="text-yellow-500 mt-1">★★★★★</div>
+        </div>
+
+        <div class="min-w-full px-4 flex flex-col items-center justify-center">
+          <img src="images/happy_clients3_realestate.png" alt="Client C - Investor" class="w-20 h-20 rounded-full mb-4 object-cover" loading="lazy" />
+          <p class="text-gray-700 italic max-w-xl mb-2">“Thanks to Hitaishi Homes, I discovered a lucrative real estate investment opportunity. Exceptional support and outstanding service throughout the process!”</p>
+          <p class="text-gray-900 font-semibold">- Client C</p>
+          <div class="text-yellow-500 mt-1">★★★★★</div>
+        </div>
+
+        <div class="min-w-full px-4 flex flex-col items-center justify-center">
+          <img src="images/happy_clients4_realestate.png" alt="Client D - Renter" class="w-20 h-20 rounded-full mb-4 object-cover" loading="lazy" />
+          <p class="text-gray-700 italic max-w-xl mb-2">“I found a beautiful apartment for rent in no time with Hitaishi Homes. The rental process was quick, easy, and completely hassle-free!”</p>
+          <p class="text-gray-900 font-semibold">- Client D</p>
+          <div class="text-yellow-500 mt-1">★★★★★</div>
+        </div>
+
+        <div class="min-w-full px-4 flex flex-col items-center justify-center">
+          <img src="images/happy_clients5_realestate.png" alt="Client E - Seller" class="w-20 h-20 rounded-full mb-4 object-cover" loading="lazy" />
+          <p class="text-gray-700 italic max-w-xl mb-2">“Hitaishi Homes helped me sell my property faster than I expected. It’s a great platform for quick and reliable property sales!”</p>
+          <p class="text-gray-900 font-semibold">- Client E</p>
+          <div class="text-yellow-500 mt-1">★★★★★</div>
+        </div>
+
+        <div class="min-w-full px-4 flex flex-col items-center justify-center">
+          <img src="images/happy_client6_realestate.png" alt="Client F - Relocator" class="w-20 h-20 rounded-full mb-4 object-cover" loading="lazy" />
+          <p class="text-gray-700 italic max-w-xl mb-2">“Relocating was a breeze with Hitaishi Homes. Their friendly agents and smooth property transactions made the move stress-free!”</p>
+          <p class="text-gray-900 font-semibold">- Client F</p>
+          <div class="text-yellow-500 mt-1">★★★★★</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.getElementById('testimonial-slides');
+  const totalSlides = 6;
+
+  function showSlide(index) {
+    slides.style.transition = 'transform 1s ease-in-out';
+    slides.style.transform = `translateX(-${index * 100}%)`;
+  }
+
+  // Show first slide immediately
+  showSlide(currentSlide);
+
+  // Auto-slide every 30 seconds
+  setInterval(() => {
+    currentSlide = (currentSlide + 1) % totalSlides;
+    showSlide(currentSlide);
+  }, 30000);
+</script>
+
+
+
+<!-- Agent Partnership Program (Enhanced with SEO) -->
+<section class="bg-white py-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-blue-400 text-transparent bg-clip-text">
+        Agent Partnership Program
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+        Join 5,000+ Trusted Real Estate Professionals
+        Unlock exclusive property listings, advanced real estate tools, and dedicated support to scale your business faster than ever.
+      </p>
+      
+      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6">
+        <a href="/agents/partner-program" 
+           class="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-8 py-4 rounded-lg font-semibold
+                  hover:from-blue-700 hover:to-blue-600 transition-all duration-300
+                  flex items-center gap-2 shadow-lg hover:shadow-xl">
+          <span>Start Your Partnership</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Benefits Grid -->
+    <div class="mt-16 grid gap-8 md:grid-cols-3 lg:gap-12">
+      <div class="p-6 border rounded-xl hover:border-blue-500 transition-colors">
+        <h3 class="text-xl font-semibold text-gray-900 mb-3">Lead Generation</h3>
+        <p class="text-gray-600">"Gain Priority Access to Qualified Buyers and Sellers in Your Local Market"</p>
+      </div>
+      <div class="p-6 border rounded-xl hover:border-blue-500 transition-colors">
+        <h3 class="text-xl font-semibold text-gray-900 mb-3">Marketing Support</h3>
+        <p class="text-gray-600">Professional Listing Presentations & Digital Marketing Tools to Boost Your Real Estate Success</p>
+      </div>
+      <div class="p-6 border rounded-xl hover:border-blue-500 transition-colors">
+        <h3 class="text-xl font-semibold text-gray-900 mb-3">Training &amp; Resources</h3>
+        <p class="text-gray-600">Weekly Training Sessions & Exclusive Market Analytics to Stay Ahead in Real Estate</p>
+      </div>
+    </div>
+
+    <!-- Trust Badges -->
+    <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div class="p-4">
+        <div class="text-3xl font-bold text-blue-600">5,000+</div>
+        <div class="text-gray-600 mt-2">Agents</div>
+      </div>
+      <div class="p-4">
+        <div class="text-3xl font-bold text-blue-600">$10B+</div>
+        <div class="text-gray-600 mt-2">Transactions</div>
+      </div>
+      <div class="p-4">
+        <div class="text-3xl font-bold text-blue-600">92%</div>
+        <div class="text-gray-600 mt-2">Repeat Rate</div>
+      </div>
+      <div class="p-4">
+        <div class="text-3xl font-bold text-blue-600">24/7</div>
+        <div class="text-gray-600 mt-2">Support</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Why Choose Us Section (Enhanced Content) -->
+<section class="bg-white py-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">Why Choose Hitaishi Homes</h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+        Connecting buyers and sellers with top-rated real estate professionals across major cities
+      </p>
+    </div>
+
+    <!-- Enhanced Square Grid Layout -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <!-- Verified Agents Card -->
+      <a href="#agents" class="square-card group">
+        <div class="bg-blue-50 p-6 aspect-square flex flex-col items-center justify-center rounded-xl transition-all hover:bg-blue-100">
+          <svg class="w-12 h-12 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Verified Agents</h3>
+          <div class="text-center space-y-2">
+            <p class="text-gray-600 text-sm mb-2">Thorough Background Checks and Certification Process for Trusted Real Estate Professionals</p>
+            <div class="flex justify-center items-center gap-2 text-gray-600 text-sm">
+              <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+              </svg>
+              <span>5+ years experience</span>
+            </div>
+            <div class="flex justify-center items-center gap-2 text-gray-600 text-sm">
+              <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+              </svg>
+              <span>Local market experts</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Smart Search Card -->
+      <a href="#listings" class="square-card group">
+        <div class="bg-blue-50 p-6 aspect-square flex flex-col items-center justify-center rounded-xl transition-all hover:bg-blue-100">
+          <svg class="w-12 h-12 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+          </svg>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Smart Search</h3>
+          <div class="text-center space-y-2">
+            <p class="text-gray-600 text-sm mb-2">AI-Powered Property Matching with Customizable Filters for Personalized Search Results</p>
+            <div class="flex justify-center items-center gap-2 text-gray-600 text-sm">
+              <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+              </svg>
+              <span>Price alerts</span>
+            </div>
+            <div class="flex justify-center items-center gap-2 text-gray-600 text-sm">
+              <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+              </svg>
+              <span>Virtual tours</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Multi-City Card -->
+      <a href="#cities" class="square-card group">
+        <div class="bg-blue-50 p-6 aspect-square flex flex-col items-center justify-center rounded-xl transition-all hover:bg-blue-100">
+          <svg class="w-12 h-12 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Multi-City</h3>
+          <div class="text-center space-y-2">
+            <p class="text-gray-600 text-sm mb-2">Nationwide Property Listings with Local Expertise to Guide Your Real Estate Decisions</p>
+            <div class="flex justify-center items-center gap-2 text-gray-600 text-sm">
+              <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+              </svg>
+              <span>25+ cities</span>
+            </div>
+            <div class="flex justify-center items-center gap-2 text-gray-600 text-sm">
+              <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+              </svg>
+              <span>Market comparisons</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 24/7 Support Card -->
+      <a href="#support" class="square-card group">
+        <div class="bg-blue-50 p-6 aspect-square flex flex-col items-center justify-center rounded-xl transition-all hover:bg-blue-100">
+          <svg class="w-12 h-12 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">24/7 Support</h3>
+          <div class="text-center space-y-2">
+            <p class="text-gray-600 text-sm mb-2">Dedicated assistance through every transaction phase</p>
+            <div class="flex justify-center items-center gap-2 text-gray-600 text-sm">
+              <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+              </svg>
+              <span>Legal guidance</span>
+            </div>
+            <div class="flex justify-center items-center gap-2 text-gray-600 text-sm">
+              <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+              </svg>
+              <span>Multilingual support</span>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- CTA Buttons -->
+    <div class="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="/agents" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl">
+        Explore Certified Agents
+      </a>
+      <a href="/properties" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold border-2 border-blue-600 hover:bg-blue-50 transition-colors shadow-lg hover:shadow-xl">
+        Browse Premium Listings
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Customer Support Section (Form) -->
+<section style="padding:60px 20px;background:linear-gradient(135deg,#667eea,#764ba2);">
+
+  <div style="max-width:500px;margin:auto;background:#fff;padding:30px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+
+    <h3 style="text-align:center;font-size:24px;margin-bottom:20px;color:#333;">
+      Customer Support
+    </h3>
+
+    <form action="#" method="POST">
+
+      <!-- Name -->
+      <div style="margin-bottom:15px;">
+        <label style="display:block;margin-bottom:5px;font-weight:500;color:#555;">Name</label>
+        <input type="text" name="name"
+          style="width:100%;padding:10px;border:none;border-radius:8px;background:#f1f3f6;outline:none;">
+      </div>
+
+      <!-- Email -->
+      <div style="margin-bottom:15px;">
+        <label style="display:block;margin-bottom:5px;font-weight:500;color:#555;">Email</label>
+        <input type="email" name="email"
+          style="width:100%;padding:10px;border:none;border-radius:8px;background:#f1f3f6;outline:none;">
+      </div>
+
+      <!-- Message -->
+      <div style="margin-bottom:20px;">
+        <label style="display:block;margin-bottom:5px;font-weight:500;color:#555;">Message</label>
+        <textarea name="message" rows="4"
+          style="width:100%;padding:10px;border:none;border-radius:8px;background:#f1f3f6;outline:none;"></textarea>
+      </div>
+
+      <!-- Button -->
+      <button type="submit"
+        style="width:100%;padding:12px;background:linear-gradient(135deg,#ff7a18,#ffb347);border:none;border-radius:5px;color:#fff;font-size:16px;cursor:pointer;transition:0.3s;">
+        Submit
+      </button>
+
+    </form>
+
+  </div>
+
+</section>
+
+
+
+<div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<div id="sectionHistory">
+  <h2 style="text-align:center;margin-bottom:20px;color:#111;">Your Posted Properties</h2>
+  
+  <!-- Search and Filter Bar -->
+  <div style="background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:20px;">
+    <div style="display:flex;gap:15px;align-items:center;flex-wrap:wrap;">
+      <input type="text" id="searchInput" placeholder="Search by property type, city, or address..." 
+             style="flex:1;padding:10px 15px;border:1px solid #e5e7eb;border-radius:8px;min-width:160px;">
+      
+      <select id="typeFilter" style="padding:10px 15px;border:1px solid #e5e7eb;border-radius:8px;">
+        <option value="">All Types</option>
+        <option value="sell">For Sale</option>
+        <option value="rent">For Rent</option>
+      </select>
+      
+      <button onclick="loadHistory()" 
+              style="background:#2563eb;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;">
+        <i class="fas fa-search"></i> Search
+      </button>
+      
+      <button onclick="clearFilters()" 
+              style="background:#f3f4f6;color:#6b7280;border:none;padding:10px 15px;border-radius:8px;cursor:pointer;">
+        Clear
+      </button>
+    </div>
+  </div>
+  
+  <!-- Statistics Cards -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:25px;">
+    <div style="padding:20px;border-radius:12px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+      <div style="font-size:14px;color:rgba(255,255,255,0.9);">Total Properties</div>
+      <div id="totalCount" style="font-size:32px;font-weight:bold;color:white;margin:5px 0;">0</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.8);"><i class="fas fa-home"></i> Your Listings</div>
+    </div>
+  </div>
+  
+  <!-- Properties Grid -->
+  <div id="propertiesContainer">
+    <div style="display:flex;justify-content:center;padding:40px;">
+      <div style="width:40px;height:40px;border:4px solid #f3f4f6;border-top:4px solid #10b981;border-radius:50%;animation:spin 1s linear infinite;"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.property-card {
+  background:white;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  transition:all 0.3s ease;
+  position:relative;
+}
+
+.property-card:hover {
+  transform:translateY(-5px);
+  box-shadow:0 8px 25px rgba(0,0,0,0.15);
+}
+
+.property-image {
+  width:100%;
+  height:200px;
+  object-fit:cover;
+}
+
+.no-properties {
+  text-align:center;
+  padding:60px 20px;
+  color:#6b7280;
+}
+
+.no-properties-icon {
+  font-size:64px;
+  margin-bottom:15px;
+  opacity:0.5;
+}
+</style>
+
+<script src="sections/history.js"></script>

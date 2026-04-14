@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+
+
+    <div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("../navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+
+
+
+
+  <div style="margin-left:500px; margin-top: 30px; background:white;padding:30px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.1);max-width:800px;width:100%;align-items: center;">
+    <form id="propertyForm" enctype="multipart/form-data">
+
+      <label for="propertyType" style="display:block;margin:15px 0 5px;color:#444;font-weight:500;">Property Type</label>
+      <select id="propertyType" name="propertyType" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+        <option value="">Select</option>
+        <option value="house">House</option>
+        <option value="land">Land</option>
+        <option value="apartment">Apartment</option>
+      </select>
+
+      <label style="display:block;margin:15px 0 5px;color:#444;font-weight:500;">Address</label>
+      <div style="display:flex;gap:15px;margin-top:5px;">
+        <input type="text" name="line1" placeholder="Line 1" required style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;">
+        <input type="text" name="line2" placeholder="Line 2" style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;">
+        <input type="text" name="pincode" placeholder="Pincode" required style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;">
+      </div>
+
+      <div style="display:flex;gap:15px;margin-top:15px;">
+        <input type="text" name="city" placeholder="City" required style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;">
+        <input type="text" name="state" placeholder="State" required style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;">
+      </div>
+
+      <div style="display:flex;gap:15px;margin-top:15px;">
+        <input type="text" name="firstName" placeholder="First Name" required style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;">
+        <input type="text" name="lastName" placeholder="Last Name" required style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;">
+      </div>
+
+      <div style="display:flex;gap:15px;margin-top:15px;">
+        <input type="email" name="email" placeholder="Email" required style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;">
+        <input type="text" name="mobile" placeholder="Mobile" required style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;">
+      </div>
+
+      <label style="display:block;margin:15px 0 5px;color:#444;font-weight:500;">Price</label>
+      <input type="number" name="price" placeholder="Price" required style="width:97%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+
+      <label style="display:block;margin:15px 0;color:#444;font-weight:500;">
+        <input type="checkbox" name="negotiable"> Negotiable
+      </label>
+
+      <textarea name="message" placeholder="Message (if any)" style="width:97%;padding:10px;border:1px solid #ddd;border-radius:8px;min-height:80px;"></textarea>
+
+      <div id="imageFields"></div>
+
+      <button type="submit" style="margin-top:20px;background-color:#007bff;color:white;border:none;padding:12px 20px;border-radius:8px;font-size:16px;cursor:pointer;width:100%;">Post Property</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("propertyType").addEventListener("change", function () {
+        const propertyType = this.value;
+        const imageFields = document.getElementById("imageFields");
+        imageFields.innerHTML = "";
+
+        if (propertyType === "house") {
+          imageFields.innerHTML = `
+            <label style="display:block;margin:15px 0 5px;color:#444;font-weight:500;">Front View</label>
+            <input type="file" name="images" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+            <label style="display:block;margin:15px 0 5px;color:#444;font-weight:500;">Back View</label>
+            <input type="file" name="images" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+            <label style="display:block;margin:15px 0 5px;color:#444;font-weight:500;">Both Side Views</label>
+            <input type="file" name="images" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+          `;
+        } else if (propertyType === "land") {
+          imageFields.innerHTML = `
+            <label style="display:block;margin:15px 0 5px;color:#444;font-weight:500;">Front View</label>
+            <input type="file" name="images" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+            <label style="display:block;margin:15px 0 5px;color:#444;font-weight:500;">Overall View</label>
+            <input type="file" name="images" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+          `;
+        } else if (propertyType === "apartment") {
+          imageFields.innerHTML = `
+            <label style="display:block;margin:15px 0 5px;color:#444;font-weight:500;">Front View</label>
+            <input type="file" name="images" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+            <label style="display:block;margin:15px 0 5px;color:#444;font-weight:500;">Back View</label>
+            <input type="file" name="images" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+            <label style="display:block;margin:15px 0 5px;color:#444;font-weight:500;">Ground View</label>
+            <input type="file" name="images" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+            <label style="display:block;margin:15px 0 5px;color:#444;font-weight:500;">Rooms</label>
+            <input type="file" name="images" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+            <label style="display:block;margin:15px 0 5px;color:#444;font-weight:500;">Parking Availability</label>
+            <input type="file" name="images" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+            <label style="display:block;margin:15px 0 5px;color:#444;font-weight:500;">Overall View</label>
+            <input type="file" name="images" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+          `;
+        }
+      });
+
+      document.getElementById("propertyForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+
+        try {
+          const response = await fetch("http://localhost:5001/api/properties_re", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (response.ok) {
+            alert("Property posted successfully!");
+            this.reset();
+          } else {
+            alert("Failed to post property. Please try again.");
+          }
+        } catch (error) {
+          console.error("Error submitting property:", error);
+          alert("An error occurred. Please try again.");
+        }
+      });
+    });
+  </script>
+
+  <!-- Why Sell With Us and How It Works Side by Side -->
+  <div style="display: flex; flex-wrap: wrap; max-width: 1000px; margin: 30px auto; gap: 20px;">
+    <!-- Why Sell With Us -->
+    <section style="flex: 1; min-width: 300px; padding: 20px; background-color: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+      <h2 style="color: #165a3f;">Why Sell With Hitaishi Homes?</h2>
+      <ul style="font-size: 16px; line-height: 1.6; padding-left: 20px;">
+        <li>✅ No hidden fees or commissions</li>
+        <li>✅ Get access to a large pool of verified buyers</li>
+        <li>✅ Post your property in under 2 minutes</li>
+        <li>✅ Receive instant alerts when someone is interested</li>
+      </ul>
+    </section>
+
+    <!-- How It Works -->
+    <section style="flex: 1; min-width: 300px; padding: 20px; background-color: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+      <h2 style="color: #165a3f;">How It Works</h2>
+      <ol style="font-size: 16px; line-height: 1.6; padding-left: 20px;">
+        <li><strong>Step 1:</strong> Fill out your property details in the form below</li>
+        <li><strong>Step 2:</strong> Upload clear images of your property</li>
+        <li><strong>Step 3:</strong> Submit the form – we'll verify and list your property</li>
+        <li><strong>Step 4:</strong> Sit back and wait for buyer inquiries!</li>
+      </ol>
+    </section>
+  </div>
+
+  <!-- Testimonials -->
+  <section style="max-width: 1000px; margin: 30px auto; padding: 20px; background-color: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <h2 style="color: #165a3f;">What Our Sellers Say</h2>
+    <blockquote style="font-style: italic; margin: 20px 0;">“Hitaishi Homes helped me sell my land within a week! The process was smooth and hassle-free.” – <strong>Rajesh K.</strong></blockquote>
+    <blockquote style="font-style: italic; margin: 20px 0;">“Highly recommend for first-time sellers. Great support and real buyers.” – <strong>Anjali P.</strong></blockquote>
+  </section>
+
+
+
+
+<div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+
+</body>
+</html>

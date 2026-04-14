@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Detail</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root{--bg:#f3f4f6;--card:#ffffff;--muted:#6b7280;--accent:#0b63e5;--success:#059669;--danger:#ef4444;--ink:#0f172a}
+    html,body{height:100%}
+    body{font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);margin:0;padding:28px;color:var(--ink);-webkit-font-smoothing:antialiased}
+    .container{max-width:1100px;margin:0 auto;background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,250,250,0.98));border-radius:14px;padding:20px;box-shadow:0 10px 30px rgba(2,6,23,.08);border:1px solid rgba(15,23,42,.04)}
+    .hdr{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
+    .hdr-left{min-width:0}
+    .meta-row{display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap}
+    .chip{background:#f1f5f9;padding:6px 8px;border-radius:999px;font-size:13px;color:#0f172a;border:1px solid #eef2ff}
+    .price-chip{background:linear-gradient(90deg,#eef2ff,#f7fbff);padding:10px 14px;border-radius:12px;border:1px solid #e6eef6;font-weight:800;color:#0b63e5;font-size:18px}
+    .price-sub{display:block;font-size:12px;color:#475569;font-weight:600}
+    .trust{display:flex;gap:8px;align-items:center}
+    .trust svg{width:18px;height:18px;opacity:.9}
+    .feature-chip{display:inline-block;background:#f8fafc;padding:6px 8px;border-radius:999px;font-size:13px;margin:6px 6px 0 0;color:#334155;border:1px solid #eef6ff}
+    .cta-row button{transition:transform .12s ease,box-shadow .12s ease;}
+    .cta-row button:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(2,6,23,.12)}
+    .grid{display:flex;gap:28px;align-items:flex-start}
+    .left{flex:1;min-width:320px}
+    .right{flex:1.05;min-width:320px}
+    .image-wrap{border-radius:12px;overflow:hidden;background:linear-gradient(180deg,#eef2ff,#fff)}
+    #mainImg{width:100%;height:460px;object-fit:cover;display:block}
+    .thumbs{display:flex;gap:10px;margin-top:12px}
+    .thumbs img{width:76px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:transform .12s ease,border-color .12s ease}
+    .thumbs img:hover{transform:translateY(-4px)}
+    .thumbs img.active{border-color:var(--accent)}
+    .badge{display:inline-block;padding:6px 12px;border-radius:999px;background:#ecfeff;color:#064e3b;font-weight:700;font-size:13px}
+    .specs{background:#fbfdff;padding:14px;border-radius:10px;border:1px solid #e6eef6;margin-top:12px;color:#334155}
+    .spec-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    .spec-item{font-size:13px;color:#334155}
+    .cta-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+    .cta-row button{flex:1;padding:12px;border-radius:10px;border:none;color:#fff;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,.06)}
+    .back{background:var(--muted)}
+    .buy{background:var(--accent)}
+    .rent{background:var(--success)}
+    .cart{background:#111827}
+    .contact{background:var(--danger)}
+    .share{background:#2563eb}
+    .seller{margin-top:14px;display:flex;align-items:center;gap:12px}
+    .seller .meta{font-size:13px;color:#374151}
+    .toast{position:fixed;right:20px;bottom:20px;background:#0b2436;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 6px 20px rgba(2,6,23,.2);display:none;z-index:30000}
+    @media (max-width:900px){.grid{flex-direction:column}.thumbs{overflow:auto}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hdr">
+      <div class="hdr-left">
+        <h1 id="title" style="margin:0;font-size:20px"></h1>
+        <div class="meta-row">
+          <div id="category" class="chip"></div>
+          <div id="availabilityBadge" class="chip"></div>
+          <div class="trust" title="Verified listing"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3 6 6 .5-4.5 4 1 6L12 16l-5.5 3.5 1-6L3 8.5 9 8 12 2z" fill="#0ea5e9"/></svg><span style="font-size:13px;color:#475569">Verified</span></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="text-align:right;margin-right:6px">
+          <div class="price-chip" id="pricePrimary">₹ 0<span class="price-sub">Buy Price</span></div>
+          <div style="height:6px"></div>
+          <div style="font-size:13px;color:#64748b">Listed on: <span id="listedAt">-</span></div>
+        </div>
+        <div><button onclick="history.back()" style="padding:8px 12px;border-radius:8px;border:none;background:#ef4444;color:#fff;cursor:pointer">Back</button></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="left">
+        <div style="border-radius:10px;overflow:hidden;background:#f3f4f6"><img id="mainImg" src="" style="width:100%;height:420px;object-fit:cover"></div>
+        <div class="thumbs" id="thumbs"></div>
+      </div>
+      <div class="right">
+        <div id="category" style="color:#475569;margin-bottom:6px"></div>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:6px">
+          <div style="display:flex;flex-direction:column">
+            <div style="font-size:14px;color:#64748b">Buy</div>
+            <div id="buyPrice" style="font-size:20px;font-weight:800;color:var(--accent)">₹ 0</div>
+          </div>
+          <div style="display:flex;flex-direction:column">
+            <div style="font-size:14px;color:#64748b">Rent</div>
+            <div id="rentPrice" style="font-size:16px;font-weight:700;color:#0ea5e9">N/A</div>
+          </div>
+          <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+            <div id="securityBadge" class="chip">Secure Payment</div>
+            <div id="warrantyBadge" class="chip">Warranty</div>
+          </div>
+        </div>
+        <div style="margin-top:8px"><span id="availability" class="badge"></span></div>
+        <div id="specs" class="specs"></div>
+        <div style="margin-top:12px"><h4 style="margin:0 0 6px 0">Short</h4><div id="short" style="color:#374151"></div></div>
+        <div style="margin-top:12px"><h4 style="margin:0 0 6px 0">Details</h4><div id="long" style="color:#475569;line-height:1.45"></div></div>
+
+        <div style="margin-top:14px">
+          <h4 style="margin:0 0 8px 0">Property Details</h4>
+          <div id="detailsGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;color:#334155;font-size:14px"></div>
+        </div>
+
+        <div class="cta-row">
+          <button id="btnBuy" class="buy">Buy Now</button>
+          <button id="btnRent" class="rent">Rent Now</button>
+          <button id="btnCart" class="cart">Add to Cart</button>
+          <button id="btnContact" class="contact">Contact Seller</button>
+          <button id="btnShare" class="share">Share</button>
+          <button id="btnCancel" class="back">Cancel</button>
+        </div>
+
+        <div style="margin-top:14px;display:flex;align-items:center;gap:12px">
+          <img id="sellerAvatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #eef2ff">
+          <div>
+            <div id="sellerName" style="font-weight:700;font-size:15px"></div>
+            <div id="sellerContact" style="color:#475569;font-size:13px"></div>
+            <div id="sellerEmail" style="color:#64748b;font-size:13px;margin-top:4px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- contact form popup -->
+  <div id="formPopup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);justify-content:center;align-items:center;z-index:20000">
+    <div style="background:#fff;width:90%;max-width:420px;padding:20px;border-radius:12px">
+      <h3 id="formTitle"></h3>
+      <form id="propertyForm">
+        <input type="hidden" id="propertyId"><input type="hidden" id="isRent">
+        <label>Name</label>
+        <input id="formName" required style="width:100%;padding:10px;margin:6px 0">
+        <label>Phone</label>
+        <input id="formPhone" required maxlength="10" style="width:100%;padding:10px;margin:6px 0">
+        <label>Email</label>
+        <input id="formEmail" type="email" required style="width:100%;padding:10px;margin:6px 0">
+        <label>Message</label>
+        <textarea id="formMsg" rows="3" style="width:100%;padding:10px;margin:6px 0"></textarea>
+        <button type="submit" id="submitButton" style="width:100%;padding:12px;background:#16a34a;color:#fff;border:none;border-radius:8px;margin-top:8px">Submit Request</button>
+        <button type="button" onclick="document.getElementById('formPopup').style.display='none'" style="width:100%;padding:10px;margin-top:8px;background:#ef4444;color:#fff;border:none;border-radius:8px">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+<script>
+(function(){
+  function getParam(name){ const u = new URL(window.location.href); return u.searchParams.get(name); }
+  const data = getParam('data');
+  if(!data){ document.body.innerHTML = '<div style="padding:20px;color:#666">No product data provided.</div>'; return; }
+
+  function showToast(msg, timeout=2200){ const t = document.getElementById('toast'); t.innerText = msg; t.style.display = 'block'; t.style.opacity = '1'; clearTimeout(t._hid); t._hid = setTimeout(()=>{ t.style.opacity = '0'; setTimeout(()=>t.style.display='none',240); }, timeout); }
+
+  function safeParseData(input){
+    try{ return JSON.parse(decodeURIComponent(input)); }catch(e){}
+    try{ const step1 = decodeURIComponent(input); try{ return JSON.parse(step1); }catch(e){} const b = atob(step1); try{ return JSON.parse(b); }catch(e){} try{ return JSON.parse(unescape(b)); }catch(e){} }catch(e){}
+    try{ const a = atob(input); try{ return JSON.parse(a); }catch(e){} try{ return JSON.parse(unescape(a)); }catch(e){} }catch(e){}
+    return null;
+  }
+
+  try{
+    const prop = safeParseData(data);
+    if(!prop) throw new Error('Unable to decode product payload');
+    document.getElementById('title').innerText = prop.title || prop.name || 'Product';
+    document.getElementById('category').innerText = prop.propertyType || prop.type || '';
+    const availability = (prop.type||'').toLowerCase().includes('rent') ? 'For Rent' : 'For Sale';
+    document.getElementById('availability').innerText = availability;
+    document.getElementById('buyPrice').innerText = prop.price?('₹ '+prop.price):'N/A';
+    document.getElementById('rentPrice').innerText = (prop.rentDaily?('Daily: ₹'+prop.rentDaily):'') + (prop.rentMonthly?(' / Monthly: ₹'+prop.rentMonthly):'') || 'N/A';
+    const specs = [];
+    if(prop.size) specs.push({k:'Size',v:prop.size});
+    if(prop.brand) specs.push({k:'Brand',v:prop.brand});
+    if(prop.condition) specs.push({k:'Condition',v:prop.condition});
+    if(prop.location||prop.city) specs.push({k:'Location',v:(prop.location||prop.city)});
+    if(prop.warranty) specs.push({k:'Warranty',v:prop.warranty});
+    if(specs.length){
+      const shtml = '<div class="spec-grid">'+specs.map(s=>`<div class="spec-item"><strong>${s.k}:</strong> ${s.v}</div>`).join('')+'</div>';
+      document.getElementById('specs').innerHTML = shtml;
+    } else document.getElementById('specs').innerHTML = 'No specifications listed.';
+
+    // Build extended details from fields present in the post form
+    const detailsMap = [
+      ['locality','Locality'],['nearbyLandmarks','Nearby Landmarks'],['builtUpArea','Built Up Area'],['carpetArea','Carpet Area'],['plotArea','Plot Area'],['bathrooms','Bathrooms'],['balconyCount','Balcony Count'],['floorNumber','Floor Number'],['totalFloors','Total Floors'],['maintenanceCharges','Maintenance Charges'],['deposit','Deposit'],['videoUrl','Video'],['furnishingStatus','Furnishing'],['ageOfProperty','Age'],['facing','Facing'],['parkingAvailability','Parking'],['waterSource','Water Source'],['powerBackup','Power Backup'],['flooringType','Flooring'],['amenities','Amenities'],['ownershipType','Ownership'],['documentsAvailable','Documents'],['ownerName','Owner'],['contactMobile','Mobile'],['contactAlt','Alt Contact'],['contactEmail','Email'],['specialFeatures','Special Features'],['idealFor','Ideal For'],['petsAllowed','Pets Allowed']
+    ];
+    const detailsEl = document.getElementById('detailsGrid');
+    detailsEl.innerHTML = '';
+    detailsMap.forEach(([k,label])=>{
+      const val = prop[k] || prop[k.charAt(0).toLowerCase()+k.slice(1)];
+      if(val !== undefined && val !== null && String(val).trim() !== ''){
+        let display = val;
+        if(typeof val === 'boolean') display = val ? 'Yes' : 'No';
+        if(k === 'amenities' && typeof val === 'string') display = val.split(',').map(s=>s.trim()).filter(Boolean).join(', ');
+        if(k === 'videoUrl') display = `<a href="${val}" target="_blank" style="color:var(--accent);text-decoration:underline">View Video</a>`;
+        detailsEl.insertAdjacentHTML('beforeend', `<div style="padding:8px 10px;border-radius:8px;background:#fbfdff;border:1px solid #eef6ff"><strong style="display:block;color:#0f172a">${label}</strong><div style="color:#475569;margin-top:4px">${display}</div></div>`);
+      }
+    });
+
+    // Boolean flags
+    const bools = { negotiable: 'Negotiable', loanAvailable: 'Loan Available', readyToMove: 'Ready To Move' };
+    Object.keys(bools).forEach(k=>{ const v = prop[k]; if(v!==undefined){ detailsEl.insertAdjacentHTML('beforeend', `<div style="padding:8px 10px;border-radius:8px;background:#fff;border:1px solid #f1f5f9"><strong style="display:block;color:#0f172a">${bools[k]}</strong><div style="color:#475569;margin-top:4px">${v? 'Yes':'No'}</div></div>`); } });
+    document.getElementById('short').innerText = prop.shortDescription || prop.summary || '';
+    document.getElementById('long').innerText = prop.description || prop.longDescription || '';
+    document.getElementById('sellerName').innerText = prop.sellerName || prop.ownerName || 'Seller';
+    const primaryPhone = prop.sellerPhone || prop.contactMobile || prop.contact || '';
+    document.getElementById('sellerContact').innerText = primaryPhone;
+    document.getElementById('sellerEmail').innerText = prop.contactEmail || prop.sellerEmail || '';
+    if(prop.sellerAvatar) document.getElementById('sellerAvatar').src = prop.sellerAvatar;
+
+    const main = document.getElementById('mainImg'); const thumbs = document.getElementById('thumbs');
+    thumbs.innerHTML=''; let imgs = [];
+    if(prop.images && prop.images.length) imgs = prop.images.slice();
+    else if(prop.imageUrl) imgs = [prop.imageUrl];
+    if(imgs.length){
+      const normalize = s => s && s.toString().startsWith('http') ? s : ('http://localhost:5001/'+s.toString().replace(/^\/+/,''));
+      main.src = normalize(imgs[0]);
+      imgs.forEach((s, idx)=>{ const im = document.createElement('img'); im.src = normalize(s); im.onclick = ()=>{ main.src = im.src; Array.from(thumbs.children).forEach(c=>c.classList.remove('active')); im.classList.add('active'); }; if(idx===0) im.classList.add('active'); thumbs.appendChild(im); });
+    } else main.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#e6eef6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#94a3b8">No Image</text></svg>';
+
+    // CTAs
+    const isRentType = (prop.type||'').toString().toLowerCase().includes('rent');
+    // Show only the main action per type, keep Cancel visible
+    if (isRentType) {
+      document.getElementById('btnBuy').style.display = 'none';
+      document.getElementById('btnCart').style.display = 'none';
+      document.getElementById('btnContact').style.display = 'none';
+    } else {
+      document.getElementById('btnRent').style.display = 'none';
+      document.getElementById('btnCart').style.display = 'none';
+      document.getElementById('btnContact').style.display = 'none';
+    }
+
+    document.getElementById('btnBuy').onclick = ()=>{ document.getElementById('isRent').value='false'; document.getElementById('propertyId').value = prop.id||prop._id||''; document.getElementById('formTitle').innerText='Buy Property'; document.getElementById('submitButton').style.background='var(--accent)'; document.getElementById('formPopup').style.display='flex'; };
+    document.getElementById('btnRent').onclick = ()=>{ document.getElementById('isRent').value='true'; document.getElementById('propertyId').value = prop.id||prop._id||''; document.getElementById('formTitle').innerText='Rent Property'; document.getElementById('submitButton').style.background='var(--success)'; document.getElementById('formPopup').style.display='flex'; };
+    document.getElementById('btnCart').onclick = ()=>{ const cart = JSON.parse(localStorage.getItem('cart')||'[]'); cart.push({id:prop.id||prop._id,title:prop.title,price:prop.price}); localStorage.setItem('cart',JSON.stringify(cart)); showToast('Added to cart'); };
+    document.getElementById('btnContact').onclick = ()=>{ document.getElementById('formTitle').innerText='Contact Seller'; document.getElementById('formPopup').style.display='flex'; };
+    document.getElementById('btnShare').onclick = async ()=>{
+      const shareUrl = window.location.href;
+      const shareTitle = prop.title || prop.name || 'Property';
+      const shareText = (prop.shortDescription||prop.summary||'') + '\n' + (prop.location||prop.city||'');
+      try{
+        if(navigator.share){
+          await navigator.share({ title: shareTitle, text: shareText, url: shareUrl });
+          showToast('Shared successfully');
+        } else if(navigator.clipboard && navigator.clipboard.writeText){
+          await navigator.clipboard.writeText(shareUrl);
+          showToast('Link copied to clipboard');
+        } else {
+          const tmp = document.createElement('input'); tmp.value = shareUrl; document.body.appendChild(tmp); tmp.select(); document.execCommand('copy'); document.body.removeChild(tmp); showToast('Link copied to clipboard');
+        }
+      }catch(err){ console.error('Share failed', err); showToast('Unable to share'); }
+    };
+    document.getElementById('btnCancel').onclick = ()=>{ history.back(); };
+
+  }catch(e){ console.error(e); document.body.innerHTML = '<div style="padding:20px;color:#666">Unable to decode product data.</div>'; }
+
+  // form submit
+  document.getElementById('propertyForm').addEventListener('submit', async function(e){ e.preventDefault(); const isRent = document.getElementById('isRent').value === 'true'; const apiEndpoint = isRent ? 'rentproperty' : 'buyproperty'; const payload = { propertyId: document.getElementById('propertyId').value, name: document.getElementById('formName').value, phone: document.getElementById('formPhone').value, email: document.getElementById('formEmail').value, message: document.getElementById('formMsg').value }; try{ const res = await fetch(`http://localhost:5001/api/${apiEndpoint}`,{ method:'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) }); const data = await res.json(); if(data.success){ alert('Request submitted'); document.getElementById('formPopup').style.display='none'; document.getElementById('propertyForm').reset(); } else alert('Failed: '+data.message); }catch(err){ console.error(err); alert('Network error'); } });
+
+})();
+</script>
+</body>
+</html>

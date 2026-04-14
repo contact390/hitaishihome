@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Properties</title>
+</head>
+<body style="font-family: Arial; background:#f2f2f2; margin:0; padding:20px;">
+
+  <h2 style="text-align:center; margin-bottom:30px;">All Properties</h2>
+
+  <div id="propertiesContainer" 
+       style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px;">
+  </div>
+
+  <script>
+    async function loadProperties() {
+
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("Token missing! Login first.");
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:5001/api/properties", {
+          method: "GET",
+          headers: { "Authorization": "Bearer " + token }
+        });
+
+        const data = await response.json();
+
+        if (!data.success) {
+          alert("Failed to load properties");
+          return;
+        }
+
+        const container = document.getElementById("propertiesContainer");
+        container.innerHTML = "";
+
+        data.properties.forEach(prop => {
+
+          // Compute a usable image URL from stored value. The API stores
+          // image entries in multiple formats (full URL, '/uploads/..',
+          // or sometimes just the filename). Make the logic defensive so
+          // all existing records can resolve to a valid server URL.
+          // let img = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 120'><rect width='100%25' height='100%25' fill='%23f3f4f6'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239ca3af' font-family='Arial' font-size='14'>no image</text></svg>";
+
+          // if (prop.images && prop.images.length) {
+          //   const stored = (prop.images[0] || '').toString();
+
+          //   // If it's already a full URL, use it as-is.
+          //   if (/^https?:\/\//i.test(stored)) {
+          //     img = stored;
+          //   } else if (stored) {
+          //     // Clean whitespace and any leading slash.
+          //     let cleaned = stored.trim();
+          //     cleaned = cleaned.startsWith('/') ? cleaned.slice(1) : cleaned;
+
+          //     // If the value looks like just a filename (no uploads/ prefix),
+          //     // prefix it so it points to the server's uploads folder.
+          //     if (!/^uploads\//i.test(cleaned)) {
+          //       cleaned = 'uploads/' + cleaned;
+          //     }
+
+          //     img = encodeURI(`http://localhost:5001/${cleaned}`);
+          //   }
+
+          //   console.log('Property stored image value ->', prop.images[0], '=> resolved URL ->', img);
+          // }
+
+        let img = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 120'><rect width='100%25' height='100%25' fill='%23f3f4f6'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239ca3af' font-family='Arial' font-size='14'>no image</text></svg>";
+
+if (prop.images && Array.isArray(prop.images) && prop.images.length > 0) {
+
+    // ALWAYS FIRST IMAGE
+    let stored = prop.images[0];  
+
+    // If backend stored like "/uploads/filename.jpg"
+    if (stored.startsWith("/")) {
+        img = `http://localhost:5001${stored}`;
+    }
+    // If backend stored like "uploads/filename.jpg"
+    else if (stored.startsWith("uploads/")) {
+        img = `http://localhost:5001/${stored}`;
+    }
+    // If backend stored only filename
+    else {
+        img = `http://localhost:5001/uploads/${stored}`;
+    }
+}
+
+
+          const card = `
+            <div style="
+                width:300px;
+                background:white;
+                padding:15px;
+                border-radius:10px;
+                box-shadow:0px 3px 10px rgba(0,0,0,0.15);
+                overflow:hidden;">
+              
+              <img src="${img}" alt="property"
+                onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 120%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23f3f4f6%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%239ca3af%22 font-family=%22Arial%22 font-size=%2214%22>no image</text></svg>'"
+                style="width:100%; height:180px; object-fit:cover; border-radius:10px;">
+              
+              <h3 style="font-size:18px; margin:10px 0; color:#333;">${prop.title}</h3>
+
+              <p style="margin:6px 0; color:#444;"><b>Type:</b> ${prop.type}</p>
+              <p style="margin:6px 0; color:#444;"><b>City:</b> ${prop.city}</p>
+              <p style="margin:6px 0; color:#444;"><b>Price:</b> ₹${prop.price}</p>
+              <p style="margin:6px 0; color:#444;"><b>Pincode:</b> ${prop.pincode}</p>
+              <p style="margin:6px 0; color:#444;"><b>Address:</b> ${prop.address}</p>
+
+              <button style="
+                  width:100%; 
+                  padding:10px; 
+                  margin-top:10px; 
+                  background:#007bff;
+                  color:white;
+                  border:none;
+                  border-radius:5px;
+                  cursor:pointer;
+                  font-size:15px;">
+                View Details
+              </button>
+            </div>
+          `;
+
+          container.innerHTML += card;
+        });
+
+      } catch (err) {
+        console.log(err);
+        alert("Error loading properties");
+      }
+    }
+
+    loadProperties();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Hitaishi Homes | Find Your Dream Home</title>
+  
+  <!-- Google Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+      overflow-x: hidden;
+    }
+
+    /* smooth transitions & modern card style */
+    .property-card {
+      background: #ffffff;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.03), 0 2px 4px rgba(0,0,0,0.05);
+      transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      border: 1px solid #eef2f6;
+    }
+
+    .property-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0,0,0,0.05);
+      border-color: #cbd5e1;
+    }
+
+    .card-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .property-card:hover .card-img {
+      transform: scale(1.02);
+    }
+
+    /* filter bar styling */
+    .filter-container {
+      background: #ffffff;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0,0,0,0.05);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid #e9edf2;
+    }
+
+    .filter-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      align-items: flex-end;
+    }
+
+    .filter-group {
+      flex: 1 1 180px;
+      min-width: 150px;
+    }
+
+    .filter-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #5b6e8c;
+      margin-bottom: 0.3rem;
+    }
+
+    .filter-select {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border-radius: 1rem;
+      border: 1px solid #e2e8f0;
+      background: #fefefe;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: #0f172a;
+      transition: 0.2s;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .filter-select:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+    }
+
+    .btn-search {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.8rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 1.4rem;
+    }
+
+    .btn-search:hover {
+      background: #1d4ed8;
+      transform: scale(0.97);
+      box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+    }
+
+    /* properties grid */
+    .properties-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.8rem;
+      margin-top: 1rem;
+    }
+
+    /* info inside card */
+    .card-content {
+      padding: 1.2rem 1.2rem 1.3rem;
+    }
+
+    .property-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: #0f172a;
+      line-height: 1.3;
+    }
+
+    .property-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin: 0.6rem 0 0.2rem;
+      font-size: 0.85rem;
+      color: #475569;
+      align-items: center;
+    }
+
+    .property-price {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #0f3b5e;
+      letter-spacing: -0.3px;
+    }
+
+    .badge {
+      background: #f1f5f9;
+      padding: 0.2rem 0.7rem;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .loader {
+      text-align: center;
+      padding: 3rem;
+      font-size: 1rem;
+      color: #3b82f6;
+    }
+
+    /* sections */
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #1e293b, #2563eb);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+      letter-spacing: -0.5px;
+    }
+
+    /* responsive */
+    @media (max-width: 680px) {
+      .filter-container {
+        padding: 1rem;
+      }
+      .btn-search {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+      }
+      .filter-group {
+        flex: 1 1 100%;
+      }
+      .section-title {
+        font-size: 1.6rem;
+      }
+    }
+
+    /* utility */
+    .bg-soft-blue {
+      background: #eef2ff;
+    }
+    .testimonial-card, .faq-card, .feature-card {
+      transition: all 0.2s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-3px);
+    }
+    hr {
+      border-color: #e2e8f0;
+    }
+    .container-padded {
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container-padded" style="margin-top: 2rem; margin-bottom: 2.5rem;">
+    
+    <div class="filter-container">
+      <h1 class="section-title" style="margin-bottom: 1rem;">✨ Find Your Dream Home</h1>
+      <div class="filter-grid">
+        <div class="filter-group">
+          <label><i class="fas fa-building"></i> Property Type</label>
+          <select id="typeFilter" class="filter-select">
+            <option value="">All Types</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label><i class="fas fa-city"></i> City</label>
+          <select id="cityFilter" class="filter-select">
+            <option value="">All Cities</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label><i class="fas fa-rupee-sign"></i> Budget Range</label>
+          <select id="budgetFilter" class="filter-select">
+            <option value="">Any Budget</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label><i class="fas fa-clock"></i> Property Age</label>
+          <select id="ageFilter" class="filter-select">
+            <option value="">Any Age</option>
+          </select>
+        </div>
+        <div class="filter-group" style="flex-grow: 0.3;">
+          <button onclick="applyFilters()" class="btn-search"><i class="fas fa-search"></i> Search</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loader & Properties grid -->
+    <div id="loader" class="loader"><i class="fas fa-spinner fa-pulse"></i> Loading premium listings...</div>
+    <div id="propertiesContainer" class="properties-grid"></div>
+
+    <!-- Additional Sections (Why Choose, Testimonials, FAQ, Help) -->
+    <section class="bg-soft-blue" style="border-radius: 2rem; margin-top: 4rem; padding: 2rem 1.5rem;">
+      <div class="text-center" style="max-width: 800px; margin: 0 auto;">
+        <h2 style="font-size: 1.8rem; font-weight: 700; color: #1e3a8a;">Why Choose Hitaishi Homes?</h2>
+        <p style="color: #334155; margin: 1rem 0 2rem;">Curated listings, verified properties, and dedicated support — your dream home journey starts here.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+          <div class="feature-card" style="background: white; border-radius: 1.5rem; padding: 1.4rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+            <i class="fas fa-check-circle" style="font-size: 2rem; color: #2563eb;"></i>
+            <h3 style="margin: 0.8rem 0 0.4rem; font-weight: 600;">Verified Listings</h3>
+            <p style="font-size: 0.85rem; color: #475569;">All properties verified by experts for authenticity & clarity.</p>
+          </div>
+          <div class="feature-card" style="background: white; border-radius: 1.5rem; padding: 1.4rem;">
+            <i class="fas fa-headset" style="font-size: 2rem; color: #2563eb;"></i>
+            <h3 style="margin: 0.8rem 0 0.4rem; font-weight: 600;">Expert Assistance</h3>
+            <p style="font-size: 0.85rem; color: #475569;">Personalized guidance from property advisors at every step.</p>
+          </div>
+          <div class="feature-card" style="background: white; border-radius: 1.5rem; padding: 1.4rem;">
+            <i class="fas fa-hand-holding-usd" style="font-size: 2rem; color: #2563eb;"></i>
+            <h3 style="margin: 0.8rem 0 0.4rem; font-weight: 600;">Easy Financing</h3>
+            <p style="font-size: 0.85rem; color: #475569;">Home loans & finance options with trusted banking partners.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin: 3rem 0;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <h2 style="font-size: 1.8rem; font-weight: 700;">What Our Clients Say 💬</h2>
+        <p style="color: #4b5563;">Real stories, real happiness</p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.8rem;">
+        <div class="testimonial-card" style="background: #ffffff; border-radius: 1.5rem; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid #edf2f7;">
+          <i class="fas fa-quote-left" style="color: #94a3b8; margin-bottom: 0.5rem;"></i>
+          <p style="font-style: italic;">"Buying our home through Hitaishi Homes was seamless. Professional team, verified listings — truly the best decision!"</p>
+          <p style="margin-top: 1rem; font-weight: 600;">— Ananya S.</p>
+        </div>
+        <div class="testimonial-card" style="background: #ffffff; border-radius: 1.5rem; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid #edf2f7;">
+          <i class="fas fa-quote-left" style="color: #94a3b8;"></i>
+          <p style="font-style: italic;">"They guided me at every step and showed only verified properties. Highly recommended for first-time buyers!"</p>
+          <p style="margin-top: 1rem; font-weight: 600;">— Rohit M.</p>
+        </div>
+        <div class="testimonial-card" style="background: #ffffff; border-radius: 1.5rem; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid #edf2f7;">
+          <i class="fas fa-quote-left" style="color: #94a3b8;"></i>
+          <p style="font-style: italic;">"Quick process, beautiful listings, and genuine support. Love my new home! Thank you Hitaishi team."</p>
+          <p style="margin-top: 1rem; font-weight: 600;">— Priya R.</p>
+        </div>
+      </div>
+    </section>
+
+    <section style="background: #f8fafc; border-radius: 1.8rem; padding: 2rem 1.5rem; margin: 2rem 0;">
+      <h2 style="font-size: 1.8rem; font-weight: 700; text-align: center; margin-bottom: 1.8rem;">Frequently Asked Questions</h2>
+      <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 780px; margin: 0 auto;">
+        <details style="background: white; border-radius: 1rem; padding: 1rem 1.2rem; border: 1px solid #e2e8f0;">
+          <summary style="font-weight: 600; cursor: pointer;">🏡 How can I schedule a visit to a property?</summary>
+          <p style="margin-top: 0.75rem; color: #334155;">Once you find a property, click the "Contact Us" button or call our helpline. Our agents will arrange a site visit at your convenience.</p>
+        </details>
+        <details style="background: white; border-radius: 1rem; padding: 1rem 1.2rem; border: 1px solid #e2e8f0;">
+          <summary style="font-weight: 600; cursor: pointer;">✅ Are all properties verified?</summary>
+          <p style="margin-top: 0.75rem; color: #334155;">Yes, every listing on Hitaishi Homes undergoes thorough verification before being published to ensure authenticity.</p>
+        </details>
+        <details style="background: white; border-radius: 1rem; padding: 1rem 1.2rem; border: 1px solid #e2e8f0;">
+          <summary style="font-weight: 600; cursor: pointer;">💰 Can I apply for a home loan through Hitaishi Homes?</summary>
+          <p style="margin-top: 0.75rem; color: #334155;">Absolutely! We have partnered with leading banks to help you secure home loans at competitive rates with minimal hassle.</p>
+        </details>
+      </div>
+    </section>
+
+    <section style="background: linear-gradient(105deg, #eef2ff 0%, #ffffff 100%); border-radius: 2rem; padding: 2rem; text-align: center; margin: 2rem 0 1rem;">
+      <h2 style="font-size: 1.7rem; font-weight: 700;">📞 Need Help?</h2>
+      <p style="margin: 0.8rem 0;">Call us at <strong style="font-size: 1.2rem;">1800-123-456</strong> or email <a href="mailto:support@hitaishihomes.com" style="color:#2563eb; text-decoration: none; font-weight: 500;">support@hitaishihomes.com</a></p>
+      <a href="/contact" style="display: inline-block; background: #1e3a8a; color: white; padding: 0.7rem 1.6rem; border-radius: 2rem; margin-top: 1rem; text-decoration: none; font-weight: 500;">Contact Us →</a>
+    </section>
+  </main>
+
+  <script>
+    // ---------- Enhanced UI with fallback mock data (since backend might be offline) ----------
+    let allProperties = [];
+
+    // --- MOCK DATA for smooth demo (robust design, but we also try real API)
+    const MOCK_PROPERTIES = [
+      { id: 1, propertyType: "Apartment", city: "Mumbai", price: "12500000", bedrooms: 3, ageOfProperty: 3, imageUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=400&fit=crop", age: 3 },
+      { id: 2, propertyType: "Villa", city: "Bangalore", price: "27500000", bedrooms: 4, ageOfProperty: 2, imageUrl: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&h=400&fit=crop", age: 2 },
+      { id: 3, propertyType: "Independent House", city: "Delhi", price: "8500000", bedrooms: 3, ageOfProperty: 8, imageUrl: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=600&h=400&fit=crop", age: 8 },
+      { id: 4, propertyType: "Apartment", city: "Hyderabad", price: "6200000", bedrooms: 2, ageOfProperty: 1, imageUrl: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=400&fit=crop", age: 1 },
+      { id: 5, propertyType: "Penthouse", city: "Mumbai", price: "42000000", bedrooms: 5, ageOfProperty: 4, imageUrl: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=600&h=400&fit=crop", age: 4 },
+      { id: 6, propertyType: "Villa", city: "Pune", price: "18900000", bedrooms: 4, ageOfProperty: 6, imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop", age: 6 },
+      { id: 7, propertyType: "Apartment", city: "Chennai", price: "7200000", bedrooms: 3, ageOfProperty: 12, imageUrl: "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=600&h=400&fit=crop", age: 12 },
+      { id: 8, propertyType: "Row House", city: "Bangalore", price: "14200000", bedrooms: 3, ageOfProperty: 5, imageUrl: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&h=400&fit=crop", age: 5 }
+    ];
+
+    async function fetchPropertiesWithFallback() {
+      const loader = document.getElementById('loader');
+      const container = document.getElementById('propertiesContainer');
+      loader.style.display = 'block';
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const response = await fetch('http://localhost:5001/api/newproperties/buy', { signal: controller.signal });
+        clearTimeout(timeoutId);
+        const data = await response.json();
+        if (data.success && data.properties && data.properties.length > 0) {
+          allProperties = data.properties.map(p => ({ ...p, ageOfProperty: p.ageOfProperty || p.age || 2, price: p.price ? p.price.toString() : '5000000' }));
+        } else {
+          allProperties = MOCK_PROPERTIES;
+        }
+      } catch (err) {
+        console.warn("Backend unreachable, using premium mock data:", err);
+        allProperties = MOCK_PROPERTIES;
+      }
+      loader.style.display = 'none';
+      if (allProperties.length === 0) {
+        container.innerHTML = '<div style="grid-column:1/-1; text-align:center;">✨ No properties match, but check back soon!</div>';
+      } else {
+        populateFiltersFromProperties(allProperties);
+        displayProperties(allProperties);
+      }
+    }
+
+    function populateFiltersFromProperties(properties) {
+      const types = [...new Set(properties.map(p => p.propertyType).filter(Boolean))].sort();
+      const cities = [...new Set(properties.map(p => p.city).filter(Boolean))].sort();
+      const priceRanges = ['< 50 Lakh', '50 Lakh - 1 Cr', '1 Cr - 2 Cr', '2 Cr - 5 Cr', '> 5 Cr'];
+      const ageRanges = ['New (0-2 yrs)', '3-7 years', '8-15 years', '15+ years'];
+
+      function populate(selectId, options, defaultLabel = "Any") {
+        const select = document.getElementById(selectId);
+        if (!select) return;
+        select.innerHTML = `<option value="">${defaultLabel}</option>`;
+        options.forEach(opt => {
+          const option = document.createElement('option');
+          option.value = opt;
+          option.textContent = opt;
+          select.appendChild(option);
+        });
+      }
+      populate('typeFilter', types, "All Types");
+      populate('cityFilter', cities, "All Cities");
+      populate('budgetFilter', priceRanges, "Any Budget");
+      populate('ageFilter', ageRanges, "Any Age");
+    }
+
+    function displayProperties(properties) {
+      const container = document.getElementById('propertiesContainer');
+      container.innerHTML = '';
+      if (!properties.length) {
+        container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding: 2rem;">🏠 No properties found with selected filters. Try adjusting criteria.</div>';
+        return;
+      }
+      properties.forEach(prop => {
+        const priceNum = parseFloat(String(prop.price).replace(/,/g, '')) || 0;
+        const formattedPrice = priceNum.toLocaleString('en-IN');
+        const bedrooms = prop.bedrooms || (prop.bedrooms === 0 ? 2 : (prop.propertyType?.includes('Villa') ? 4 : 3));
+        const ageValue = prop.ageOfProperty || prop.age || 2;
+        const ageText = ageValue <= 1 ? 'New' : (ageValue + ' years old');
+        const imgSrc = prop.imageUrl || prop.image || 'https://images.unsplash.com/photo-1560185009-5e6f6e6b2a9c?w=600&h=400&fit=crop';
+        
+        const card = document.createElement('div');
+        card.className = 'property-card';
+        card.innerHTML = `
+          <img class="card-img" src="${imgSrc}" alt="property" loading="lazy" onerror="this.src='https://placehold.co/600x400/f1f5f9/475569?text=Premium+Home'">
+          <div class="card-content">
+            <div class="property-title">${prop.propertyType || 'Residential'} in ${prop.city || 'Prime Location'}</div>
+            <div class="property-price">₹ ${formattedPrice}</div>
+            <div class="property-meta">
+              <span><i class="fas fa-bed"></i> ${bedrooms} BHK</span>
+              <span><i class="fas fa-calendar-alt"></i> ${ageText}</span>
+              <span class="badge"><i class="fas fa-map-marker-alt"></i> ${prop.city || 'Metro'}</span>
+            </div>
+            <div style="margin-top: 12px;"><i class="fas fa-check-circle" style="color:#10b981;"></i> <span style="font-size:0.8rem;">Verified by Hitaishi</span></div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function applyFilters() {
+      let filtered = [...allProperties];
+      const type = document.getElementById('typeFilter')?.value;
+      const city = document.getElementById('cityFilter')?.value;
+      const budgetRaw = document.getElementById('budgetFilter')?.value;
+      const ageRaw = document.getElementById('ageFilter')?.value;
+
+      if (type && type !== "") filtered = filtered.filter(p => p.propertyType === type);
+      if (city && city !== "") filtered = filtered.filter(p => p.city === city);
+      
+      // Budget filter logic (range mapping)
+      if (budgetRaw && budgetRaw !== "") {
+        filtered = filtered.filter(p => {
+          let priceVal = parseFloat(String(p.price).replace(/,/g, '')) || 0;
+          if (budgetRaw === '< 50 Lakh') return priceVal < 50_00_000;
+          if (budgetRaw === '50 Lakh - 1 Cr') return priceVal >= 50_00_000 && priceVal <= 1_00_00_000;
+          if (budgetRaw === '1 Cr - 2 Cr') return priceVal > 1_00_00_000 && priceVal <= 2_00_00_000;
+          if (budgetRaw === '2 Cr - 5 Cr') return priceVal > 2_00_00_000 && priceVal <= 5_00_00_000;
+          if (budgetRaw === '> 5 Cr') return priceVal > 5_00_00_000;
+          return true;
+        });
+      }
+
+      // Age filter
+      if (ageRaw && ageRaw !== "") {
+        filtered = filtered.filter(p => {
+          const propAge = parseInt(p.ageOfProperty || p.age || 0);
+          if (ageRaw === 'New (0-2 yrs)') return propAge <= 2;
+          if (ageRaw === '3-7 years') return propAge >= 3 && propAge <= 7;
+          if (ageRaw === '8-15 years') return propAge >= 8 && propAge <= 15;
+          if (ageRaw === '15+ years') return propAge > 15;
+          return true;
+        });
+      }
+      displayProperties(filtered);
+    }
+
+    // init all (header & footer removed completely)
+    window.onload = () => {
+      fetchPropertiesWithFallback();
+    };
+
+    window.applyFilters = applyFilters; // global for button
+  </script>
+</body>
+</html>

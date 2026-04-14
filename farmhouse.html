@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+
+
+</head>
+
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+<div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("../navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+
+
+
+    <!-- 1. Hero Banner with Search & Image Slideshow -->
+<section style="position:relative;height:60vh;overflow:hidden;">
+    <!-- Slideshow Background -->
+    <div style="position:absolute;width:300%;height:100%;display:flex;animation:slide 15s infinite;">
+        <div style="width:33.33%;height:100%;background:url('images/farmhouse1.png') center/cover;"></div>
+        <div style="width:33.33%;height:100%;background:url('images/farmhouse2.png') center/cover;"></div>
+        <div style="width:33.33%;height:100%;background:url('images/farmhouse3.png') center/cover;"></div>
+    </div>
+    <!-- Overlay -->
+    <div style="position:absolute;width:100%;height:100%;background:rgba(0,0,0,0.6);"></div>
+    <!-- Content -->
+    <div style="position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#fff;padding:0 20px;z-index:1;">
+        <h1 style="font-size:2.5rem;margin:0;text-shadow:2px 2px 8px rgba(0,0,0,0.5);"><span style="color:#e67e22;">Hitaishi</span> Premium Farmhouses</h1>
+        <p style="font-size:1.2rem;max-width:800px;margin:20px 0 40px;text-shadow:1px 1px 4px rgba(0,0,0,0.5);">Discover India's finest collection of luxury farm properties with modern amenities</p>
+        <div style="background:rgba(255,255,255,0.9);padding:30px;border-radius:10px;max-width:900px;width:100%;">
+            <form onsubmit="toggleSearchResults(event)" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;">
+                <select id="farmType" style="padding:12px;border-radius:5px;border:none;font-size:1rem;" aria-label="Property type">
+                    <option value="">Farm Type</option>
+                    <option value="Working Farm">Working Farm</option>
+                    <option value="Equestrian">Equestrian</option>
+                    <option value="Vineyard">Vineyard</option>
+                    <option value="Organic">Organic</option>
+                </select>
+                <select id="location" style="padding:12px;border-radius:5px;border:none;font-size:1rem;" aria-label="Location">
+                    <option value="">Location</option>
+                    <option value="North India">North India</option>
+                    <option value="South India">South India</option>
+                    <option value="West India">West India</option>
+                    <option value="East India">East India</option>
+                </select>
+                <select id="budget" style="padding:12px;border-radius:5px;border:none;font-size:1rem;" aria-label="Budget">
+                    <option value="">Budget</option>
+                    <option value="Under ₹1 Crore">Under ₹1 Crore</option>
+                    <option value="₹1-2 Crore">₹1-2 Crore</option>
+                    <option value="₹2-5 Crore">₹2-5 Crore</option>
+                    <option value="₹5+ Crore">₹5+ Crore</option>
+                </select>
+                <button type="submit" style="background:#e67e22;color:#fff;padding:12px;border:none;border-radius:5px;font-weight:600;font-size:1rem;cursor:pointer;">Search Farms</button>
+            </form>
+            <!-- Results Display Area -->
+            <div id="searchResults" style="margin-top:20px;padding:15px;background:#f8f9fa;border-radius:5px;display:none;">
+                <h3 style="margin-top:0;color:#2c3e50;">Your Search Criteria:</h3>
+                <p id="resultsText" style="margin-bottom:0;color:#000000;"></p>
+            </div>
+        </div>
+    </div>
+    <!-- Animation -->
+    <style>
+        @keyframes slide {
+            0% { transform:translateX(0); }
+            33% { transform:translateX(-33.33%); }
+            66% { transform:translateX(-66.66%); }
+            100% { transform:translateX(0); }
+        }
+    </style>
+    <!-- JavaScript for Search Results -->
+    <script>
+        let resultsVisible = false;
+        
+        function toggleSearchResults(event) {
+            event.preventDefault();
+            
+            const resultsDiv = document.getElementById('searchResults');
+            
+            if (resultsVisible) {
+                // Hide results if they're currently visible
+                resultsDiv.style.display = 'none';
+                resultsVisible = false;
+            } else {
+                // Show results if they're hidden
+                // Get selected values
+                const type = document.getElementById('farmType').value;
+                const location = document.getElementById('location').value;
+                const budget = document.getElementById('budget').value;
+                
+                // Build results text
+                let resultsText = '';
+                if (type) resultsText += `<strong style="color:#000000;">Farm Type:</strong> <span style="color:#000000;">${type}</span><br>`;
+                if (location) resultsText += `<strong style="color:#000000;">Location:</strong> <span style="color:#000000;">${location}</span><br>`;
+                if (budget) resultsText += `<strong style="color:#000000;">Budget:</strong> <span style="color:#000000;">${budget}</span>`;
+                
+                if (resultsText) {
+                    document.getElementById('resultsText').innerHTML = resultsText;
+                    resultsDiv.style.display = 'block';
+                    resultsVisible = true;
+                    
+                    // Scroll to results
+                    resultsDiv.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                } else {
+                    document.getElementById('resultsText').innerHTML = '<span style="color:#000000;">Please select at least one search criteria</span>';
+                    resultsDiv.style.display = 'block';
+                    resultsVisible = true;
+                }
+            }
+        }
+    </script>
+</section>
+<!-- 2. Featured Listings -->
+<section style="padding:80px 20px;max-width:1400px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:60px;">
+        <h2 class="section-title">Featured Farmhouses</h2>
+        <p style="font-size:1.2rem;color:#7f8c8d;max-width:700px;margin:15px auto 0;">Hitaishi's curated selection of premium agricultural properties</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:40px;">
+        <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08);transition:transform 0.4s;">
+            <div style="position:relative;">
+                <img src="images/luxury_farm_house_realestate.png" alt="Luxury farmhouse in Lonavala with pool" style="width:100%;height:250px;object-fit:cover;">
+                <div style="position:absolute;top:20px;right:20px;background:#e67e22;color:#fff;padding:8px 15px;border-radius:50px;font-weight:600;">HITAISHI EXCLUSIVE</div>
+            </div>
+            <div style="padding:25px;">
+                <h3 style="margin:0 0 10px;font-size:1.5rem;color:#2c3e50;">Lonavala Organic Retreat</h3>
+                <p style="color:#7f8c8d;margin:0 0 15px;font-size:0.95rem;"><span style="color:#e67e22;">✓</span> 5 Acres | 4 Beds | 3 Baths | Organic Certification</p>
+                <div style="display:flex;justify-content:space-between;margin-bottom:20px;">
+                    <span style="background:#ecf0f1;padding:5px 10px;border-radius:5px;font-size:0.9rem;">🏡 3,500 sq.ft.</span>
+                    <span style="background:#ecf0f1;padding:5px 10px;border-radius:5px;font-size:0.9rem;">🌳 5 Acres</span>
+                    <span style="background:#ecf0f1;padding:5px 10px;border-radius:5px;font-size:0.9rem;">🏊 Pool</span>
+                </div>
+                <p style="font-size:1.5rem;font-weight:700;color:#e67e22;margin:0 0 20px;">₹2.75 Crore</p>
+                <a href="#" style="display:block;text-align:center;background:#2c3e50;color:#fff;padding:12px;border-radius:8px;text-decoration:none;font-weight:600;transition:all 0.3s;">View Property Details</a>
+            </div>
+        </div>
+        <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08);transition:transform 0.4s;">
+            <div style="position:relative;">
+                <img src="images/Hyderabad Equestrian_real Estate.png" alt="Equestrian estate in Hyderabad" style="width:100%;height:250px;object-fit:cover;">
+                <div style="position:absolute;top:20px;right:20px;background:#e67e22;color:#fff;padding:8px 15px;border-radius:50px;font-weight:600;">NEW LISTING</div>
+            </div>
+            <div style="padding:25px;">
+                <h3 style="margin:0 0 10px;font-size:1.5rem;color:#2c3e50;">Hyderabad Equestrian Estate</h3>
+                <p style="color:#7f8c8d;margin:0 0 15px;font-size:0.95rem;"><span style="color:#e67e22;">✓</span> 8 Acres | 5 Beds | 4 Baths | Horse Stables</p>
+                <div style="display:flex;justify-content:space-between;margin-bottom:20px;">
+                    <span style="background:#ecf0f1;padding:5px 10px;border-radius:5px;font-size:0.9rem;">🏡 4,200 sq.ft.</span>
+                    <span style="background:#ecf0f1;padding:5px 10px;border-radius:5px;font-size:0.9rem;">🌳 8 Acres</span>
+                    <span style="background:#ecf0f1;padding:5px 10px;border-radius:5px;font-size:0.9rem;">🐎 12 Stalls</span>
+                </div>
+                <p style="font-size:1.5rem;font-weight:700;color:#e67e22;margin:0 0 20px;">₹4.25 Crore</p>
+                <a href="#" style="display:block;text-align:center;background:#2c3e50;color:#fff;padding:12px;border-radius:8px;text-decoration:none;font-weight:600;transition:all 0.3s;">View Property Details</a>
+            </div>
+        </div>
+        <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08);transition:transform 0.4s;">
+            <div style="position:relative;">
+                <img src="images/Vineyard property_realestate.png" alt="Vineyard property in Nashik" style="width:100%;height:250px;object-fit:cover;">
+                <div style="position:absolute;top:20px;right:20px;background:#e67e22;color:#fff;padding:8px 15px;border-radius:50px;font-weight:600;">HITAISHI PREMIUM</div>
+            </div>
+            <div style="padding:25px;">
+                <h3 style="margin:0 0 10px;font-size:1.5rem;color:#2c3e50;">Nashik Vineyard Estate</h3>
+                <p style="color:#7f8c8d;margin:0 0 15px;font-size:0.95rem;"><span style="color:#e67e22;">✓</span> 15 Acres | 6 Beds | 5 Baths | Wine Production</p>
+                <div style="display:flex;justify-content:space-between;margin-bottom:20px;">
+                    <span style="background:#ecf0f1;padding:5px 10px;border-radius:5px;font-size:0.9rem;">🏡 5,800 sq.ft.</span>
+                    <span style="background:#ecf0f1;padding:5px 10px;border-radius:5px;font-size:0.9rem;">🌳 15 Acres</span>
+                    <span style="background:#ecf0f1;padding:5px 10px;border-radius:5px;font-size:0.9rem;">🍇 8 Acres Vines</span>
+                </div>
+                <p style="font-size:1.5rem;font-weight:700;color:#e67e22;margin:0 0 20px;">₹6.50 Crore</p>
+                <a href="#" style="display:block;text-align:center;background:#2c3e50;color:#fff;padding:12px;border-radius:8px;text-decoration:none;font-weight:600;transition:all 0.3s;">View Property Details</a>
+            </div>
+        </div>
+    </div>
+    <div style="text-align:center;margin-top:50px;">
+        <a href="#" style="display:inline-block;background:#e67e22;color:#fff;padding:15px 40px;border-radius:50px;text-decoration:none;font-weight:600;font-size:1.1rem;">View All Farm Properties</a>
+    </div>
+</section>
+
+<!-- 3. Why Hitaishi Farms -->
+<section style="padding:80px 20px;background:#2c3e50;color:#fff;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title" style="color:white;">Why Choose Hitaishi Farmhouses</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:50px;">
+            <div style="text-align:center;padding:0 20px;">
+                <div style="width:100px;height:100px;background:#e67e22;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;font-size:2.5rem;">🔍</div>
+                <h3 style="font-size:1.5rem;margin-bottom:15px;">Rigorous Vetting</h3>
+                <p style="margin:0;line-height:1.7;">Every property undergoes 25-point verification including soil quality, water rights, and legal clearances.</p>
+            </div>
+            <div style="text-align:center;padding:0 20px;">
+                <div style="width:100px;height:100px;background:#e67e22;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;font-size:2.5rem;">🏆</div>
+                <h3 style="font-size:1.5rem;margin-bottom:15px;">Premium Selection</h3>
+                <p style="margin:0;line-height:1.7;">Only 1 in 20 farm properties meet our standards for luxury, functionality, and investment potential.</p>
+            </div>
+            <div style="text-align:center;padding:0 20px;">
+                <div style="width:100px;height:100px;background:#e67e22;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;font-size:2.5rem;">🧑‍🌾</div>
+                <h3 style="font-size:1.5rem;margin-bottom:15px;">Agricultural Experts</h3>
+                <p style="margin:0;line-height:1.7;">Our team includes agronomists and farm managers to evaluate property potential.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4. Farm Types Gallery -->
+<section style="padding:80px 20px;background:#f9f9f9;">
+    <div style="max-width:1400px;margin:0 auto;">
+        <h2 class="section-title">Explore Farm Types</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+            <div style="position:relative;border-radius:12px;overflow:hidden;height:350px;">
+                <img src="images/Equestrian farm with horses_realestate.png" alt="Equestrian farm with horses" style="width:100%;height:100%;object-fit:cover;">
+                <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.7));padding:25px;color:#fff;">
+                    <h3 style="margin:0 0 10px;font-size:1.8rem;">Equestrian Farms</h3>
+                    <p style="margin:0;font-size:1.1rem;">Properties with stables, riding arenas, and training facilities</p>
+                    <a href="#" style="display:inline-block;margin-top:15px;color:#fff;font-weight:600;text-decoration:none;">View 12 Listings →</a>
+                </div>
+            </div>
+            <div style="position:relative;border-radius:12px;overflow:hidden;height:350px;">
+                <img src="images/Organic vegetable farm_raelaestae.png" alt="Organic vegetable farm" style="width:100%;height:100%;object-fit:cover;">
+                <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.7));padding:25px;color:#fff;">
+                    <h3 style="margin:0 0 10px;font-size:1.8rem;">Organic Farms</h3>
+                    <p style="margin:0;font-size:1.1rem;">Certified organic operations with sustainable practices</p>
+                    <a href="#" style="display:inline-block;margin-top:15px;color:#fff;font-weight:600;text-decoration:none;">View 8 Listings →</a>
+                </div>
+            </div>
+            <div style="position:relative;border-radius:12px;overflow:hidden;height:350px;">
+                <img src="images/Vineyard_realestate.png" alt="Vineyard with grapevines" style="width:100%;height:100%;object-fit:cover;">
+                <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.7));padding:25px;color:#fff;">
+                    <h3 style="margin:0 0 10px;font-size:1.8rem;">Vineyards</h3>
+                    <p style="margin:0;font-size:1.1rem;">Wine-producing properties with established vines</p>
+                    <a href="#" style="display:inline-block;margin-top:15px;color:#fff;font-weight:600;text-decoration:none;">View 5 Listings →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 5. Testimonials with Client Images -->
+<section style="padding:80px 20px;background:#fff;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title">Client Success Stories</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:40px;">
+            <!-- Testimonial 1 -->
+            <div style="background:#f9f9f9;border-radius:12px;padding:40px 30px;position:relative;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                <div style="color:#e67e22;font-size:1.8rem;margin-bottom:20px;">★★★★★</div>
+                <p style="font-size:1.1rem;line-height:1.7;margin-bottom:25px;font-style:italic;">"Hitaishi found us a perfect organic farm near Pune that met all our requirements. Their knowledge of soil quality and water rights was invaluable in our decision."</p>
+                <div style="display:flex;align-items:center;">
+                    <img src="images/Rajesh & Priya Patel _realestate.png" alt="Rajesh & Priya Patel" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-right:15px;border:3px solid #e67e22;">
+                    <div>
+                        <p style="font-weight:600;margin:0 0 5px;color:#2c3e50;">Rajesh & Priya Patel</p>
+                        <p style="margin:0;color:#7f8c8d;font-size:0.9rem;">Organic Farm Owners, Maharashtra</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testimonial 2 -->
+            <div style="background:#f9f9f9;border-radius:12px;padding:40px 30px;position:relative;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                <div style="color:#e67e22;font-size:1.8rem;margin-bottom:20px;">★★★★★</div>
+                <p style="font-size:1.1rem;line-height:1.7;margin-bottom:25px;font-style:italic;">"As NRIs buying our first farm in India, Hitaishi guided us through every step - from legal paperwork to understanding agricultural zoning laws."</p>
+                <div style="display:flex;align-items:center;">
+                    <img src="images/amit andnehakanna_realestate.png" alt="Amit & Neha Khanna" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-right:15px;border:3px solid #e67e22;">
+                    <div>
+                        <p style="font-weight:600;margin:0 0 5px;color:#2c3e50;">Amit & Neha Khanna</p>
+                        <p style="margin:0;color:#7f8c8d;font-size:0.9rem;">Farm Owners (NRIs), Bangalore</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Testimonial 3 -->
+            <div style="background:#f9f9f9;border-radius:12px;padding:40px 30px;position:relative;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                <div style="color:#e67e22;font-size:1.8rem;margin-bottom:20px;">★★★★★</div>
+                <p style="font-size:1.1rem;line-height:1.7;margin-bottom:25px;font-style:italic;">"We purchased a vineyard through Hitaishi and couldn't be happier. They connected us with wine experts who helped evaluate the grape varieties."</p>
+                <div style="display:flex;align-items:center;">
+                    <img src="images/vikram mehta_realestate.png" alt="Vikram Mehta" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-right:15px;border:3px solid #e67e22;">
+                    <div>
+                        <p style="font-weight:600;margin:0 0 5px;color:#2c3e50;">Vikram Mehta</p>
+                        <p style="margin:0;color:#7f8c8d;font-size:0.9rem;">Vineyard Owner, Nashik</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- 6. Farm Investment Guide -->
+<section style="padding:80px 20px;">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(500px,1fr));gap:60px;align-items:center;">
+        <div>
+            <h2 class="section-title" >Farm Property Investment Guide</h2>
+            <p style="margin-bottom:25px;line-height:1.7;">Our comprehensive 35-page guide covers everything you need to know about investing in agricultural properties:</p>
+            <ul style="list-style-type:none;padding:0;margin:0;">
+                <li style="margin-bottom:15px;padding-left:35px;position:relative;line-height:1.6;">✅ <span style="font-weight:600;">Legal Considerations:</span> Agricultural zoning, conversion norms, and land ceiling laws</li>
+                <li style="margin-bottom:15px;padding-left:35px;position:relative;line-height:1.6;">✅ <span style="font-weight:600;">Soil & Water:</span> How to evaluate land quality and water rights</li>
+                <li style="margin-bottom:15px;padding-left:35px;position:relative;line-height:1.6;">✅ <span style="font-weight:600;">Tax Benefits:</span> Agricultural income tax exemptions and deductions</li>
+                <li style="margin-bottom:15px;padding-left:35px;position:relative;line-height:1.6;">✅ <span style="font-weight:600;">Income Potential:</span> Revenue models from crops, livestock, and agritourism</li>
+                <li style="margin-bottom:15px;padding-left:35px;position:relative;line-height:1.6;">✅ <span style="font-weight:600;">Market Trends:</span> Current farmland appreciation rates across India</li>
+            </ul>
+            <div style="display:flex;gap:20px;margin-top:40px;">
+                <a href="#" style="display:inline-block;background:#e67e22;color:#fff;padding:15px 35px;border-radius:50px;text-decoration:none;font-weight:600;">Download Free Guide</a>
+                <a href="#" style="display:inline-block;background:#2c3e50;color:#fff;padding:15px 35px;border-radius:50px;text-decoration:none;font-weight:600;">Attend Webinar</a>
+            </div>
+        </div>
+        <img src="images/investment_guide_realestate.png" alt="Farm investment guide cover" style="width:100%;border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,0.1);">
+    </div>
+</section>
+
+<!-- 7. Financing Options -->
+<section style="padding:80px 20px;background:#2c3e50;color:#fff;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title" style="color:white;">Farm Property Financing</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:40px;">
+            <div style="background:rgba(255,255,255,0.1);padding:30px;border-radius:10px;backdrop-filter:blur(5px);">
+                <h3 style="margin-top:0;font-size:1.5rem;">Agricultural Loans</h3>
+                <p style="margin-bottom:25px;line-height:1.7;">Specialized farm loans from leading banks with competitive interest rates and flexible repayment terms.</p>
+                <a href="#" style="color:#e67e22;font-weight:600;text-decoration:none;">Explore Options →</a>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);padding:30px;border-radius:10px;backdrop-filter:blur(5px);">
+                <h3 style="margin-top:0;font-size:1.5rem;">NRI Farm Investments</h3>
+                <p style="margin-bottom:25px;line-height:1.7;">Guidance for NRIs on FEMA regulations, repatriation of funds, and agricultural property ownership.</p>
+                <a href="#" style="color:#e67e22;font-weight:600;text-decoration:none;">NRI Services →</a>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);padding:30px;border-radius:10px;backdrop-filter:blur(5px);">
+                <h3 style="margin-top:0;font-size:1.5rem;">Leaseback Options</h3>
+                <p style="margin-bottom:25px;line-height:1.7;">Structured solutions where you purchase the farm and we arrange professional management.</p>
+                <a href="#" style="color:#e67e22;font-weight:600;text-decoration:none;">Learn More →</a>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:50px;">
+            <a href="#" style="display:inline-block;background:#e67e22;color:#fff;padding:15px 40px;border-radius:50px;text-decoration:none;font-weight:600;font-size:1.1rem;">Consult Our Financial Experts</a>
+        </div>
+    </div>
+</section>
+
+<!-- 8. Indian Farm Market Stats -->
+<section style="padding:80px 20px;background:#f9f9f9;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title">Indian Farm Real Estate Trends</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:40px;text-align:center;">
+            <div>
+                <div style="font-size:3.5rem;font-weight:700;color:#e67e22;margin-bottom:15px;">15%</div>
+                <p style="font-size:1.1rem;margin:0;color:#2c3e50;font-weight:600;">Average annual appreciation of farmland near metro cities</p>
+            </div>
+            <div>
+                <div style="font-size:3.5rem;font-weight:700;color:#e67e22;margin-bottom:15px;">7.5%</div>
+                <p style="font-size:1.1rem;margin:0;color:#2c3e50;font-weight:600;">Average rental yield for agricultural land</p>
+            </div>
+            <div>
+                <div style="font-size:3.5rem;font-weight:700;color:#e67e22;margin-bottom:15px;">30%</div>
+                <p style="font-size:1.1rem;margin:0;color:#2c3e50;font-weight:600;">Increase in demand for weekend farmhouses post-pandemic</p>
+            </div>
+            <div>
+                <div style="font-size:3.5rem;font-weight:700;color:#e67e22;margin-bottom:15px;">5:1</div>
+                <p style="font-size:1.1rem;margin:0;color:#2c3e50;font-weight:600;">Ratio of buyers to quality farm properties in premium locations</p>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:70px;">
+            <a href="#" style="display:inline-block;background:#2c3e50;color:#fff;padding:15px 40px;border-radius:50px;text-decoration:none;font-weight:600;font-size:1.1rem;">Request Full Market Report</a>
+        </div>
+    </div>
+</section>
+
+<!-- 9. Hitaishi Farm Services -->             
+<section style="padding:80px 20px;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title">Hitaishi Farm Services</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;">
+            <div style="background:#fff;padding:30px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.05);text-align:center;">
+                <div style="width:80px;height:80px;background:#e67e22;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;font-size:2rem;">🌱</div>
+                <h3 style="margin:0 0 15px;color:#2c3e50;">Farm Setup</h3>
+                <p style="margin:0;line-height:1.7;">Turnkey solutions for establishing organic farms, orchards, or vineyards with crop planning and infrastructure.</p>
+            </div>
+            <div style="background:#fff;padding:30px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.05);text-align:center;">
+                <div style="width:80px;height:80px;background:#e67e22;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;font-size:2rem;">🏡</div>
+                <h3 style="margin:0 0 15px;color:#2c3e50;">Property Management</h3>
+                <p style="margin:0;line-height:1.7;">Complete care for your farm including maintenance, staffing, and operations for absentee owners.</p>
+            </div>
+            <div style="background:#fff;padding:30px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.05);text-align:center;">
+                <div style="width:80px;height:80px;background:#e67e22;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;font-size:2rem;">💰</div>
+                <h3 style="margin:0 0 15px;color:#2c3e50;">Revenue Optimization</h3>
+                <p style="margin:0;line-height:1.7;">Maximize income through crop selection, agritourism, and value-added products from your farm.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 10. Contact CTA -->
+<section style="padding:100px 20px;background:linear-gradient(rgba(44,62,80,0.9),rgba(44,62,80,0.9)),url('hitaishi-contact.jpg');background-size:cover;background-position:center;text-align:center;color:#fff;">
+    <div style="max-width:800px;margin:0 auto;">
+        <h2 style="font-size:2.8rem;margin-bottom:20px;">Ready to Own Your <span style="color:#e67e22;">Dream Farmhouse</span>?</h2>
+        <p style="font-size:1.3rem;margin-bottom:40px;line-height:1.6;">Our team of agricultural property specialists is ready to guide you through every step of the farm buying process in India.</p>
+        <div style="display:flex;justify-content:center;gap:25px;flex-wrap:wrap;">
+            <a href="tel:+9118005551234" style="display:inline-flex;align-items:center;background:#e67e22;color:#fff;padding:18px 35px;border-radius:50px;text-decoration:none;font-weight:600;font-size:1.1rem;">
+                <span style="margin-right:10px;">📞</span> Call: 1800 555 1234
+            </a>
+            <a href="#" style="display:inline-flex;align-items:center;background:#fff;color:#2c3e50;padding:18px 35px;border-radius:50px;text-decoration:none;font-weight:600;font-size:1.1rem;">
+                <span style="margin-right:10px;">📅</span> Schedule Consultation
+            </a>
+        </div>
+        <div style="margin-top:40px;display:flex;justify-content:center;gap:20px;">
+            <a href="#" style="width:40px;height:40px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#2c3e50;text-decoration:none;">f</a>
+            <a href="#" style="width:40px;height:40px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#2c3e50;text-decoration:none;">in</a>
+            <a href="#" style="width:40px;height:40px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#2c3e50;text-decoration:none;">ig</a>
+            <a href="#" style="width:40px;height:40px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#2c3e50;text-decoration:none;">yt</a>
+        </div>
+    </div>
+</section>
+
+
+
+
+<div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+
+
+</body>
+</html>

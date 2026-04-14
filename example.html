@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dummy Razorpay Payment</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; }
+        .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; }
+        button { background: #1a1a1a; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; cursor: pointer; transition: opacity 0.2s; }
+        button:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Test Payment</h2>
+        <p>Amount: <strong>₹100.00</strong></p>
+        <button id="payNowBtn">Pay Now</button>
+    </div>
+
+    <!-- 1. Include Razorpay's JS SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+        document.getElementById('payNowBtn').onclick = function() {
+            // 2. Define options for the payment modal
+            var options = {
+                key: "rzp_test_YOUR_TEST_KEY_ID", // Replace with your actual Test Key ID
+                amount: 10000, // Amount in paise (10000 paise = ₹100)
+                currency: "INR",
+                name: "Your Business Name",
+                description: "Test Transaction",
+                image: "https://your-logo-url.com/logo.png", // Optional
+                handler: function (response) {
+                    // This function runs after a successful payment
+                    alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+                    console.log(response);
+                    // In a real app, you would send this response to your backend for verification.
+                },
+                prefill: {
+                    name: "Test User",
+                    email: "test@example.com",
+                    contact: "9999999999"
+                },
+                theme: {
+                    color: "#1a1a1a" // Set your brand color
+                }
+            };
+            
+            // 3. Create and open the modal
+            var rzp = new Razorpay(options);
+            rzp.open();
+        };
+    </script>
+</body>
+</html>

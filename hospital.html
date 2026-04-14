@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hitashi Real Estate presents premium healthcare properties - modern hospitals, clinics, and medical facilities with strategic locations and advanced infrastructure.">
+    <meta name="keywords" content="hospital real estate, medical properties, healthcare facilities, hospital buildings, medical real estate, clinic spaces">
+    <title>Premium Healthcare Properties | Hitashi Real Estate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+
+     <!-- Top Navigation -->
+     <nav style="background-color: #a621db; color: white; padding: 15px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; max-width: 1200px; margin: auto;">
+          <a href="index.html" style="color: white; font-size: 24px; text-decoration: none;">
+            <i class="fas fa-house"></i> Hitaishi Homes
+          </a>
+  
+          <!-- <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="search" placeholder="Search property..." style="padding: 8px; border: none; border-radius: 5px 0 0 5px;">
+            <button style="padding: 8px 12px; background: white; border: none; border-radius: 0 5px 5px 0; cursor: pointer;">
+              <i class="fa fa-search" style="color: rgb(243, 151, 114);"></i>
+            </button>
+          </div> -->
+  
+  
+          <!-- search -->
+          <div style="display: flex; align-items: center; gap: 10px; position: relative; min-width: 200px; max-width: 500px;">
+              <input type="search" id="searchInput" placeholder="Search property..." 
+                     style="padding: 8px; border: none; border-radius: 5px 0 0 5px; width: 160px;">
+              <button id="searchButton" 
+                      style="padding: 8px 12px; background: white; border: none; border-radius: 0 5px 5px 0; cursor: pointer;">
+                <i class="fa fa-search" style="color: rgb(243, 151, 114);"></i>
+              </button>
+              <!-- <div id="suggestions" 
+                   style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background: white; color: black; z-index: 1000; max-height: 250px;  box-shadow: 0 4px 8px rgba(0,0,0,0.1); box-sizing: border-box; border-radius: 0 0 5px 5px;">
+              </div> -->
+            </div>
+            
+          
+          <script>
+              // Comprehensive search index with proper URLs
+              const searchIndex = [
+                  // Property Types
+                  { keyword: 'house', url: 'Buy.html?type=house' },
+                  { keyword: 'apartment', url: 'highriseapartments.html' },
+                  { keyword: 'villa', url: 'villas.html' },
+                  { keyword: 'plot', url: 'lands.html' },
+                  { keyword: 'commercial', url: 'commercial.html' },
+                  { keyword: 'farmhouse', url: 'farmhouse.html' },
+                  { keyword: 'shop', url: 'commercial.html?type=shop' },
+                  { keyword: 'land', url: 'lands.html' },
+                  { keyword: 'flat', url: 'Buy.html?type=flat' },
+                  { keyword: 'penthouse', url: 'Buy.html?type=penthouse' },
+                  { keyword: 'duplex', url: 'Buy.html?type=duplex' },
+              
+                  // Cities
+                  { keyword: 'mumbai', url: 'Buy.html?city=mumbai' },
+                  { keyword: 'delhi', url: 'Buy.html?city=delhi' },
+                  { keyword: 'bangalore', url: 'Buy.html?city=bangalore' },
+                  { keyword: 'chennai', url: 'Buy.html?city=chennai' },
+                  { keyword: 'hyderabad', url: 'Buy.html?city=hyderabad' },
+                  { keyword: 'pune', url: 'Buy.html?city=pune' },
+                  { keyword: 'kolkata', url: 'Buy.html?city=kolkata' },
+              
+                  // Features
+                  { keyword: 'furnished', url: 'Buy.html?feature=furnished' },
+                  { keyword: 'ready to move', url: 'Buy.html?feature=ready' },
+                  { keyword: 'luxury', url: 'villas.html' },
+              
+                  // Services
+                  { keyword: 'buy', url: 'Buy.html' },
+                  { keyword: 'sell', url: 'Sell.html' },
+                  { keyword: 'rent', url: 'Rent.html' },
+                  { keyword: 'loan', url: 'services.html#loan' },
+                  { keyword: 'legal', url: 'services.html#legal' },
+              
+                  // Pages
+                  { keyword: 'about', url: 'about.html' },
+                  { keyword: 'contact', url: 'contact.html' },
+                  { keyword: 'login', url: 'login.html' },
+                  { keyword: 'register', url: 'register.html' }
+              ];
+              
+              // Search function
+              function performSearch(query) {
+                  query = query.toLowerCase().trim();
+                  if (!query) return [];
+              
+                  const terms = query.split(' ');
+                  const matches = searchIndex.filter(item => {
+                      const itemKeywords = item.keyword.toLowerCase().split(' ');
+                      return terms.some(term =>
+                          itemKeywords.some(kw => kw.includes(term))
+                      );
+                  });
+              
+                  matches.sort((a, b) => {
+                      const aExact = a.keyword.toLowerCase() === query;
+                      const bExact = b.keyword.toLowerCase() === query;
+                      return bExact - aExact || b.keyword.length - a.keyword.length;
+                  });
+              
+                  return matches;
+              }
+              
+              // Handle search action
+              function handleSearch() {
+                  const query = document.getElementById('searchInput').value;
+                  const matches = performSearch(query);
+              
+                  if (matches.length > 0) {
+                      window.location.href = matches[0].url;
+                  } else {
+                      window.location.href = `Buy.html?search=${encodeURIComponent(query)}`;
+                  }
+              }
+              
+              // Show autocomplete suggestions
+              function showSuggestions(query) {
+                  const suggestions = performSearch(query);
+                  const container = document.getElementById('suggestions');
+                  container.innerHTML = '';
+              
+                  if (suggestions.length === 0) {
+                      container.style.display = 'none';
+                      return;
+                  }
+              
+                  suggestions.slice(0, 5).forEach(item => {
+                      const div = document.createElement('div');
+                      div.textContent = item.keyword;
+                      div.style.padding = '8px 16px';
+                      div.style.cursor = 'pointer';
+                      div.style.borderBottom = '1px solid #eee';
+                      div.style.background = 'white';
+                      div.onclick = () => window.location.href = item.url;
+                      div.onmouseover = () => div.style.background = '#f5f5f5';
+                      div.onmouseout = () => div.style.background = 'white';
+                      container.appendChild(div);
+                  });
+              
+                  container.style.display = 'block';
+              }
+              
+              // Event listeners
+              document.getElementById('searchButton').addEventListener('click', handleSearch);
+              document.getElementById('searchInput').addEventListener('input', function () {
+                  showSuggestions(this.value);
+              });
+              document.getElementById('searchInput').addEventListener('keypress', function (e) {
+                  if (e.key === 'Enter') handleSearch();
+              });
+              
+              // Hide suggestions on click outside
+              document.addEventListener('click', function (e) {
+                  if (!e.target.closest('#searchInput') && !e.target.closest('#suggestions')) {
+                      document.getElementById('suggestions').style.display = 'none';
+                  }
+              });
+              
+              // Prevent body scroll when input is focused (optional)
+              document.getElementById('searchInput').addEventListener('focus', () => {
+                  document.body.style.overflow = 'hidden';
+              });
+              document.getElementById('searchInput').addEventListener('blur', () => {
+                  setTimeout(() => { // delay to allow click on suggestion
+                      document.body.style.overflow = '';
+                  }, 200);
+              });
+          </script>
+  
+  
+  
+  
+          <div style="display: flex; gap: 15px; align-items: center;">
+            <a href="builders.html" style="color: black; text-decoration: none; font-size: 16px;">Real Estate Builders</a>
+            <a href="highriseapartments.html" style="color: black; text-decoration: none; font-size: 16px;">High Rise Apartments</a>
+            <a href="Sell.html" style="color: black; text-decoration: none; font-size: 16px;">
+              Post Property <i class="fas fa-paper-plane"></i>
+            </a>
+          </div>
+          <div style="display: flex; gap: 15px; align-items: center;">
+            <a href="#" title="Facebook" style="color: white; font-size: 28px;"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" title="Twitter" style="color: white; font-size: 28px;"><i class="fab fa-twitter"></i></a>
+            <a href="#" title="Instagram" style="color: white; font-size: 28px;"><i class="fab fa-instagram"></i></a>
+            <a href="#" title="LinkedIn" style="color: white; font-size: 28px;"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" title="YouTube" style="color: white; font-size: 28px;"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </nav>
+
+  <!-- Bottom Navigation -->
+  <nav style="background-color: #ebefa0; position: sticky; top: 0; z-index: 1000;">
+    <div style="max-width: 1200px; margin: auto; padding: 10px 15px;">
+      <ul style="display: flex; flex-wrap: wrap; list-style: none; padding: 0; margin: 0; justify-content: center; gap: 15px;">
+        <li style="position: relative;">
+          <a href="index.html" style="text-decoration: none; color: #000; padding: 10px; display: block;">Home</a>
+        </li>
+
+        <li style="position: relative;">
+          <a href="Buy.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Buy <i class="fas fa-angle-down"></i></a>
+          <ul style="position: absolute; background-color: #fff; list-style: none; padding: 10px 0; margin: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; min-width: 180px; top: 100%; left: 0;">
+            <li><a href="Buy.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Houses</a></li>
+            <li><a href="buy.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Plots</a></li>
+            <li><a href="farmhouse.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Flats</a></li>
+            <li><a href="villas.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Villas</a></li>
+            <li><a href="buy.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Shops</a></li>
+            <li><a href="find_agent.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Ready to move</a></li>
+            <li><a href="buy.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Furnished</a></li>
+            <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Commercial</a></li>
+            <li><a href="lands.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Agriculture Lands</a></li>
+            <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Layouts</a></li>
+          </ul>
+        </li>
+
+        <li style="position: relative;">
+          <a href="Sell.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Sell <i class="fas fa-angle-down"></i></a>
+          <ul style="position: absolute; background-color: #fff; list-style: none; padding: 10px 0; margin: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; min-width: 180px; top: 100%; left: 0;">
+            <li><a href="postRent.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Post Property</a></li>
+            <li><a href="postRent.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Dashboard</a></li>
+            <li><a href="villas.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Villas</a></li>
+            <li><a href="Sell.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Flats</a></li>
+            <li><a href="Sell.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Plots</a></li>
+            <li><a href="Sell.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Furnished</a></li>
+            <li><a href="find_agent.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Ready to move</a></li>
+            <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Commercial</a></li>
+            <li><a href="farmhouse.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Farm Houses</a></li>
+            <li><a href="lands.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Layouts</a></li>
+          </ul>
+        </li>
+
+        <li style="position: relative;">
+          <a href="Rent.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Rent <i class="fas fa-angle-down"></i></a>
+          <ul style="position: absolute; background-color: #fff; list-style: none; padding: 10px 0; margin: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; min-width: 180px; top: 100%; left: 0;">
+            <li><a href="Rent.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Houses</a></li>
+            <li><a href="highriseapartments.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Flats</a></li>
+            <li><a href="Rent.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Furnished</a></li>
+            <li><a href="Rent.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Villas</a></li>
+            <li><a href="farmhouse.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Farm Houses</a></li>
+            <li><a href="lands.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Layouts</a></li>
+            <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Commercial</a></li>
+          </ul>
+        </li>
+
+        
+
+          <li style="position: relative;">
+                  <a href="villas.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Villas<i class="fas fa-angle-down"></i></a>
+                  <ul style="position: absolute; background-color: #fff; list-style: none; padding: 10px 0; margin: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; min-width: 180px; top: 100%; left: 0;">
+                      <li><a href="villas.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Houses</a></li>
+                      <li><a href="villas.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Villas</a></li>
+                      <li><a href="lands.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Plots</a></li>
+                      <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Flats</a></li>
+                      <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Shop</a></li>
+                      <li><a href="find_agent.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Ready to move</a></li>
+                      <li><a href="Buy.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Furnished</a></li>
+                  </ul>
+          </li>
+
+
+          <li style="position: relative;">
+                  <a href="commercial.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Commercial<i class="fas fa-angle-down"></i></a>
+                  <ul style="position: absolute; background-color: #fff; list-style: none; padding: 10px 0; margin: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; min-width: 180px; top: 100%; left: 0;">
+                      <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Houses</a></li>
+                      <li><a href="malls.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Malls</a></li>
+                      <li><a href="hospital.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Hospitals</a></li>
+                      <li><a href="office.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Offices</a></li>
+                      <li><a href="retails.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Retails</a></li>
+                      <li><a href="functionhall.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Function Halls</a></li>
+                      <li><a href="landdevelopment.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Land Developments</a></li>
+                  </ul>
+          </li>
+              
+          <li style="position: relative;">
+                  <a href="farmhouse.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Farm Houses<i class="fas fa-angle-down"></i></a>
+                  <ul style="position: absolute; background-color: #fff; list-style: none; padding: 10px 0; margin: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; min-width: 180px; top: 100%; left: 0;">
+                      <li><a href="farmhouse.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Farm Houses</a></li>
+                      <li><a href="commercial.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Layouts</a></li>
+                 </ul>
+          </li>
+
+          <li style="position: relative;">
+            <a href="lands.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Agriculture Lands</a>
+          </li>
+
+          <li style="position: relative;">
+            <a href="about.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">About Us</a>
+          </li>
+
+          <li style="position: relative;">
+              <a href="contact.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Contact Us</a>
+          </li>
+
+          <li style="position: relative;">
+            <a href="login.html" style="text-decoration: none; color: #000; padding: 10px; display:block;">Login</a>
+            <ul style="position: absolute; background-color: #fff; list-style: none; padding: 10px 0; margin: 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; min-width: 180px; top: 100%; left: 0;">
+              <li><a href="Login.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Login</a></li>
+              <li><a href="register.html" style="text-decoration: none; color: #333; display: block; padding: 8px 20px;">Register</a></li>
+            </ul>
+          </li>
+
+      </ul>
+    </div>
+  </nav>
+  <script>
+      document.querySelectorAll('nav ul li').forEach(li => {
+        li.addEventListener('mouseenter', () => {
+          const submenu = li.querySelector('ul');
+          if (submenu) submenu.style.display = 'block';
+        });
+        li.addEventListener('mouseleave', () => {
+          const submenu = li.querySelector('ul');
+          if (submenu) submenu.style.display = 'none';
+        });
+      });
+  </script>
+
+
+<!-- Hero Section with Animated Background -->
+<div style="position:relative;overflow:hidden;color:#fff;text-align:center;padding:120px 20px;min-height:300px;display:flex;flex-direction:column;justify-content:center;align-items:center;">
+    <!-- Background Images Container -->
+    <div style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;">
+        <!-- First Background Image -->
+        <div style="position:absolute;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url('images/background\ image11.png') center/cover no-repeat;animation:bgFade 16s infinite 0s;"></div>
+        <!-- Second Background Image -->
+        <div style="position:absolute;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url('images/background\ image12.png') center/cover no-repeat;animation:bgFade 16s infinite 4s;"></div>
+        <!-- Third Background Image -->
+        <div style="position:absolute;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url('images/background\ image13.png') center/cover no-repeat;animation:bgFade 16s infinite 8s;"></div>
+        <!-- Fourth Background Image -->
+        <div style="position:absolute;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url('images/background\ image6.png') center/cover no-repeat;animation:bgFade 16s infinite 12s;"></div>
+    </div>
+    
+    <!-- Content -->
+    <h1 style="font-size:2.8rem;margin-bottom:20px;text-shadow:1px 1px 3px rgba(0,0,0,0.5);">Premium Healthcare Properties</h1>
+    <p style="font-size:1.2rem;max-width:800px;margin:0 auto 30px;text-shadow:1px 1px 2px rgba(0,0,0,0.5);">Discover strategically located, state-of-the-art medical facilities designed for optimal patient care and operational efficiency</p>
+    <a href="#contact" style="background:#0066cc;color:#fff;padding:12px 30px;border-radius:5px;text-decoration:none;font-weight:bold;display:inline-block;transition:all 0.3s ease;" 
+       onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 5px 15px rgba(0,0,0,0.3)'" 
+       onmouseout="this.style.transform='scale(1)';this.style.boxShadow='none'">Explore Healthcare Properties</a>
+
+    <!-- Animation Keyframes -->
+    <style>
+        @keyframes bgFade {
+            0% { opacity:1; }
+            20% { opacity:1; }
+            25% { opacity:0; }
+            95% { opacity:0; }
+            100% { opacity:1; }
+        }
+    </style>
+</div>
+<!-- Featured Hospitals -->
+<div style="padding:60px 20px;max-width:1200px;margin:0 auto;">
+    <h2 class="section-title">Featured Medical Facilities</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+        <div style="border:1px solid #ddd;border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <img src="images/Metropolitan Medical Center.png" alt="Metropolitan Medical Center" style="width:100%;height:220px;object-fit:cover;">
+            <div style="padding:20px;">
+                <h3 style="margin-top:0;color:#0066cc;">Metropolitan Medical Center</h3>
+                <p style="color:#666;"><i style="color:#0066cc;margin-right:5px;">📍</i> Downtown Business District</p>
+                <p>120,000 sq.ft. tertiary care facility with 24/7 emergency services and specialized departments</p>
+                <a href="#" style="color:#0066cc;font-weight:bold;text-decoration:none;">View Details →</a>
+            </div>
+        </div>
+        <div style="border:1px solid #ddd;border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <img src="images/childrens hospital.png" alt="Children's Specialty Hospital" style="width:100%;height:220px;object-fit:cover;">
+            <div style="padding:20px;">
+                <h3 style="margin-top:0;color:#0066cc;">Children's Specialty Hospital</h3>
+                <p style="color:#666;"><i style="color:#0066cc;margin-right:5px;">📍</i> Suburban Healthcare Corridor</p>
+                <p>80,000 sq.ft. pediatric facility with family-centered care design and advanced NICU</p>
+                <a href="#" style="color:#0066cc;font-weight:bold;text-decoration:none;">View Details →</a>
+            </div>
+        </div>
+        <div style="border:1px solid #ddd;border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <img src="images/advanced surgical institute.png" alt="Advanced Surgical Institute" style="width:100%;height:220px;object-fit:cover;">
+            <div style="padding:20px;">
+                <h3 style="margin-top:0;color:#0066cc;">Advanced Surgical Institute</h3>
+                <p style="color:#666;"><i style="color:#0066cc;margin-right:5px;">📍</i> Medical Innovation Zone</p>
+                <p>65,000 sq.ft. specialty surgical center with 12 ORs and robotic surgery capabilities</p>
+                <a href="#" style="color:#0066cc;font-weight:bold;text-decoration:none;">View Details →</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Healthcare Property Advantages -->
+<div style="background:#f8f9fa;padding:60px 20px;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title">Why Invest in Healthcare Properties?</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;">
+            <div style="text-align:center;padding:25px;background:#fff;border-radius:8px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                <div style="background:#0066cc;width:60px;height:60px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;">📈</div>
+                <h3 style="margin-top:0;color:#0066cc;">Stable Returns</h3>
+                <p>Healthcare properties offer consistent cash flow with long-term lease agreements and recession-resistant demand</p>
+            </div>
+            <div style="text-align:center;padding:25px;background:#fff;border-radius:8px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                <div style="background:#0066cc;width:60px;height:60px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;">🏥</div>
+                <h3 style="margin-top:0;color:#0066cc;">Essential Service</h3>
+                <p>Medical facilities remain critical infrastructure with growing demand due to aging populations</p>
+            </div>
+            <div style="text-align:center;padding:25px;background:#fff;border-radius:8px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                <div style="background:#0066cc;width:60px;height:60px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;">🔄</div>
+                <h3 style="margin-top:0;color:#0066cc;">High Retention</h3>
+                <p>Healthcare tenants typically invest significantly in tenant improvements and rarely relocate</p>
+            </div>
+            <div style="text-align:center;padding:25px;background:#fff;border-radius:8px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                <div style="background:#0066cc;width:60px;height:60px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;">💰</div>
+                <h3 style="margin-top:0;color:#0066cc;">Value Appreciation</h3>
+                <p>Medical properties in strategic locations appreciate steadily due to limited supply</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Property Types -->
+<div style="padding:60px 20px;max-width:1200px;margin:0 auto;">
+    <h2 class="section-title">Healthcare Property Types We Offer</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;">
+        <div style="background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <div style="background:#0066cc;color:#fff;padding:15px;text-align:center;font-weight:bold;">Acute Care Hospitals</div>
+            <div style="padding:20px;">
+                <ul style="padding-left:20px;">
+                    <li style="margin-bottom:10px;">Full-service hospitals (50-500 beds)</li>
+                    <li style="margin-bottom:10px;">Emergency departments</li>
+                    <li style="margin-bottom:10px;">Surgical suites</li>
+                    <li style="margin-bottom:10px;">Intensive care units</li>
+                    <li>Diagnostic imaging centers</li>
+                </ul>
+            </div>
+        </div>
+        <div style="background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <div style="background:#0066cc;color:#fff;padding:15px;text-align:center;font-weight:bold;">Specialty Facilities</div>
+            <div style="padding:20px;">
+                <ul style="padding-left:20px;">
+                    <li style="margin-bottom:10px;">Children's hospitals</li>
+                    <li style="margin-bottom:10px;">Cancer treatment centers</li>
+                    <li style="margin-bottom:10px;">Cardiac care facilities</li>
+                    <li style="margin-bottom:10px;">Orthopedic institutes</li>
+                    <li>Rehabilitation hospitals</li>
+                </ul>
+            </div>
+        </div>
+        <div style="background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <div style="background:#0066cc;color:#fff;padding:15px;text-align:center;font-weight:bold;">Outpatient Centers</div>
+            <div style="padding:20px;">
+                <ul style="padding-left:20px;">
+                    <li style="margin-bottom:10px;">Ambulatory surgery centers</li>
+                    <li style="margin-bottom:10px;">Multi-specialty clinics</li>
+                    <li style="margin-bottom:10px;">Urgent care facilities</li>
+                    <li style="margin-bottom:10px;">Diagnostic laboratories</li>
+                    <li>Dialysis centers</li>
+                </ul>
+            </div>
+        </div>
+        <div style="background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <div style="background:#0066cc;color:#fff;padding:15px;text-align:center;font-weight:bold;">Senior Care</div>
+            <div style="padding:20px;">
+                <ul style="padding-left:20px;">
+                    <li style="margin-bottom:10px;">Skilled nursing facilities</li>
+                    <li style="margin-bottom:10px;">Assisted living communities</li>
+                    <li style="margin-bottom:10px;">Memory care centers</li>
+                    <li style="margin-bottom:10px;">Long-term acute care</li>
+                    <li>Hospice facilities</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Location Strategy -->
+<div style="background:#0066cc;color:#fff;padding:60px 20px;">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;align-items:center;">
+        <div>
+            <h2 style="font-size:2.2rem;margin-bottom:20px;">Strategic Healthcare Locations</h2>
+            <p style="font-size:1.1rem;margin-bottom:25px;">Our medical properties are strategically positioned in high-demand areas with excellent accessibility and visibility</p>
+            <ul style="padding-left:20px;font-size:1.1rem;">
+                <li style="margin-bottom:10px;">Proximity to major transportation routes</li>
+                <li style="margin-bottom:10px;">High population density areas</li>
+                <li style="margin-bottom:10px;">Growing suburban communities</li>
+                <li style="margin-bottom:10px;">Near complementary medical services</li>
+                <li>Areas with favorable demographic trends</li>
+            </ul>
+        </div>
+        <div style="background:#fff;border-radius:8px;padding:20px;box-shadow:0 5px 15px rgba(0,0,0,0.2);">
+            <img src="images/map_location.png" alt="Healthcare Property Locations" style="width:100%;border-radius:5px;">
+        </div>
+    </div>
+</div>
+
+<!-- Key Features -->
+<div style="padding:60px 20px;max-width:1200px;margin:0 auto;">
+    <h2 class="section-title">Designed for Healthcare Excellence</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+        <div style="display:flex;gap:20px;">
+            <div style="color:#0066cc;font-size:1.8rem;flex-shrink:0;">🏗️</div>
+            <div>
+                <h3 style="margin-top:0;color:#0066cc;">Modern Infrastructure</h3>
+                <p>Purpose-built facilities with flexible floor plates, high ceilings, and robust structural systems to accommodate heavy medical equipment</p>
+            </div>
+        </div>
+        <div style="display:flex;gap:20px;">
+            <div style="color:#0066cc;font-size:1.8rem;flex-shrink:0;">⚡</div>
+            <div>
+                <h3 style="margin-top:0;color:#0066cc;">Advanced Utilities</h3>
+                <p>Redundant power systems, medical gas infrastructure, and specialized HVAC systems for infection control</p>
+            </div>
+        </div>
+        <div style="display:flex;gap:20px;">
+            <div style="color:#0066cc;font-size:1.8rem;flex-shrink:0;">🛗</div>
+            <div>
+                <h3 style="margin-top:0;color:#0066cc;">Patient Flow Design</h3>
+                <p>Efficient layouts that separate public, clinical, and staff areas while optimizing patient movement</p>
+            </div>
+        </div>
+        <div style="display:flex;gap:20px;">
+            <div style="color:#0066cc;font-size:1.8rem;flex-shrink:0;">🌿</div>
+            <div>
+                <h3 style="margin-top:0;color:#0066cc;">Healing Environments</h3>
+                <p>Thoughtful design incorporating natural light, noise reduction, and calming aesthetics to promote recovery</p>
+            </div>
+        </div>
+        <div style="display:flex;gap:20px;">
+            <div style="color:#0066cc;font-size:1.8rem;flex-shrink:0;">🅿️</div>
+            <div>
+                <h3 style="margin-top:0;color:#0066cc;">Ample Parking</h3>
+                <p>Generous parking ratios with dedicated spaces for patients, visitors, and staff, including ADA compliance</p>
+            </div>
+        </div>
+        <div style="display:flex;gap:20px;">
+            <div style="color:#0066cc;font-size:1.8rem;flex-shrink:0;">📶</div>
+            <div>
+                <h3 style="margin-top:0;color:#0066cc;">Technology Ready</h3>
+                <p>Pre-wired for advanced medical IT systems with robust data infrastructure and telemedicine capabilities</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Investment Calculator -->
+<div style="background:#f8f9fa;padding:60px 20px;">
+    <div style="max-width:800px;margin:0 auto;background:#fff;border-radius:8px;padding:40px;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+        <h2 style="text-align:center;font-size:2.2rem;margin-bottom:30px;color:#0066cc;">Healthcare Property Investment Calculator</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:25px;margin-left: 5px;">
+            <div>
+                <label style="display:block;margin-bottom:8px;font-weight:bold;">Property Value ($)</label>
+                <input type="number" style="width:90%;padding:10px;border:1px solid #ddd;border-radius:4px;" placeholder="e.g. 5,000,000">
+            </div>
+            <div>
+                <label style="display:block;margin-bottom:8px;font-weight:bold;">Down Payment (%)</label>
+                <input type="number" style="width:90%;padding:10px;border:1px solid #ddd;border-radius:4px;" placeholder="e.g. 20" min="10" max="50">
+            </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:25px;margin-left: 5px;">
+            <div>
+                <label style="display:block;margin-bottom:8px;font-weight:bold;">Loan Term (Years)</label>
+                <input type="number" style="width:90%;padding:10px;border:1px solid #ddd;border-radius:4px;" placeholder="e.g. 15" min="5" max="30">
+            </div>
+            <div>
+                <label style="display:block;margin-bottom:8px;font-weight:bold;">Interest Rate (%)</label>
+                <input type="number" style="width:90%;padding:10px;border:1px solid #ddd;border-radius:4px;" placeholder="e.g. 4.5" step="0.1" min="2" max="10">
+            </div>
+        </div>
+        <div style="margin-bottom:25px;margin-left: 5px;">
+            <label style="display:block;margin-bottom:8px;font-weight:bold;">Annual Net Operating Income ($)</label>
+            <input type="number" style="width:95%;padding:10px;border:1px solid #ddd;border-radius:4px;" placeholder="e.g. 400,000">
+        </div>
+        <button style="background:#0066cc;color:#fff;border:none;padding:12px 30px;border-radius:5px;font-weight:bold;cursor:pointer;width:97%;margin-left: 5px;">Calculate Investment Metrics</button>
+        <div style="margin-top:30px;background:#f8f9fa;padding:20px;border-radius:5px;display:none;" id="results">
+            <h3 style="margin-top:0;color:#0066cc;">Projected Returns</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                <div>
+                    <p style="margin-bottom:5px;font-weight:bold;">Cap Rate</p>
+                    <p style="margin-top:0;font-size:1.2rem;" id="cap-rate">0.00%</p>
+                </div>
+                <div>
+                    <p style="margin-bottom:5px;font-weight:bold;">Cash on Cash</p>
+                    <p style="margin-top:0;font-size:1.2rem;" id="cash-on-cash">0.00%</p>
+                </div>
+                <div>
+                    <p style="margin-bottom:5px;font-weight:bold;">Monthly Payment</p>
+                    <p style="margin-top:0;font-size:1.2rem;" id="monthly-payment">$0</p>
+                </div>
+                <div>
+                    <p style="margin-bottom:5px;font-weight:bold;">Annual Cash Flow</p>
+                    <p style="margin-top:0;font-size:1.2rem;" id="annual-cash">$0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Market Trends -->
+<div style="background:#0066cc;color:#fff;padding:60px 20px;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 style="text-align:center;font-size:2.2rem;margin-bottom:40px;">Healthcare Real Estate Market Trends</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;">
+            <div style="text-align:center;">
+                <div style="font-size:2.5rem;font-weight:bold;margin-bottom:10px;">$1.2T</div>
+                <p style="margin-top:0;">U.S. healthcare construction spending (2023)</p>
+            </div>
+            <div style="text-align:center;">
+                <div style="font-size:2.5rem;font-weight:bold;margin-bottom:10px;">6.8%</div>
+                <p style="margin-top:0;">Annual growth in outpatient facilities</p>
+            </div>
+            <div style="text-align:center;">
+                <div style="font-size:2.5rem;font-weight:bold;margin-bottom:10px;">92%</div>
+                <p style="margin-top:0;">Occupancy rate for medical offices</p>
+            </div>
+            <div style="text-align:center;">
+                <div style="font-size:2.5rem;font-weight:bold;margin-bottom:10px;">4.2%</div>
+                <p style="margin-top:0;">Average cap rate for medical properties</p>
+            </div>
+        </div>
+        <div style="margin-top:40px;background:rgba(255,255,255,0.1);padding:25px;border-radius:8px;">
+            <h3 style="margin-top:0;font-size:1.5rem;">Key Drivers of Growth</h3>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;">
+                <div style="display:flex;gap:15px;align-items:flex-start;">
+                    <div style="background:#fff;color:#0066cc;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+                    <p style="margin-top:0;">Aging population increasing demand</p>
+                </div>
+                <div style="display:flex;gap:15px;align-items:flex-start;">
+                    <div style="background:#fff;color:#0066cc;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+                    <p style="margin-top:0;">Shift to outpatient care delivery</p>
+                </div>
+                <div style="display:flex;gap:15px;align-items:flex-start;">
+                    <div style="background:#fff;color:#0066cc;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+                    <p style="margin-top:0;">Medical technology advancements</p>
+                </div>
+                <div style="display:flex;gap:15px;align-items:flex-start;">
+                    <div style="background:#fff;color:#0066cc;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+                    <p style="margin-top:0;">Provider consolidation trends</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Resources -->
+<div style="padding:60px 20px;max-width:1200px;margin:0 auto;">
+    <h2 class="section-title">Healthcare Real Estate Resources</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+        <div style="border:1px solid #ddd;border-radius:8px;overflow:hidden;">
+            <div style="background:#0066cc;color:#fff;padding:15px;font-weight:bold;">Guide: Healthcare Facility Development</div>
+            <div style="padding:20px;">
+                <p style="margin-top:0;">Comprehensive 50-page guide covering zoning, design considerations, and financing options for medical facilities.</p>
+                <a href="#" style="background:#0066cc;color:#fff;padding:10px 20px;border-radius:5px;text-decoration:none;font-weight:bold;display:inline-block;">Download PDF</a>
+            </div>
+        </div>
+        <div style="border:1px solid #ddd;border-radius:8px;overflow:hidden;">
+            <div style="background:#0066cc;color:#fff;padding:15px;font-weight:bold;">Webinar: Investing in Medical Real Estate</div>
+            <div style="padding:20px;">
+                <p style="margin-top:0;">60-minute recording with our investment team analyzing current market trends and underwriting strategies.</p>
+                <a href="#" style="background:#0066cc;color:#fff;padding:10px 20px;border-radius:5px;text-decoration:none;font-weight:bold;display:inline-block;">Watch Now</a>
+            </div>
+        </div>
+        <div style="border:1px solid #ddd;border-radius:8px;overflow:hidden;">
+            <div style="background:#0066cc;color:#fff;padding:15px;font-weight:bold;">Checklist: Medical Property Due Diligence</div>
+            <div style="padding:20px;">
+                <p style="margin-top:0;">Essential checklist for evaluating healthcare properties, including regulatory compliance and infrastructure needs.</p>
+                <a href="#" style="background:#0066cc;color:#fff;padding:10px 20px;border-radius:5px;text-decoration:none;font-weight:bold;display:inline-block;">Download Checklist</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Interactive FAQ Section with Toggle Functionality -->
+<div style="padding:60px 20px;max-width:800px;margin:0 auto;font-family:Arial,sans-serif;">
+    <h2 class="section-title">Healthcare Property FAQs</h2>
+    
+    <!-- FAQ Item 1 -->
+    <div style="margin-bottom:10px;border-bottom:1px solid #ddd;overflow:hidden;">
+        <h3 onclick="toggleFAQ(this)" 
+            style="margin:0;padding:20px 0;color:#0066cc;font-size:1.2rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:all 0.3s ease;"
+            onmouseover="this.style.color='#004080'" 
+            onmouseout="this.style.color='#0066cc'">
+            What makes healthcare real estate different from other commercial properties?
+            <span style="font-size:1.5rem;">+</span>
+        </h3>
+        <div style="max-height:0;overflow:hidden;transition:max-height 0.5s ease;padding:0 15px;">
+            <p style="margin-top:0;padding-bottom:20px;color:#555;line-height:1.6;">
+                Healthcare properties have unique requirements including specialized infrastructure (medical gas, backup power), higher parking ratios, strict zoning regulations, and need for proximity to population centers. They also typically have longer lease terms and more stable tenants compared to other commercial real estate.
+            </p>
+        </div>
+    </div>
+    
+    <!-- FAQ Item 2 -->
+    <div style="margin-bottom:10px;border-bottom:1px solid #ddd;overflow:hidden;">
+        <h3 onclick="toggleFAQ(this)" 
+            style="margin:0;padding:20px 0;color:#0066cc;font-size:1.2rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:all 0.3s ease;"
+            onmouseover="this.style.color='#004080'" 
+            onmouseout="this.style.color='#0066cc'">
+            What are the typical lease terms for medical offices?
+            <span style="font-size:1.5rem;">+</span>
+        </h3>
+        <div style="max-height:0;overflow:hidden;transition:max-height 0.5s ease;padding:0 15px;">
+            <p style="margin-top:0;padding-bottom:20px;color:#555;line-height:1.6;">
+                Medical office leases generally run 7-15 years, significantly longer than traditional office spaces. They often include tenant improvement allowances for build-outs and periodic rent escalations tied to CPI or fixed percentages.
+            </p>
+        </div>
+    </div>
+    
+    <!-- FAQ Item 3 -->
+    <div style="margin-bottom:10px;border-bottom:1px solid #ddd;overflow:hidden;">
+        <h3 onclick="toggleFAQ(this)" 
+            style="margin:0;padding:20px 0;color:#0066cc;font-size:1.2rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:all 0.3s ease;"
+            onmouseover="this.style.color='#004080'" 
+            onmouseout="this.style.color='#0066cc'">
+            How does zoning affect healthcare property development?
+            <span style="font-size:1.5rem;">+</span>
+        </h3>
+        <div style="max-height:0;overflow:hidden;transition:max-height 0.5s ease;padding:0 15px;">
+            <p style="margin-top:0;padding-bottom:20px;color:#555;line-height:1.6;">
+                Medical facilities often require specific zoning (M-1, C-2, or healthcare-specific designations) that permits 24/7 operations, higher traffic volumes, and specialized uses. Some municipalities have separate zoning for hospitals, clinics, and diagnostic centers.
+            </p>
+        </div>
+    </div>
+    
+    <!-- FAQ Item 4 -->
+    <div style="margin-bottom:10px;border-bottom:1px solid #ddd;overflow:hidden;">
+        <h3 onclick="toggleFAQ(this)" 
+            style="margin:0;padding:20px 0;color:#0066cc;font-size:1.2rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:all 0.3s ease;"
+            onmouseover="this.style.color='#004080'" 
+            onmouseout="this.style.color='#0066cc'">
+            What should I look for in a healthcare property investment?
+            <span style="font-size:1.5rem;">+</span>
+        </h3>
+        <div style="max-height:0;overflow:hidden;transition:max-height 0.5s ease;padding:0 15px;">
+            <p style="margin-top:0;padding-bottom:20px;color:#555;line-height:1.6;">
+                Key factors include: strong demographics with growing population, proximity to hospitals or other medical providers, flexible floor plans that can accommodate multiple specialties, adequate parking and accessibility, and infrastructure that can support evolving medical technology.
+            </p>
+        </div>
+    </div>
+    
+    <!-- FAQ Item 5 -->
+    <div style="margin-bottom:10px;border-bottom:1px solid #ddd;overflow:hidden;">
+        <h3 onclick="toggleFAQ(this)" 
+            style="margin:0;padding:20px 0;color:#0066cc;font-size:1.2rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:all 0.3s ease;"
+            onmouseover="this.style.color='#004080'" 
+            onmouseout="this.style.color='#0066cc'">
+            How has COVID-19 impacted healthcare real estate?
+            <span style="font-size:1.5rem;">+</span>
+        </h3>
+        <div style="max-height:0;overflow:hidden;transition:max-height 0.5s ease;padding:0 15px;">
+            <p style="margin-top:0;padding-bottom:20px;color:#555;line-height:1.6;">
+                The pandemic accelerated trends toward telehealth, decentralized care delivery, and infection control design. Demand increased for outpatient facilities while highlighting the need for flexible spaces that can adapt to surge capacity requirements.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleFAQ(element) {
+        const answer = element.nextElementSibling;
+        const plusMinus = element.querySelector('span');
+        
+        if (answer.style.maxHeight) {
+            // Collapse the answer
+            answer.style.maxHeight = null;
+            plusMinus.textContent = '+';
+        } else {
+            // Expand the answer
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+            plusMinus.textContent = '-';
+        }
+    }
+</script>
+<!-- Testimonials -->
+<div style="padding:60px 20px;max-width:1200px;margin:0 auto;">
+    <h2 class="section-title">What Our Healthcare Clients Say</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+        <div style="background:#fff;border-radius:8px;padding:30px;box-shadow:0 5px 15px rgba(0,0,0,0.1);position:relative;">
+            <div style="color:#0066cc;font-size:2rem;margin-bottom:15px;">❝</div>
+            <p style="font-style:italic;margin-bottom:20px;">Hitashi Real Estate helped us secure the perfect location for our new specialty hospital. Their understanding of healthcare zoning requirements saved us months of delays.</p>
+            <div style="display:flex;align-items:center;gap:15px;">
+                <img src="images/sarah johnson.png" alt="Dr. Sarah Johnson" style="width:60px;height:60px;border-radius:50%;object-fit:cover;">
+                <div>
+                    <p style="font-weight:bold;margin-bottom:5px;">Dr. Sarah Johnson</p>
+                    <p style="margin-top:0;color:#666;">CEO, Metropolitan Heart Institute</p>
+                </div>
+            </div>
+        </div>
+        <div style="background:#fff;border-radius:8px;padding:30px;box-shadow:0 5px 15px rgba(0,0,0,0.1);position:relative;">
+            <div style="color:#0066cc;font-size:2rem;margin-bottom:15px;">❝</div>
+            <p style="font-style:italic;margin-bottom:20px;">The surgical center we acquired through Hitashi has exceeded our operational expectations. The facility was designed with physician input, which shows in the efficient layout.</p>
+            <div style="display:flex;align-items:center;gap:15px;">
+                <img src="images/michaelchen.png" alt="Dr. Michael Chen" style="width:60px;height:60px;border-radius:50%;object-fit:cover;">
+                <div>
+                    <p style="font-weight:bold;margin-bottom:5px;">Dr. Michael Chen</p>
+                    <p style="margin-top:0;color:#666;">Medical Director, Advanced Surgical Partners</p>
+                </div>
+            </div>
+        </div>
+        <div style="background:#fff;border-radius:8px;padding:30px;box-shadow:0 5px 15px rgba(0,0,0,0.1);position:relative;">
+            <div style="color:#0066cc;font-size:2rem;margin-bottom:15px;">❝</div>
+            <p style="font-style:italic;margin-bottom:20px;">As a real estate investor, I've found healthcare properties to be the most stable in my portfolio. Hitashi's team has an exceptional eye for identifying high-growth medical markets.</p>
+            <div style="display:flex;align-items:center;gap:15px;">
+                <img src="images/robert villiams.png" alt="Robert Williams" style="width:60px;height:60px;border-radius:50%;object-fit:cover;">
+                <div>
+                    <p style="font-weight:bold;margin-bottom:5px;">Robert Williams</p>
+                    <p style="margin-top:0;color:#666;">Portfolio Manager, BlueRock Investments</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Accreditation Partners -->
+<div style="background:#f8f9fa;padding:60px 20px;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title">Our Healthcare Accreditation Partners</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:30px;align-items:center;justify-items:center;">
+            <img src="images/joint comission.png" alt="Joint Commission" style="height:60px;width:auto;filter:grayscale(100%) opacity(70%);transition:filter 0.3s;" onmouseover="this.style.filter='none'" onmouseout="this.style.filter='grayscale(100%) opacity(70%)'">
+            <img src="images/american hospital asso.png" alt="American Hospital Association" style="height:60px;width:auto;filter:grayscale(100%) opacity(70%);transition:filter 0.3s;" onmouseover="this.style.filter='none'" onmouseout="this.style.filter='grayscale(100%) opacity(70%)'">
+            <img src="images/leed.png" alt="LEED Certified" style="height:60px;width:auto;filter:grayscale(100%) opacity(70%);transition:filter 0.3s;" onmouseover="this.style.filter='none'" onmouseout="this.style.filter='grayscale(100%) opacity(70%)'">
+            <img src="images/hfap.png" alt="HFAP Accreditation" style="height:60px;width:auto;filter:grayscale(100%) opacity(70%);transition:filter 0.3s;" onmouseover="this.style.filter='none'" onmouseout="this.style.filter='grayscale(100%) opacity(70%)'">
+            <img src="images/aasf.png" alt="AAAASF Accreditation" style="height:60px;width:auto;filter:grayscale(100%) opacity(70%);transition:filter 0.3s;" onmouseover="this.style.filter='none'" onmouseout="this.style.filter='grayscale(100%) opacity(70%)'">
+        </div>
+    </div>
+</div>
+
+<!-- Case Studies -->
+<div style="padding:60px 20px;max-width:1200px;margin:0 auto;">
+    <h2 class="section-title">Healthcare Property Success Stories</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:30px;">
+        <div style="border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <img src="images/regional_medical center.png" alt="Regional Medical Center" style="width:100%;height:200px;object-fit:cover;">
+            <div style="padding:25px;background:#fff;">
+                <h3 style="margin-top:0;color:#0066cc;">Regional Medical Center Expansion</h3>
+                <p style="color:#666;margin-bottom:20px;"><strong>Challenge:</strong> 300-bed hospital needed to expand emergency and surgical capacity without disrupting operations</p>
+                <p style="margin-bottom:25px;"><strong>Solution:</strong> We secured adjacent land and designed a phased construction plan that allowed continuous operation while adding 120,000 sq.ft. of new clinical space</p>
+                <div style="background:#f8f9fa;padding:15px;border-radius:5px;">
+                    <p style="margin:0;font-weight:bold;color:#0066cc;">Results: 40% increase in patient capacity • 28 new private rooms • LEED Silver certification</p>
+                </div>
+            </div>
+        </div>
+        <div style="border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <img src="images/multi speciality clinic.png" alt="Specialty Clinic Network" style="width:100%;height:200px;object-fit:cover;">
+            <div style="padding:25px;background:#fff;">
+                <h3 style="margin-top:0;color:#0066cc;">Multi-Specialty Clinic Network</h3>
+                <p style="color:#666;margin-bottom:20px;"><strong>Challenge:</strong> Physician group needed to consolidate 8 scattered practices into integrated facilities</p>
+                <p style="margin-bottom:25px;"><strong>Solution:</strong> We identified and developed three strategic locations with standardized clinic designs, improving operational efficiency by 35%</p>
+                <div style="background:#f8f9fa;padding:15px;border-radius:5px;">
+                    <p style="margin:0;font-weight:bold;color:#0066cc;">Results: 25% cost reduction • Improved patient satisfaction • 15-year NNN leases</p>
+                </div>
+            </div>
+        </div>
+        <div style="border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <img src="images/surgical_center acquisation.png" alt="Surgical Center Acquisition" style="width:100%;height:200px;object-fit:cover;">
+            <div style="padding:25px;background:#fff;">
+                <h3 style="margin-top:0;color:#0066cc;">Ambulatory Surgery Center Acquisition</h3>
+                <p style="color:#666;margin-bottom:20px;"><strong>Challenge:</strong> Investor sought stable healthcare asset with growth potential in secondary market</p>
+                <p style="margin-bottom:25px;"><strong>Solution:</strong> We sourced an underperforming ASC, negotiated physician partnerships, and executed value-add renovations</p>
+                <div style="background:#f8f9fa;padding:15px;border-radius:5px;">
+                    <p style="margin:0;font-weight:bold;color:#0066cc;">Results: 42% NOI increase in 2 years • 95% occupancy • AAAASF accreditation</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Team Section -->
+<div style="background:#f8f9fa;padding:60px 20px;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title">Our Healthcare Real Estate Specialists</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;">
+            <div style="text-align:center;background:#fff;border-radius:8px;padding:30px 20px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                <img src="images/jenniferle.png" alt="Jennifer Lee" style="width:150px;height:150px;border-radius:50%;object-fit:cover;margin-bottom:20px;border:3px solid #0066cc;">
+                <h3 style="margin-bottom:5px;color:#0066cc;">Jennifer Lee</h3>
+                <p style="margin-top:0;color:#666;font-weight:bold;">Healthcare Development Director</p>
+                <p>15 years experience in medical facility planning and development. Former hospital administrator.</p>
+                <a href="mailto:jlee@hitashi.com" style="color:#0066cc;font-weight:bold;text-decoration:none;">Contact Jennifer</a>
+            </div>
+            <div style="text-align:center;background:#fff;border-radius:8px;padding:30px 20px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                <img src="images/david martineze.png" alt="David Martinez" style="width:150px;height:150px;border-radius:50%;object-fit:cover;margin-bottom:20px;border:3px solid #0066cc;">
+                <h3 style="margin-bottom:5px;color:#0066cc;">David Martinez</h3>
+                <p style="margin-top:0;color:#666;font-weight:bold;">Medical Property Broker</p>
+                <p>Specializes in physician practice transitions and outpatient facility sales. Licensed architect.</p>
+                <a href="mailto:dmartinez@hitashi.com" style="color:#0066cc;font-weight:bold;text-decoration:none;">Contact David</a>
+            </div>
+            <div style="text-align:center;background:#fff;border-radius:8px;padding:30px 20px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                <img src="images/sarah johnson.png" alt="Sarah Johnson" style="width:150px;height:150px;border-radius:50%;object-fit:cover;margin-bottom:20px;border:3px solid #0066cc;">
+                <h3 style="margin-bottom:5px;color:#0066cc;">Sarah Johnson</h3>
+                <p style="margin-top:0;color:#666;font-weight:bold;">Healthcare Investment Analyst</p>
+                <p>Focuses on market trends, demographic analysis, and investment underwriting for medical assets.</p>
+                <a href="mailto:sjohnson@hitashi.com" style="color:#0066cc;font-weight:bold;text-decoration:none;">Contact Sarah</a>
+            </div>
+            <div style="text-align:center;background:#fff;border-radius:8px;padding:30px 20px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                <img src="images/michaelchen.png" alt="Michael Chen" style="width:150px;height:150px;border-radius:50%;object-fit:cover;margin-bottom:20px;border:3px solid #0066cc;">
+                <h3 style="margin-bottom:5px;color:#0066cc;">Michael Chen</h3>
+                <p style="margin-top:0;color:#666;font-weight:bold;">Senior Project Manager</p>
+                <p>Oversees healthcare construction projects with expertise in regulatory compliance and Lean design.</p>
+                <a href="mailto:mchen@hitashi.com" style="color:#0066cc;font-weight:bold;text-decoration:none;">Contact Michael</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Form -->
+<div id="contact" style="padding:60px 20px;background:#0066cc;color:#fff;">
+    <div style="max-width:800px;margin:0 auto;">
+        <h2 style="text-align:center;font-size:2.2rem;margin-bottom:40px;">Contact Our Healthcare Real Estate Team</h2>
+
+        <form style="background:#fff;padding:40px;border-radius:8px;color:#333;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+                <div>
+                    <label style="display:block;margin-bottom:8px;font-weight:bold;margin-left: 5px;">First Name</label>
+                    <input type="text" style="width:90%;padding:10px;border:1px solid #ddd;border-radius:4px;margin-left: 5px;">
+                </div>
+                <div>
+                    <label style="display:block;margin-bottom:8px;font-weight:bold;margin-left: 5px;">Last Name</label>
+                    <input type="text" style="width:90%;padding:10px;border:1px solid #ddd;border-radius:4px;margin-left: 5px;">
+                </div>
+            </div>
+            <div style="margin-bottom:20px;">
+                <label style="display:block;margin-bottom:8px;font-weight:bold;margin-left: 5px;">Email</label>
+                <input type="email" style="width:95%;padding:10px;border:1px solid #ddd;border-radius:4px;margin-left: 5px;">
+            </div>
+            <div style="margin-bottom:20px;">
+                <label style="display:block;margin-bottom:8px;font-weight:bold;margin-left: 5px;">Phone</label>
+                <input type="tel" style="width:95%;padding:10px;border:1px solid #ddd;border-radius:4px;margin-left: 5px;">
+            </div>
+            <div style="margin-bottom:20px;">
+                <label style="display:block;margin-bottom:8px;font-weight:bold;margin-left: 5px;">Organization</label>
+                <input type="text" style="width:95%;padding:10px;border:1px solid #ddd;border-radius:4px;margin-left: 5px;">
+            </div>
+            <div style="margin-bottom:20px;">
+                <label style="display:block;margin-bottom:8px;font-weight:bold;margin-left: 5px;">Interest</label>
+                <select style="width:98%;padding:10px;border:1px solid #ddd;border-radius:4px;margin-left: 5px;">
+                    <option>Hospital Acquisition</option>
+                    <option>Medical Office Lease</option>
+                    <option>Development Consultation</option>
+                    <option>Investment Opportunity</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div style="margin-bottom:20px;">
+                <label style="display:block;margin-bottom:8px;font-weight:bold;margin-left: 5px;">Message</label>
+                <textarea style="width:95%;padding:10px;border:1px solid #ddd;border-radius:4px;min-height:120px;margin-left: 5px;"></textarea>
+            </div>
+            <button type="submit" style="background:#0066cc;color:#fff;border:none;padding:12px 30px;border-radius:5px;font-weight:bold;cursor:pointer;width:98%;margin-left: 5px;">Submit Inquiry</button>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    // Simple calculator functionality
+    document.querySelector('button').addEventListener('click', function(e) {
+        e.preventDefault();
+        const propertyValue = parseFloat(document.querySelector('input[type="number"]').value) || 0;
+        const downPayment = parseFloat(document.querySelectorAll('input[type="number"]')[1].value) || 20;
+        const loanTerm = (parseFloat(document.querySelectorAll('input[type="number"]')[2].value) || 15) * 12;
+        const interestRate = (parseFloat(document.querySelectorAll('input[type="number"]')[3].value) || 4.5) / 100 / 12;
+        const noi = parseFloat(document.querySelectorAll('input[type="number"]')[4].value) || 0;
+        
+        const loanAmount = propertyValue * (1 - downPayment/100);
+        const monthlyPayment = loanAmount * interestRate * Math.pow(1 + interestRate, loanTerm) / (Math.pow(1 + interestRate, loanTerm) - 1);
+        const annualDebt = monthlyPayment * 12;
+        const annualCash = noi - annualDebt;
+        const capRate = (noi / propertyValue * 100).toFixed(2);
+        const cashOnCash = (annualCash / (propertyValue * downPayment/100) * 100).toFixed(2);
+        
+        document.getElementById('cap-rate').textContent = capRate + '%';
+        document.getElementById('cash-on-cash').textContent = cashOnCash + '%';
+        document.getElementById('monthly-payment').textContent = '$' + monthlyPayment.toFixed(0);
+        document.getElementById('annual-cash').textContent = '$' + annualCash.toFixed(0);
+        document.getElementById('results').style.display = 'block';
+    });
+</script>
+
+
+
+
+
+<div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+    
+
+<div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("../navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+
+
+    <div style="max-width: 850px; margin: 40px auto; padding: 40px; background: linear-gradient(to right, #ffffff, #f9f9f9); border-radius: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.12);">
+        <h2 style="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Post Property for Rent</h2>
+        
+        
+        <form id="rentForm" enctype="multipart/form-data" style="align-items: baseline;">
+          <!-- Property Info -->
+          <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">Title</label>
+          <input type="text" name="title" required style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+      
+          <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">Property Type</label>
+          <select name="propertyType" required style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+            <option value="">Select</option>
+            <option value="Apartment">Apartment</option>
+            <option value="Villa">Villa</option>
+            <option value="Independent House">Independent House</option>
+          </select>
+      
+          <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">No. of Bedrooms</label>
+          <select name="bedrooms" required style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+            <option value="">Select</option>
+            <option value="1 BHK">1 BHK</option>
+            <option value="2 BHK">2 BHK</option>
+            <option value="3 BHK">3 BHK</option>
+            <option value="4 BHK">4 BHK</option>
+            <option value="5 BHK">5 BHK</option>
+          </select>
+      
+          <!-- Location -->
+          <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">City</label>
+          <input type="text" name="city" required style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+      
+          <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">State</label>
+          <input type="text" name="state" required style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+      
+          <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">Locality / Address</label>
+          <textarea name="address" required style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;"></textarea>
+      
+          <!-- Price & Deposit -->
+          <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">Rent (per month)</label>
+          <input type="number" name="price" required style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+      
+          <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">Deposit</label>
+          <input type="number" name="deposit" required style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+      
+          <!-- Extras -->
+          <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">Furnishing Status</label>
+          <select name="furnishing" required style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+            <option value="Furnished">Furnished</option>
+            <option value="Semi-Furnished">Semi-Furnished</option>
+            <option value="Unfurnished">Unfurnished</option>
+          </select>
+      
+          <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">Available For</label>
+          <select name="availableFor" required style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+            <option value="Family">Family</option>
+            <option value="Single Women">Single Women</option>
+            <option value="Single Men">Single Men</option>
+          </select>
+      
+          <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">Posted By</label>
+          <select name="postedBy" required style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+            <option value="Owner">Owner</option>
+            <option value="Dealer">Dealer</option>
+          </select>
+      
+          <!-- Contact -->
+          <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">Your Name</label>
+          <input type="text" name="firstName" required placeholder="First Name" style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+          <input type="text" name="lastName" required placeholder="Last Name" style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+      
+          <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">Email</label>
+          <input type="email" name="email" required style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+      
+          <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">Mobile</label>
+          <input type="text" name="mobile" required maxlength="10" style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+      
+          <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">Additional Message</label>
+          <textarea name="message" placeholder="Write something..." style="margin-left: 30px;width: 90%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;"></textarea>
+      
+          <!-- Image Upload Field at Last -->
+       <label style="font-weight: 100; margin-bottom: 5px; display: block;margin-left: 30px;">Upload Property Images</label>
+<div id="imageUploads" style="margin-bottom: 10px;">
+  <div class="image-upload-container" style="display: flex; align-items: center; margin-bottom: 10px; margin-left: 30px;">
+    <input type="file" name="images" accept="image/*" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+    <button type="button" onclick="removeImageField(this)" style="background: #dc3545; color: white; padding: 8px 12px; border: none; border-radius: 5px; margin-left: 10px; font-size: 14px; cursor: pointer;margin-right: 30px; display: inline-flex; align-items: center; justify-content: center;">
+      <i class="fas fa-trash-alt"></i>
+    </button>
+  </div>
+</div>
+<button type="button" onclick="addImageField()" style="background: #28a745; color: white; padding: 8px 14px; border: none; border-radius: 5px; margin-bottom: 25px; font-size: 14px; cursor: pointer;margin-left: 30px;">+ Add</button>
+          <!-- Submit Button -->
+          <button type="submit" style="background-color: #007bff; color: white; padding: 14px 20px; border: none; border-radius: 6px; font-size: 16px; width: 93%;margin-left: 30px;">Post Property</button>
+        </form>
+
+
+    </div>
+      
+      <script>
+        function addImageField() {
+          const container = document.getElementById('imageUploads');
+          const newDiv = document.createElement('div');
+          newDiv.className = 'image-upload-container';
+          newDiv.style.cssText = 'display: flex; align-items: center; margin-bottom: 10px; margin-left: 30px;';
+          newDiv.innerHTML = `
+            <input type="file" name="images" accept="image/*" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+            <button type="button" onclick="removeImageField(this)" style="background: #dc3545; color: white; padding: 8px 12px; border: none; border-radius: 5px; margin-left: 10px; font-size: 14px; cursor: pointer; margin-right: 30px; display: inline-flex; align-items: center; justify-content: center;">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          `;
+          container.appendChild(newDiv);
+        }
+
+        function removeImageField(btn) {
+          const containerDiv = btn.closest('.image-upload-container');
+          if (containerDiv) containerDiv.remove();
+        }
+
+        document.getElementById('rentForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            const formData = new FormData(this);
+            
+            // Send the form data to the API endpoint
+            fetch('http://localhost:5001/api/post-property', {
+              method: 'POST',
+              body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+              alert('Property posted successfully! Property UID: ' + data.propertyUID);
+              document.getElementById('rentForm').reset();
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('There was an error posting the property.');
+            });
+        });
+      </script>
+
+    <div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+</body>
+</html>

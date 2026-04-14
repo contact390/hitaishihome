@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+
+    <div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("../navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+
+
+  <section style="position: relative; width: 100%; height: 500px; overflow: hidden; font-family: 'Segoe UI', sans-serif;">
+    <img src="https://images.rawpixel.com/image_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvcHg1OTk4MzYtaW1hZ2Uta3d2dmI2em4uanBn.jpg" 
+         alt="Luxury Living" 
+         style="width: 100%; height: 100%; object-fit: cover; display: block;">
+    <div style="
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, 30%);
+      text-align: center;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 30px 40px;
+      border-radius: 16px;
+      animation: slideUpInline 2s ease-out forwards;
+      opacity: 0;
+    ">
+      <h1 style="font-size: 36px; margin: 0; line-height: 1.5;">
+        Experience Haven<br>
+        Experience Comfort<br>
+        Experience Luxury
+      </h1>
+    </div>
+    <svg style="display: none;">
+      <style>
+        @keyframes slideUpInline {
+          0% {
+            transform: translate(-50%, 30%);
+            opacity: 0;
+          }
+          100% {
+            transform: translate(-50%, -50%);
+            opacity: 1;
+          }
+        }
+      </style>
+    </svg>
+  </section>
+  
+  <section style="padding: 80px 20px; background: #eceae6; font-family: 'Segoe UI', sans-serif;">
+    <div style="max-width: 1100px; margin: 0 auto;">
+      <h2 class="section-title">Features</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
+        
+        <div class="feature-card" style="flex: 1 1 400px; background: #fff; padding: 35px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+          <h3 style="font-size: 24px; color: #0a0a0a; margin-bottom: 18px;">Elevation</h3>
+          <p style="font-size: 17px; color: #555;">
+            Modern villa elevations often feature a mix of contemporary lines, natural materials, and open facades that blend beauty with functionality...
+          </p>
+        </div>
+  
+        <div class="feature-card" style="flex: 1 1 400px; background: #fff; padding: 35px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+          <h3 style="font-size: 24px; color: #0d0d0e; margin-bottom: 18px;">Connectivity</h3>
+          <p style="font-size: 17px; color: #555;">
+            With seamless road networks and quick access to public transport, you enjoy both urban convenience and peaceful living...
+          </p>
+        </div>
+  
+        <div class="feature-card" style="flex: 1 1 400px; background: #fff; padding: 35px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+          <h3 style="font-size: 24px; color: #070707; margin-bottom: 18px;">Schools</h3>
+          <p style="font-size: 17px; color: #555;">
+            With top-rated international, public, and private schools within a short drive, you can skip the long school commutes...
+          </p>
+        </div>
+  
+        <div class="feature-card" style="flex: 1 1 400px; background: #fff; padding: 35px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+          <h3 style="font-size: 24px; color: #131313; margin-bottom: 18px;">Investment</h3>
+          <p style="font-size: 17px; color: #555;">
+            With features like gated communities, private amenities, and premium infrastructure, villas consistently outperform...
+          </p>
+        </div>
+  
+      </div>
+    </div>
+  
+    <style>
+      .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+      }
+    </style>
+  </section>
+
+  <section style="padding: 80px 20px; background: #ffffff; font-family: 'Segoe UI', sans-serif;">
+    <style>
+      .gallery-card {
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+  
+      .gallery-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+      }
+  
+      .gallery-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+      }
+  
+      .gallery-card p {
+        margin: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+      }
+    </style>
+  
+    <div style="max-width: 1100px; margin: 0 auto;">
+      <h2 style="text-align: center; font-size: 34px; color: #003366; margin-bottom: 50px;">Gallery</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+  
+        <div class="gallery-card" style="flex: 1 1 250px; text-align: center;">
+          <img src="https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2018%2F05%2Fmaleo-residence-mitchel-squires-associates-3.jpg?q=75&w=800&cbr=1&fit=max" alt="West Group side">
+          <p>West Group Side</p>
+        </div>
+  
+        <div class="gallery-card" style="flex: 1 1 250px; text-align: center;">
+          <img src="https://cdn12.picryl.com/photo/2016/12/31/semi-detached-house-villa-rendering-architecture-buildings-519643-1024.jpg" alt="Club Side">
+          <p>Club Side</p>
+        </div>
+  
+        <div class="gallery-card" style="flex: 1 1 250px; text-align: center;">
+          <img src="https://images.squarespace-cdn.com/content/v1/6012f7470bfcfd193b1f7fd8/1621310094257-483IJR6HXOR5TBSM5MTE/1-front.jpg" alt="Arch Day view-222">
+          <p>Arch Day View - 222</p>
+        </div>
+  
+        <div class="gallery-card" style="flex: 1 1 250px; text-align: center;">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTryQuTfTofcsxhAt9Vsct7MhERgLjlfPVbhoKzlnqNwfYJY8UJtA7rLiTLZ-yW7ncjjKw&usqp=CAU" alt="Club Front">
+          <p>Club Front</p>
+        </div>
+  
+        <div class="gallery-card" style="flex: 1 1 250px; text-align: center;">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBXYf1Yqv_82LTvYbitZx1_0sGb91mv5D7lQ&s" alt="Arch night view -2">
+          <p>Arch Night View - 2</p>
+        </div>
+  
+        <div class="gallery-card" style="flex: 1 1 250px; text-align: center;">
+          <img src="https://cdn12.picryl.com/photo/2016/12/31/home-villa-manor-house-architecture-buildings-c35dd8-1024.jpg" alt="East View Group">
+          <p>East View Group</p>
+        </div>
+  
+        <div class="gallery-card" style="flex: 1 1 250px; text-align: center;">
+          <img src="https://live.staticflickr.com/1359/543124254_7005366ba4_b.jpg" alt="Villa East Single">
+          <p>Villa East Single</p>
+        </div>
+  
+        <div class="gallery-card" style="flex: 1 1 250px; text-align: center;">
+          <img src="https://live.staticflickr.com/8111/8660576316_0f3e6c731e_b.jpg" alt="Villa Single West">
+          <p>Villa Single West</p>
+        </div>
+  
+        <div class="gallery-card" style="flex: 1 1 250px; text-align: center;">
+          <img src="https://images.pexels.com/photos/1488267/pexels-photo-1488267.png" alt="ArialView">
+          <p>Arial View</p>
+        </div>
+  
+        <div class="gallery-card" style="flex: 1 1 250px; text-align: center;">
+          <img src="https://images.pexels.com/photos/10681890/pexels-photo-10681890.jpeg" alt="Arch Day view-222">
+          <p>Arch Day View - 222</p>
+        </div>
+  
+      </div>
+    </div>
+  </section>
+
+  <section style="padding: 60px 20px; background: #f0f4f8; font-family: 'Segoe UI', sans-serif;">
+    <div style="max-width: 1100px; margin: 0 auto;">
+      <h2 class="section-title">Specifications</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; list-style: none;">
+        <div style="flex: 1 1 300px; background: #ffffff; border-radius: 16px; padding: 25px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+          <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 12px;">
+            <img src="https://img.icons8.com/ios-filled/50/003366/building.png" alt="Structure Icon" style="width: 40px; height: 40px;">
+            <h3 style="font-size: 18px; margin: 0; color: #003366;">Structure</h3>
+          </div>
+          <p style="font-size: 15px; color: #555;">RCC framed structure with seismic zone III compliance and high-quality concrete blocks for external walls.</p>
+        </div>
+        <div style="flex: 1 1 300px; background: #ffffff; border-radius: 16px; padding: 25px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+          <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 12px;">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmdYjkRdxZXJU-SHP9Y1-b489opKytTcrO0g&s" alt="Flooring Icon" style="width: 40px; height: 40px;">
+            <h3 style="font-size: 18px; margin: 0; color: #003366;">Flooring</h3>
+          </div>
+          <p style="font-size: 15px; color: #555;">Premium vitrified tiles in living, dining & bedrooms. Anti-skid ceramic tiles in bathrooms and utility areas.</p>
+        </div>
+        <div style="flex: 1 1 300px; background: #ffffff; border-radius: 16px; padding: 25px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+          <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 12px;">
+            <img src="https://img.icons8.com/ios-filled/50/003366/door.png" alt="Doors & Windows Icon" style="width: 40px; height: 40px;">
+            <h3 style="font-size: 18px; margin: 0; color: #003366;">Doors & Windows</h3>
+          </div>
+          <p style="font-size: 15px; color: #555;">Main door in teak wood frame and shutter. UPVC windows with mosquito mesh shutters for ventilation and durability.</p>
+        </div>
+        <div style="flex: 1 1 300px; background: #ffffff; border-radius: 16px; padding: 25px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+          <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 12px;">
+            <img src="https://img.icons8.com/ios-filled/50/003366/kitchen-room.png" alt="Kitchen Icon" style="width: 40px; height: 40px;">
+            <h3 style="font-size: 18px; margin: 0; color: #003366;">Kitchen</h3>
+          </div>
+          <p style="font-size: 15px; color: #555;">Granite platform with stainless steel sink. Provision for water purifier, chimney & washing machine.</p>
+        </div>
+        <div style="flex: 1 1 300px; background: #ffffff; border-radius: 16px; padding: 25px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+          <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 12px;">
+            <img src="https://img.icons8.com/ios-filled/50/003366/bath.png" alt="Bathrooms Icon" style="width: 40px; height: 40px;">
+            <h3 style="font-size: 18px; margin: 0; color: #003366;">Bathrooms</h3>
+          </div>
+          <p style="font-size: 15px; color: #555;">CP fittings of reputed brand. Designer wall tiles up to 7 feet height. Provision for geysers in all bathrooms.</p>
+        </div>
+        <div style="flex: 1 1 300px; background: #ffffff; border-radius: 16px; padding: 25px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+          <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 12px;">
+            <img src="https://img.icons8.com/ios-filled/50/003366/electrical.png" alt="Electrical Icon" style="width: 40px; height: 40px;">
+            <h3 style="font-size: 18px; margin: 0; color: #003366;">Electrical</h3>
+          </div>
+          <p style="font-size: 15px; color: #555;">Concealed copper wiring with modular switches. Adequate points for AC, TV, and geyser in all necessary areas.</p>
+        </div>
+  
+      </div>
+    </div>
+  </section>
+
+    <section style="padding: 60px 20px; background-color: #fff8f0; font-family: 'Segoe UI', sans-serif;">
+    <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+        <h2 class="section-title">Ongoing Villa Projects</h2>
+        <p style="font-size: 18px; color: #666; max-width: 800px; margin: 0 auto 50px;">Explore our exclusive collection of luxury villas currently under development, each designed for comfort, elegance, and refined living.</p>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
+        <div onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.1)';" style="background: #fff; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); overflow: hidden; width: 340px; text-align: left; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzeSTO7xPnfEKAE-HP6Y4sQYYXd1wt-4MBSw&s" alt="Villa Project 1" style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 20px;">
+            <h3 style="font-size: 22px; color: #004aad; margin: 0 0 10px;">Palm Grove Villas</h3>
+            <p style="color: #555; font-size: 16px;">3 & 4 BHK luxury villas with private gardens, located in Whitefield. Handover by Dec 2025.</p>
+            </div>
+        </div>
+        <div onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.1)';" style="background: #fff; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); overflow: hidden; width: 340px; text-align: left; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTED875IwMOz-t_euN_mrdTVDz3Ku8i3zt_dA&s" alt="Villa Project 2" style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 20px;">
+            <h3 style="font-size: 22px; color: #004aad; margin: 0 0 10px;">Lakeview Residences</h3>
+            <p style="color: #555; font-size: 16px;">Waterfront villas with panoramic lake views in Sarjapur. Possession from March 2026.</p>
+            </div>
+        </div>
+        <div onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.1)';" style="background: #fff; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); overflow: hidden; width: 340px; text-align: left; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2iyoAkFfvHJdMZbV7wt87l8W1ehcXKXEnlg&s" alt="Villa Project 3" style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 20px;">
+            <h3 style="font-size: 22px; color: #004aad; margin: 0 0 10px;">The Highland Estate</h3>
+            <p style="color: #555; font-size: 16px;">Premium hillside villas with clubhouse amenities in Devanahalli. Delivery Q2 2025.</p>
+            </div>
+        </div>
+
+        </div>
+    </div>
+    </section>
+
+    <section style="padding: 60px 30px; background: linear-gradient(135deg, #a7a9ac, #dbe9ff); font-family: 'Segoe UI', sans-serif;">
+    <div style="max-width: 1100px; margin: 0 auto; text-align: center;">
+        <h2 class="section-title">
+        India's Trusted Luxury Villa Rentals
+        </h2>
+        
+
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;">
+        <div style="flex: 1 1 280px; min-width: 260px; background: #ffffff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; align-items: flex-start; gap: 15px;">
+            <i class="fas fa-gem" style="font-size: 28px; color: #004aad;"></i>
+            <div style="text-align: left;">
+            <h4 style="margin: 0 0 10px; font-size: 20px;">
+                <a href="#experiences" style="color: #004aad; background: #dbe9ff; padding: 6px 14px; border-radius: 25px; text-decoration: none; font-weight: 600;">Exclusive Experiences</a>
+            </h4>
+            <p style="margin: 0; font-size: 16px; color: #555;">Handpicked villas for unforgettable stays</p>
+            </div>
+        </div>
+
+        <div style="flex: 1 1 280px; min-width: 260px; background: #ffffff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; align-items: flex-start; gap: 15px;">
+            <i class="fas fa-user-cog" style="font-size: 28px; color: #004aad;"></i>
+            <div style="text-align: left;">
+            <h4 style="margin: 0 0 10px; font-size: 20px;">
+                <a href="#service" style="color: #004aad; background: #dbe9ff; padding: 6px 14px; border-radius: 25px; text-decoration: none; font-weight: 600;">Unmatched Service</a>
+            </h4>
+            <p style="margin: 0; font-size: 16px; color: #555;">Dedicated concierge & travel assistance</p>
+            </div>
+        </div>
+
+        <div style="flex: 1 1 280px; min-width: 260px; background: #ffffff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; align-items: flex-start; gap: 15px;">
+            <i class="fas fa-shield-alt" style="font-size: 28px; color: #004aad;"></i>
+            <div style="text-align: left;">
+            <h4 style="margin: 0 0 10px; font-size: 20px;">
+                <a href="#value" style="color: #004aad; background: #dbe9ff; padding: 6px 14px; border-radius: 25px; text-decoration: none; font-weight: 600;">Superior Guest Value</a>
+            </h4>
+            <p style="margin: 0; font-size: 16px; color: #555;">Prioritising safety, cleanliness & service</p>
+            </div>
+        </div>
+        </div>
+    </div>
+    </section>
+
+
+    <section style="padding: 60px 20px; background: #e4e8f4; font-family: 'Segoe UI', sans-serif;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+        <h2 class="section-title">
+        Popular Destinations to Rent a Holiday Home in India
+        </h2>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
+
+        <!-- Destination Card -->
+        <div onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)';" style="flex: 1 1 250px; max-width: 300px; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+            <img src="https://images.pexels.com/photos/29023465/pexels-photo-29023465/free-photo-of-scenic-view-of-anjuna-beach-in-goa.jpeg" alt="Goa" style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 16px;">
+            <h3 style="margin: 0; font-size: 20px; color: #004aad;">Goa</h3>
+            <p style="font-size: 15px; color: #666; margin-top: 6px;">Tropical beaches, nightlife & Portuguese charm.</p>
+            </div>
+        </div>
+
+        <!-- Udaipur -->
+        <div onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)';" style="flex: 1 1 250px; max-width: 300px; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+            <img src="https://live.staticflickr.com/65535/52982752746_7066af6ef7_b.jpg" alt="Udaipur" style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 16px;">
+            <h3 style="margin: 0; font-size: 20px; color: #004aad;">Udaipur</h3>
+            <p style="font-size: 15px; color: #666; margin-top: 6px;">Romantic lakes, palaces & royal retreats.</p>
+            </div>
+        </div>
+
+        <!-- Coorg -->
+        <div onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)';" style="flex: 1 1 250px; max-width: 300px; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+            <img src="https://pixahive.com/wp-content/uploads/2020/09/Abbey-Falls-Coorg-71926-pixahive.jpg" alt="Coorg" style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 16px;">
+            <h3 style="margin: 0; font-size: 20px; color: #004aad;">Coorg</h3>
+            <p style="font-size: 15px; color: #666; margin-top: 6px;">Misty hills, coffee estates & serene escapes.</p>
+            </div>
+        </div>
+
+        <!-- Manali -->
+        <div onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)';" style="flex: 1 1 250px; max-width: 300px; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d2/Mountains%2C_Manali%2C_Himachal_Pradesh.jpg" alt="Manali" style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 16px;">
+            <h3 style="margin: 0; font-size: 20px; color: #004aad;">Manali</h3>
+            <p style="font-size: 15px; color: #666; margin-top: 6px;">Snowy peaks, adventure sports & cool air.</p>
+            </div>
+        </div>
+
+        </div>
+    </div>
+    </section>
+
+    <section style="padding: 50px 20px; background-color: #dddddd; font-family: 'Segoe UI', sans-serif;">
+    <div style="max-width: 800px; margin: auto;">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+
+        <div class="faq-item" style="cursor: pointer; margin-bottom: 15px; border-left: 4px solid #3b82f6; background: #fff; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+        <h3 style="margin-bottom: 10px;">What is included in a villa rental?<span class="arrow" style="float: right;">▼</span></h3>
+        <p style="display: none; font-size: 18px;"> Most villas come fully furnished with private pools, kitchens, Wi-Fi, housekeeping, and 24/7 support.</p>
+        </div>
+
+        <div class="faq-item" style="cursor: pointer; margin-bottom: 15px; border-left: 4px solid #36ca56; background: #fff; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+        <h3 style="margin-bottom: 10px;">How do I book a luxury villa? <span class="arrow" style="float: right;">▼</span></h3>
+        <p style="display: none; font-size: 18px;"> Simply choose your preferred dates, villa, and follow the secure online booking process. Assistance is available if needed.</p>
+        </div>
+
+        <div class="faq-item" style="cursor: pointer; margin-bottom: 15px; border-left: 4px solid #f81616; background: #fff; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+        <h3 style="margin-bottom: 10px;">Are there any hidden charges? <span class="arrow" style="float: right;">▼</span></h3>
+        <p style="display: none; font-size: 18px;">  No hidden fees. Pricing includes taxes and services unless stated otherwise. Transparent billing always.</p>
+        </div>
+
+        <div class="faq-item" style="cursor: pointer; margin-bottom: 15px; border-left: 4px solid #3b82f6; background: #fff; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+        <h3 style="margin-bottom: 10px;">Do you offer furnished apartments? <span class="arrow" style="float: right;">▼</span></h3>
+        <p style="display: none; font-size: 18px;"> Absolutely. All villas are verified for quality, hygiene, and security with support teams available round the clock.</p>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.faq-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+            const para = this.querySelector('p');
+            const arrow = this.querySelector('.arrow');
+            const isOpen = para.style.display === 'block';
+            para.style.display = isOpen ? 'none' : 'block';
+            arrow.textContent = isOpen ? '▼' : '▲';
+        });
+        });
+    </script>
+    </section>
+
+    <section style="padding: 80px 20px; background: linear-gradient(135deg, #001f3f, #004aad); color: #fff; font-family: 'Segoe UI', sans-serif;">
+        <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+        
+        <h2 sclass="section-title">
+            MAGICAL EXPERIENCES · LUXURIOUS STAYS
+        </h2>
+    
+        <p style="font-size: 20px; max-width: 700px; margin: 0 auto 40px; color: #e0e0e0;">
+            Discover India's most enchanting villas, where every detail is crafted for elegance, comfort, and unforgettable memories.
+        </p>
+    
+        <a href="#villas" style="display: inline-block; margin-top: 20px; padding: 14px 32px; background: #fff; color: #004aad; font-size: 16px; font-weight: 600; border-radius: 8px; text-decoration: none; transition: all 0.3s;">
+            Explore Villas
+        </a>
+        
+        </div>
+    </section>
+ 
+  <section style="padding: 30px 20px; background: #d3d8d6; font-family: 'Segoe UI', sans-serif;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 30px; align-items: stretch;">
+      
+      <div style="flex: 1.2 1 450px;">
+        <img src="https://freerangestock.com/sample/122409/magnifying-glass-on-map.jpg" alt="West Group Side" style="width: 100%; height: 100%; min-height: 300px; object-fit: cover; border-radius: 12px;">
+      </div>
+      
+      <div style="flex: 2 1 600px;">
+        <h2 class="section-title">Location Highlights</h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          
+          <div style="display: flex; align-items: flex-start; gap: 16px;">
+            <i class="fas fa-school" style="font-size: 24px; color: #004aad; min-width: 24px;"></i>
+            <div>
+              <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #004aad;">Top Schools Nearby</h3>
+              <p style="margin: 4px 0 0; font-size: 16px; color: #555;">Within 10 mins from reputed international and CBSE schools.</p>
+            </div>
+          </div>
+  
+          <div style="display: flex; align-items: flex-start; gap: 16px;">
+            <i class="fas fa-laptop-house" style="font-size: 24px; color: #004aad; min-width: 24px;"></i>
+            <div>
+              <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #004aad;">Close to Tech Parks</h3>
+              <p style="margin: 4px 0 0; font-size: 16px; color: #555;">Easy access to major IT corridors and business centers.</p>
+            </div>
+          </div>
+  
+          <div style="display: flex; align-items: flex-start; gap: 16px;">
+            <i class="fas fa-shopping-bag" style="font-size: 24px; color: #004aad; min-width: 24px;"></i>
+            <div>
+              <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #004aad;">Retail & Essentials</h3>
+              <p style="margin: 4px 0 0; font-size: 16px; color: #555;">Supermarkets, malls, and daily essentials just minutes away.</p>
+            </div>
+          </div>
+  
+          <div style="display: flex; align-items: flex-start; gap: 16px;">
+            <i class="fas fa-hospital-user" style="font-size: 24px; color: #004aad; min-width: 24px;"></i>
+            <div>
+              <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #004aad;">Quality Healthcare</h3>
+              <p style="margin: 4px 0 0; font-size: 16px; color: #555;">Renowned hospitals and clinics within easy reach.</p>
+            </div>
+          </div>
+  
+          <div style="display: flex; align-items: flex-start; gap: 16px;">
+            <i class="fas fa-tree" style="font-size: 24px; color: #004aad; min-width: 24px;"></i>
+            <div>
+              <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #004aad;">Serene Surroundings</h3>
+              <p style="margin: 4px 0 0; font-size: 16px; color: #555;">Peaceful, pollution-free environment surrounded by nature.</p>
+            </div>
+          </div>
+  
+          <div style="display: flex; align-items: flex-start; gap: 16px;">
+            <i class="fas fa-road" style="font-size: 24px; color: #004aad; min-width: 24px;"></i>
+            <div>
+              <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #004aad;">Excellent Connectivity</h3>
+              <p style="margin: 4px 0 0; font-size: 16px; color: #555;">Well-connected by highways, metro, and public transport.</p>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+  
+    </div>
+  </section>
+  
+ <div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+
+</body>
+</html>

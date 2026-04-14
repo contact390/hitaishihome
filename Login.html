@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+  <script>
+    function showForgotModal() {
+      document.getElementById('forgot-modal').style.display = 'flex';
+    }
+
+    function sendOTP() {
+      document.getElementById('otp-section').style.display = 'block';
+      document.getElementById('send-otp-btn').style.display = 'none';
+    }
+
+    function verifyOTP() {
+      const otpInput = document.getElementById('otp-input').value;
+      if (otpInput === '123456') {
+        document.getElementById('new-password-section').style.display = 'block';
+        document.getElementById('verify-otp-btn').style.display = 'none';
+      } else {
+        alert('Invalid OTP');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('forgot-modal').style.display = 'none';
+    }
+  </script>
+</head>
+<body >
+  
+     <div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("../navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+  <div style="width: 100%; margin-left: 30%; margin-top: 30px; max-width: 400px; padding: 2rem; background-color: white; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);align-items: center;margin-left: 680px;margin-bottom: 50px;">
+    <h2 class="section-title">Welcome Back</h2>
+    <form style="display: flex; flex-direction: column; gap: 1rem;">
+      <div>
+        <label style="display: block; margin-bottom: 0.15rem; font-size: 14px; font-weight: 500; color: #4b5563;margin-left: 25px;">Username</label>
+        <input type="text" placeholder="Enter username" required style="width: 80%; padding: 0.5rem 1rem; background-color: #f3f4f6; color: #374151; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none;margin-left: 25px;">
+      </div>
+      <div>
+        <label style="display: block; margin-bottom: 0.15rem; font-size: 14px; font-weight: 500; color: #4b5563;margin-left: 25px;">Password</label>
+        <input type="password" placeholder="Enter password" required style="width: 80%; padding: 0.5rem 1rem; background-color: #f3f4f6; color: #374151; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none;margin-left: 25px;">
+      </div>
+
+      <div style="display: none; padding: 0.5rem; font-size: 14px; color: #b91c1c; background-color: #fee2e2; border: 1px solid #fca5a5; border-radius: 0.5rem;">
+        Error message
+      </div>
+
+      <button type="submit" style="width: 88%; padding: 0.5rem 1rem; color: white; background-color: #3b82f6; border-radius: 0.5rem; transition: background-color 0.2s; border: none;margin-left: 25px;">Login</button>
+
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; margin-top: 1rem; font-size: 14px; color: #4b5563;">
+        <button type="button" onclick="showForgotModal()" style="color: #3b82f6; background: none; border: none; cursor: pointer; text-decoration: underline;">Forgot password?</button>
+        <span>
+          Don't have an account?
+          <button type="button" style="color: #3b82f6; background: none; border: none; cursor: pointer; text-decoration: underline;">Register here</button>
+        </span>
+      </div>
+    </form>
+
+
+    <script>
+      document.querySelector('form').addEventListener('submit', function (e) {
+        e.preventDefault();
+      
+        const username = this.querySelector('input[type="text"]').value;
+        const password = this.querySelector('input[type="password"]').value;
+      
+        fetch("http://localhost:5001/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.token) {
+            // Store JWT token and user info in localStorage
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            // Redirect to dashboard with full HTTP URL
+            window.location.href = "http://localhost:5001/dashboard/dashboard.html";
+          } else {
+            alert(data.message || "Login failed.");
+          }
+        })
+        .catch(err => {
+          alert("Something went wrong.");
+          console.error(err);
+        });
+      });
+      </script>
+      
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div id="forgot-modal" style="display: none; position: fixed; inset: 0; background-color: rgba(0,0,0,0.3); justify-content: center; align-items: center;">
+    <div style="position: relative; background-color: white; padding: 1.5rem; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 1rem;">
+      <button onclick="closeModal()" style="position: absolute; top: 0.5rem; right: 0.5rem; background: none; border: none; font-size: 1.25rem; cursor: pointer;">&times;</button>
+      <h3 style="font-size: 18px; font-weight: 600;">Reset Password</h3>
+      <input type="text" placeholder="Enter your email or username" style="padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem;">
+      <button id="send-otp-btn" onclick="sendOTP()" style="background-color: #3b82f6; color: white; padding: 0.5rem; border-radius: 0.5rem; border: none;">Send OTP</button>
+      <div id="otp-section" style="display: none;">
+        <input id="otp-input" type="text" placeholder="Enter OTP" style="padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; margin-top: 1rem;">
+        <button id="verify-otp-btn" onclick="verifyOTP()" style="background-color: #10b981; color: white; padding: 0.5rem; border-radius: 0.5rem; border: none; margin-top: 0.5rem;">Verify OTP</button>
+      </div>
+      <div id="new-password-section" style="display: none;">
+        <input type="password" placeholder="New Password" style="padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; margin-top: 1rem;">
+        <input type="password" placeholder="Confirm New Password" style="padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; margin-top: 0.5rem;">
+        <button style="background-color: #10b981; color: white; padding: 0.5rem; border-radius: 0.5rem; border: none; margin-top: 0.5rem;">Submit</button>
+      </div>
+    </div>
+
+
+    <script>
+      let generatedOTP = null;
+      let currentUser = null;
+      
+      // Show forgot modal
+      function showForgotModal() {
+        document.getElementById('forgot-modal').style.display = 'flex';
+      }
+      
+      function closeModal() {
+        document.getElementById('forgot-modal').style.display = 'none';
+        document.getElementById('otp-section').style.display = 'none';
+        document.getElementById('new-password-section').style.display = 'none';
+      }
+      
+      // Send OTP
+      function sendOTP() {
+        const input = document.querySelector('#forgot-modal input[type="text"]').value;
+
+        // First, get user info to extract email
+        fetch('http://localhost:5001/api/get-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identifier: input })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.user) {
+            currentUser = data.user;
+
+            // Now request backend to send the OTP email
+            fetch('http://localhost:5001/api/send-otp', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email: currentUser.email })
+            })
+            .then(res => res.json())
+            .then(data => {
+              alert(data.message);
+              document.getElementById('otp-section').style.display = 'block';
+            });
+
+          } else {
+            alert(data.message);
+          }
+        });
+      }
+
+      // Verify OTP
+      function verifyOTP() {
+        const inputOTP = document.getElementById('otp-input').value;
+
+        fetch('http://localhost:5001/api/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: currentUser.email,
+            otp: inputOTP
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.message === 'OTP verified') {
+            alert('OTP verified!');
+            document.getElementById('new-password-section').style.display = 'block';
+          } else {
+            alert('Invalid OTP!');
+          }
+        });
+      }
+
+      // Submit new password
+      document.querySelector('#new-password-section button').addEventListener('click', () => {
+        const newPassword = document.querySelectorAll('#new-password-section input')[0].value;
+        const confirmPassword = document.querySelectorAll('#new-password-section input')[1].value;
+      
+        if (newPassword !== confirmPassword) {
+          alert('Passwords do not match!');
+          return;
+        }
+      
+        fetch("http://localhost:5001/api/reset-password", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: currentUser.id, newPassword })
+        })
+        .then(res => res.json())
+        .then(data => {
+          alert(data.message);
+          if (data.success) {
+            closeModal();
+          }
+        });
+      });
+      </script>
+      
+  </div>
+
+
+
+
+<div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+
+</body>
+</html>

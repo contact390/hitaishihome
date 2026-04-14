@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+
+   <div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("../navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+
+<section style="background:url('https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=600&auto=format&fit=crop&q=60') no-repeat center center/cover;padding:5rem 2rem;text-align:center;margin-top:110px;">
+
+  <!-- BLACK OVERLAY -->
+  <div style="background:rgba(0,0,0,0.6);padding:30px;border-radius:10px;display:inline-block;color:white;max-width:700px;width:100%;margin-bottom: 30px;">
+
+    <h1 style="font-size:2.0rem;margin-bottom:1rem;color:#fff;">
+      <span style="text-decoration: none;">Welcome to our</span> Hitaishi Real Estate
+    </h1>
+    
+    <!-- BUTTONS -->
+    <div id="propertyTypeButtons" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:15px;">
+      <input type="hidden" id="type" name="type" required>
+
+      <button type="button" class="type-btn" data-value="house"
+        style="padding:0.5rem 1rem;border:1px solid #ccc;border-radius:4px;cursor:pointer;background:#fff;color:#000;">
+        House
+      </button>
+
+      <button type="button" class="type-btn" data-value="apartment"
+        style="padding:0.5rem 1rem;border:1px solid #ccc;border-radius:4px;cursor:pointer;background:#fff;color:#000;">
+        Apartment
+      </button>
+
+      <button type="button" class="type-btn" data-value="commercial"
+        style="padding:0.5rem 1rem;border:1px solid #ccc;border-radius:4px;cursor:pointer;background:#fff;color:#000;">
+        Commercial
+      </button>
+
+      <button type="button" class="type-btn" data-value="villa"
+        style="padding:0.5rem 1rem;border:1px solid #ccc;border-radius:4px;cursor:pointer;background:#fff;color:#000;">
+        Villa
+      </button>
+
+      <button type="button" class="type-btn" data-value="flat"
+        style="padding:0.5rem 1rem;border:1px solid #ccc;border-radius:4px;cursor:pointer;background:#fff;color:#000;">
+        Flat
+      </button>
+
+      <button type="button" class="type-btn" data-value="land"
+        style="padding:0.5rem 1rem;border:1px solid #ccc;border-radius:4px;cursor:pointer;background:#fff;color:#000;">
+        Land
+      </button>
+    </div>
+
+    <!-- SEARCH -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+      
+      <input type="text" placeholder="enter your search.."
+        style="padding:0.5rem;border:1px solid #ccc;border-radius:4px;min-width:200px;">
+
+      <select style="padding:0.5rem;border:1px solid #ccc;border-radius:4px;">
+        <option value="">Select City</option>
+        <option value="delhi">Delhi</option>
+        <option value="mumbai">Mumbai</option>
+        <option value="bangalore">Bangalore</option>
+        <option value="chennai">Chennai</option>
+        <option value="hyderabad">Hyderabad</option>
+      </select>
+
+      <button style="background:#f39c12;border:none;padding:0.5rem 1rem;color:white;border-radius:4px;cursor:pointer;">
+        Search
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- SCRIPT -->
+<script>
+  const buttons = document.querySelectorAll('.type-btn');
+  const hiddenInput = document.getElementById('type');
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+
+      // reset all buttons
+      buttons.forEach(btn => {
+        btn.style.backgroundColor = '#fff';
+        btn.style.color = '#000';
+      });
+
+      // active button
+      button.style.backgroundColor = '#3b82f6';
+      button.style.color = '#fff';
+
+      hiddenInput.value = button.getAttribute('data-value');
+    });
+  });
+</script>
+  
+<section class="services" style="padding:2rem;text-align:center;">
+  <h2 class="section-title">Our Services</h2>
+
+
+  <div class="service-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;">
+
+    <div class="service-item" style="padding:1.5rem;border-radius:10px;color:white;background:#1B3A6F;transition:transform 0.3s ease;">
+      <i class="fa fa-home" style="font-size:2rem;margin-bottom:1rem;"></i>
+      <h3>Buy Property</h3>
+      <p>Find your dream home from our listings.</p>
+    </div>
+
+    <div class="service-item" style="padding:1.5rem;border-radius:10px;color:white;background:#1B3C73;transition:transform 0.3s ease;">
+      <i class="fa fa-key" style="font-size:2rem;margin-bottom:1rem;"></i>
+      <h3>Rent Property</h3>
+      <p>Explore rental homes and apartments in top locations.</p>
+    </div>
+
+    <div class="service-item" style="padding:1.5rem;border-radius:10px;color:white;background:#1B3C73;transition:transform 0.3s ease;">
+      <i class="fa fa-building" style="font-size:2rem;margin-bottom:1rem;"></i>
+      <h3>Commercial Spaces</h3>
+      <p>Get the best spaces for your business needs.</p>
+    </div>
+
+    <div class="service-item" style="padding:1.5rem;border-radius:10px;color:white;background:#1B3C73;transition:transform 0.3s ease;">
+      <i class="fa fa-cogs" style="font-size:2rem;margin-bottom:1rem;"></i>
+      <h3>Property Management</h3>
+      <p>Hassle-free management of your real estate assets.</p>
+    </div>
+
+    <div class="service-item" style="padding:1.5rem;border-radius:10px;color:white;background:#1B3C73;transition:transform 0.3s ease;">
+      <i class="fa fa-gavel" style="font-size:2rem;margin-bottom:1rem;"></i>
+      <h3>Legal Assistance</h3>
+      <p>Expert legal advice for safe and transparent transactions.</p>
+    </div>
+
+    <div class="service-item" style="padding:1.5rem;border-radius:10px;color:white;background:#1B3C73;transition:transform 0.3s ease;">
+      <i class="fa fa-paint-brush" style="font-size:2rem;margin-bottom:1rem;"></i>
+      <h3>Interior Design</h3>
+      <p>Stylish and functional interiors for your home or office.</p>
+    </div>
+
+    <div class="service-item" style="padding:1.5rem;border-radius:10px;color:white;background:#1B3C73;transition:transform 0.3s ease;">
+      <i class="fa fa-credit-card" style="font-size:2rem;margin-bottom:1rem;"></i>
+      <h3>Loan Assistance</h3>
+      <p>Get financial help and the best home loan offers.</p>
+    </div>
+
+  </div>
+</section>
+
+
+  
+
+  <section class="listings" style="padding:2rem;text-align:center;">
+    <h2 class="section-title">Latest Listings</h2>
+    <div class="listing-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;">
+      
+      <!-- Existing Listings -->
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/3bhk_apartment_realestate.png" alt="3bhk_apartment_hitaishi_realestate" style="width:100%;height:200px;object-fit:cover;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>3 BHK Apartment</h3>
+          <p>₹75 Lakhs - Mumbai</p>
+        </div>
+      </div>
+  
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/villas_realestate.png" alt="Property 2" style="width:100%;height:200px;object-fit:cover;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>Villa in Bangalore</h3>
+          <p>₹1.2 Cr - Bangalore</p>
+        </div>
+      </div>
+  
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/office_space_realestate.png" alt="office_space_hitaishi_realestate" style="width:100%;height:200px;object-fit:cover;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>Office Space</h3>
+          <p>₹60 Lakhs - Pune</p>
+        </div>
+      </div>
+  
+      <!-- New Listings -->
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/pent house with seaview_realesate.png" alt="" loading="lazy" style="height: 200px; width: auto;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>Penthouse with Sea View</h3>
+          <p>₹2.5 Cr - Goa</p>
+        </div>
+      </div>
+  
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/studio_apartment_realestate.png" alt="Property 5" style="width:100%;height:200px;object-fit:cover;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>Studio Apartment</h3>
+          <p>₹35 Lakhs - Hyderabad</p>
+        </div>
+      </div>
+  
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/Form_house_realestate.png" alt="Form house in realestate" style="width:100%;height:200px;object-fit:cover;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>Farmhouse Retreat</h3>
+          <p>₹90 Lakhs - Outskirts of Delhi</p>
+        </div>
+      </div>
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/modern_flAt_realestate.png" alt="Property 7" style="width:100%;height:200px;object-fit:cover;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>Modern Flat</h3>
+          <p>₹55 Lakhs - Chennai</p>
+        </div>
+      </div>
+  
+      <div class="listing-card" style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:box-shadow 0.3s ease;">
+        <img src="images/Luxury_duplex_realestate.png" alt="Property 8" style="width:100%;height:200px;object-fit:cover;">
+        <div class="listing-info" style="padding:1rem;">
+          <h3>Luxury Duplex</h3>
+          <p>₹1.8 Cr - Kolkata</p>
+        </div>
+      </div>
+      
+  </section>
+  <div style="margin-left: 45%;  justify-content: center; margin-top: 1rem;">
+    <a href="#" style=" display: inline-block; padding: 0.75rem 1.5rem; background: #3b82f6; color: white; border-radius: 6px; text-decoration: none; font-weight: 500; transition: background 0.3s;">
+      View More
+    </a>
+  </div> 
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Properties</title>
+</head>
+
+<body style="font-family:Arial;background:#f3f4f6;margin:0;padding:20px;">
+
+  <h2 style="text-align:center;margin-bottom:25px;font-size:26px;color:#111;">
+    All New Properties
+  </h2>
+
+  <!-- GRID CONTAINER -->
+  <div id="props"
+       style="
+         display:flex;
+         flex-wrap:wrap;
+         gap:20px;
+         justify-content:center;
+         padding:10px;
+       ">
+  </div>
+
+<script>
+  
+/* ---------------------------- LOAD PROPERTIES ---------------------------- */
+async function loadNewProperties() {
+  const container = document.getElementById("props");
+  container.innerHTML = "Loading...";
+
+  try {
+    const res = await fetch("http://localhost:5001/api/newproperties");
+    const data = await res.json();
+
+    if (!data.success) {
+      container.innerHTML = "Failed to load properties";
+      return;
+    }
+
+    container.innerHTML = "";
+
+    data.properties.forEach(p => {
+
+      /* -------- Resolve image URL -------- */
+      let img = "data:image/svg+xml;utf8,\
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 120'>\
+          <rect width='100%' height='100%' fill='#e5e7eb'/>\
+          <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#9ca3af' font-size='14'>No Image</text>\
+        </svg>";
+
+      if (p.imageUrl) {
+        let stored = p.imageUrl.toString().trim();
+        stored = stored.replace(/^\/+/, "");
+        if (!stored.startsWith("uploads")) stored = "uploads/" + stored;
+        img = "http://localhost:5001/" + stored;
+      }
+
+      /* -------- Google Maps Link -------- */
+      const gmap = encodeURIComponent(p.address || p.city || "");
+      const mapUrl = `https://www.google.com/maps/search/?api=1&query=${gmap}`;
+
+      /* ---------------- PROPERTY CARD ---------------- */
+      const card = `
+      <div class="prop-card"
+        style="
+          width:300px;
+          background:white;
+          border-radius:14px;
+          box-shadow:0 4px 14px rgba(0,0,0,0.12);
+          overflow:hidden;
+          cursor:pointer;
+          transition:all .25s;
+        "
+        onmouseover="this.style.transform='scale(1.04)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.20)'"
+        onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 14px rgba(0,0,0,0.12)'"
+      >
+
+        <div style="width:100%; height:190px; position:relative;">
+          <img src="${img}" style="width:100%; height:100%; object-fit:cover;">
+
+          <!-- HEART ICON -->
+          <div onclick="toggleHeart(this, '${p.id}')"
+            style="
+              position:absolute; top:10px; right:10px;
+              background:white;
+              width:40px; height:40px;
+              border-radius:50%;
+              display:flex; justify-content:center; align-items:center;
+              font-size:22px; cursor:pointer;
+              box-shadow:0 2px 6px rgba(0,0,0,0.25);
+              transition:.2s;
+            ">🤍</div>
+        </div>
+
+        <div style="padding:15px;">
+
+          <!-- Type Row -->
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <div style="font-size:14px;"><b>Type:</b> ${p.type || ""}</div>
+            <div style="font-size:14px;"><b>Property:</b> ${p.propertyType || ""}</div>
+          </div>
+
+          <div style="font-size:14px; margin-bottom:10px;">
+            <b>Bedrooms:</b> ${p.bedrooms || ""}
+          </div>
+
+          <div style="font-size:14px; margin-bottom:5px;">
+            <b>City:</b> ${p.city || ""}
+          </div>
+
+          <!-- Address + Map -->
+          <a href="${mapUrl}" target="_blank" style="text-decoration:none;">
+            <div style="
+              font-size:14px;
+              color:#1d4ed8;
+              margin-bottom:12px;
+              display:flex;
+              align-items:center;
+              gap:6px;
+            ">
+              <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png"
+                   style="width:16px;height:16px;">
+              ${p.address || "Open in Google Maps"}
+            </div>
+          </a>
+
+          <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+            <div style="font-size:16px; color:#059669; font-weight:bold;">
+              ₹ ${p.price || ""}
+            </div>
+            <div style="font-size:14px;">
+              <b>Pincode:</b> ${p.pincode || ""}
+            </div>
+          </div>
+
+          <!-- Features -->
+          <div style="
+            background:#f9fafb;
+            border:1px solid #e5e7eb;
+            padding:10px;
+            font-size:13px;
+            border-radius:8px;
+            color:#374151;
+          ">
+            <b>Features:
+            ${p.features || "No additional features"}
+          </div>
+
+          <!-- BUY BUTTON -->
+          <button onclick="openBuyForm('${p.id}', '${p.title || ""}')"
+            style="
+              width:100%;
+              padding:12px;
+              margin-top:12px;
+              background:#2563eb;
+              color:white;
+              border:none;
+              border-radius:8px;
+              font-size:15px;
+              cursor:pointer;
+            ">
+            Buy Now
+          </button>
+
+        </div>
+      </div>`;
+
+      container.innerHTML += card;
+    });
+
+  } catch (err) {
+    console.log(err);
+    container.innerHTML = "Error loading properties.";
+  }
+}
+
+  /* ---------------- HEART TOGGLE ---------------- */
+  async function toggleHeart(el, propertyId, p) {
+    if (!el) return;
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    if (!user || !user.id) { alert('Please login'); return; }
+
+    const currentlyLiked = el.getAttribute('data-liked') === '1';
+
+    // Optimistic inline-style change (inline CSS as requested)
+    if (!currentlyLiked) {
+      el.innerText = '❤️';
+      el.setAttribute('data-liked', '1');
+      el.style.color = 'red';
+      el.style.background = 'white';
+      el.style.borderRadius = '50%';
+      el.style.transition = 'transform .12s ease';
+      el.style.transform = 'scale(1.08)';
+      setTimeout(() => el.style.transform = 'scale(1)', 140);
+    } else {
+      el.innerText = '🤍';
+      el.setAttribute('data-liked', '0');
+      el.style.color = '#888';
+      el.style.transform = 'scale(1.03)';
+      setTimeout(() => el.style.transform = 'scale(1)', 120);
+    }
+
+    try {
+      if (!currentlyLiked) {
+        const res = await fetch('http://localhost:5001/api/newproperties/interest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: user.id, propertyListingId: propertyId })
+        });
+        const j = await res.json();
+        if (!j.success) {
+          // revert
+          el.innerText = '🤍'; el.setAttribute('data-liked', '0'); el.style.color = '#888';
+          alert(j.message || 'Failed to add interest');
+          return;
+        }
+
+        // build normalized interest object for UI update
+        const image = (p && (p.images || p.imageUrl) && (p.images || [p.imageUrl])[0]) ? ((p.images && p.images[0]) || p.imageUrl) : null;
+        const imgUrl = image ? (image.toString().startsWith('http') ? image.toString() : ('http://localhost:5001/' + image.toString().replace(/^\/+/, ''))) : '/images/placeholder.png';
+
+        const interestObj = {
+          interestId: j.interestId || j.insertId || null,
+          propertyId: propertyId,
+          title: (p && (p.title || p.name)) ? (p.title || p.name) : '',
+          price: p && p.price ? p.price : '',
+          address: p && p.address ? p.address : (p && p.city ? p.city : ''),
+          images: [imgUrl],
+          createdAt: new Date().toISOString()
+        };
+
+        window.dispatchEvent(new CustomEvent('interestAdded', { detail: interestObj }));
+      } else {
+        const res = await fetch('http://localhost:5001/api/newproperties/interest', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: user.id, propertyListingId: propertyId })
+        });
+        const j = await res.json();
+        if (!j.success) {
+          // revert
+          el.innerText = '❤️'; el.setAttribute('data-liked', '1'); el.style.color = 'red';
+          alert(j.message || 'Failed to remove interest');
+          return;
+        }
+
+        window.dispatchEvent(new CustomEvent('interestRemoved', { detail: { propertyId } }));
+      }
+    } catch (err) {
+      console.error('toggleHeart error', err);
+      // revert optimistic UI
+      if (!currentlyLiked) { el.innerText = '🤍'; el.setAttribute('data-liked', '0'); el.style.color = '#888'; }
+      else { el.innerText = '❤️'; el.setAttribute('data-liked', '1'); el.style.color = 'red'; }
+      alert('Connection error');
+    }
+  }
+
+loadNewProperties();
+</script>
+
+
+<!-- ---------------- BUY FORM POPUP ---------------- -->
+<div id="buyPopup" style="
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.45);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+">
+  <div style="
+    background:white;
+    width:90%;
+    max-width:420px;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 18px rgba(0,0,0,0.3);
+  ">
+
+    <h3 style="text-align:center;margin-bottom:15px;">Buy Property</h3>
+
+ <form id="buyForm" style="background:#ffffff; padding:25px; border-radius:12px; 
+      box-shadow:0 4px 20px rgba(0,0,0,0.12); font-family:Arial;">
+
+  <input type="hidden" id="buyPropertyId">
+
+  <label style="font-weight:normal; font-size:14px; color:#333;">Name</label>
+  <input type="text" id="buyName" required
+    style="width:95%; padding:12px; margin-bottom:15px; border:1px solid #ccc; 
+    border-radius:8px; font-size:15px; transition:0.3s;">
+
+  <label style="font-weight:normal; font-size:14px; color:#333;">Phone</label>
+  <input type="text" id="buyPhone" required maxlength="10"
+    style="width:95%; padding:12px; margin-bottom:15px; border:1px solid #ccc; 
+    border-radius:8px; font-size:15px; transition:0.3s;">
+
+  <label style="font-weight:normal; font-size:14px; color:#333;">Email</label>
+  <input type="email" id="buyEmail" required
+    style="width:95%; padding:12px; margin-bottom:15px; border:1px solid #ccc; 
+    border-radius:8px; font-size:15px; transition:0.3s;">
+
+  <label style="font-weight:normal; font-size:14px; color:#333;">Message</label>
+  <textarea id="buyMsg" rows="3"
+    style="width:95%; padding:12px; border:1px solid #ccc; border-radius:8px; 
+    font-size:15px; margin-bottom:20px; resize:none; transition:0.3s;"></textarea>
+
+  <button type="submit"
+    style="width:100%; padding:14px; background:#16a34a; color:white; border:none; 
+    border-radius:5px; margin-top:10px; font-size:17px; cursor:pointer; 
+    font-weight:bold; letter-spacing:0.5px; transition:0.3s;">
+    Submit Request
+  </button>
+
+  <button type="button" onclick="closeBuyForm()"
+    style="width:100%; padding:12px; background:#ef4444; color:white; border:none; 
+    border-radius:5px; margin-top:12px; font-size:16px; cursor:pointer; 
+    font-weight:bold; transition:0.3s;">
+    Cancel
+  </button>
+</form>
+
+  </div>
+</div>
+
+<script>
+function openBuyForm(id) {
+  document.getElementById("buyPropertyId").value = id;
+  document.getElementById("buyPopup").style.display = "flex";
+}
+function closeBuyForm() {
+  document.getElementById("buyPopup").style.display = "none";
+}
+
+/* ---------------- SUBMIT BUY FORM ---------------- */
+document.getElementById("buyForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const payload = {
+    propertyId: document.getElementById("buyPropertyId").value,
+    name: document.getElementById("buyName").value,
+    phone: document.getElementById("buyPhone").value,
+    email: document.getElementById("buyEmail").value,
+    message: document.getElementById("buyMsg").value
+  };
+
+  const res = await fetch("http://localhost:5001/api/buyproperty", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  const data = await res.json();
+  if (data.success) {
+    alert("Your request has been submitted!");
+    closeBuyForm();
+    document.getElementById("buyForm").reset();
+  } else {
+    alert("Failed: " + data.message);
+  }
+});
+</script>
+
+
+<!-- ---------------- RESPONSIVE CSS ---------------- -->
+<style>
+@media (max-width: 480px) {
+  #props {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+  }
+  .prop-card {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  #props {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .prop-card {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  #props {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+  }
+}
+</style>
+
+</body>
+</html>
+
+
+  
+<div id="footer"></div>
+
+<script>
+fetch("footer.html")   // ✅ correct
+  .then(res => res.text())
+  .then(data => {
+    document.getElementById("footer").innerHTML = data;
+  });
+</script>
+         
+  <script>
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector(".navbar ul");
+    menuToggle.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+      if (navLinks.classList.contains("active")) {
+        navLinks.style.display = "flex";
+        navLinks.style.flexDirection = "column";
+        navLinks.style.background = "#2c3e50";
+        navLinks.style.position = "absolute";
+        navLinks.style.top = "60px";
+        navLinks.style.right = "0";
+        navLinks.style.width = "200px";
+        navLinks.style.zIndex = "99";
+      } else {
+        navLinks.style.display = "none";
+      }
+    });
+    const dropdown = document.querySelector(".dropdown");
+    dropdown.addEventListener("mouseover", () => {
+      const menu = dropdown.querySelector("ul");
+      menu.style.display = "block";
+    });
+    dropdown.addEventListener("mouseout", () => {
+      const menu = dropdown.querySelector("ul");
+      menu.style.display = "none";
+    });
+  </script>
+
+
+
+
+<!-- Load Chatbot -->
+<script>
+  async function loadChatbot() {
+    try {
+      const response = await fetch('./chatbot.html');
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const htmlContent = await response.text();
+      
+      // Create a container to hold chatbot
+      const container = document.createElement('div');
+      container.id = 'chatbot-container';
+      container.innerHTML = htmlContent;
+      document.body.appendChild(container);
+      
+      // Extract and re-execute scripts from chatbot.html
+      const scripts = container.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        document.head.appendChild(newScript);
+      });
+      
+      console.log('✓ Chatbot loaded successfully');
+    } catch (error) {
+      console.error('✗ Chatbot load failed:', error);
+    }
+  }
+  
+  // Load chatbot when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadChatbot);
+  } else {
+    loadChatbot();
+  }
+</script>
+
+
+<!-- Scroll to Top Button -->
+<button id="scrollToTopBtn" style="display: none; position: fixed; bottom: 80px; right: 22px; z-index: 1000; background: linear-gradient(135deg, #3498db, #2980b9); color:white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 33px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.3s ease;" onclick="scrollToTop()">↑</button>
+
+<style>
+  #scrollToTopBtn:hover {
+    background: linear-gradient(135deg, #2980b9, #21618c);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+  }
+</style>
+
+<script>
+  // Show/hide scroll to top button
+  window.addEventListener('scroll', function() {
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+    if (window.pageYOffset > 100) {
+      scrollToTopBtn.style.display = 'block';
+    } else {
+      scrollToTopBtn.style.display = 'none';
+    }
+  });
+
+  // Scroll to top function
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+</script>
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

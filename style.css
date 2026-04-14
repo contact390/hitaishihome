@@ -1,0 +1,200 @@
+/* Section */
+
+<!----- hall page stylling ----->
+
+.hall-section {
+  padding: 60px 20px;
+  background: #f8f9fa;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Title */
+.section-title {
+  font-size: 34px;
+  color: #003366;
+  text-align: center;
+  margin-bottom: 50px;
+  font-weight: 600;
+}
+
+/* Grid */
+.hall-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+}
+
+/* Card */
+.hall-card {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+/* Hover effect */
+.hall-card:hover {
+  transform: translateY(-10px);
+}
+
+/* Image */
+.hall-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+/* Content */
+.hall-content {
+  padding: 25px;
+}
+
+.hall-content h3 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: #e63946;
+}
+
+.hall-content p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* List */
+.hall-content ul {
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+
+.hall-content ul li {
+  margin-bottom: 8px;
+}
+
+/* Link */
+.hall-content a {
+  color: #e63946;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.hall-content a:hover {
+  text-decoration: underline;
+}
+
+
+<!---- hero section styling ---->
+/* HERO SECTION */
+.hero {
+  height: 90vh;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+              url("https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=2070") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+/* CONTENT */
+.hero-content {
+  max-width: 900px;
+  color: #fff;
+}
+
+/* TITLE */
+.hero-title {
+  font-size: 3.2rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.hero-title span {
+  color: #f39c12;
+}
+
+/* SUBTITLE */
+.hero-subtitle {
+  font-size: 1.3rem;
+  margin-bottom: 30px;
+  color: #ddd;
+}
+
+/* TYPE BUTTONS */
+.type-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.type-btn {
+  padding: 8px 18px;
+  border-radius: 25px;
+  border: 1px solid #fff;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.type-btn:hover,
+.type-btn.active {
+  background: #f39c12;
+  border-color: #f39c12;
+}
+
+/* SEARCH BAR */
+.search-bar {
+  display: flex;
+  gap: 10px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 50px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.search-bar input,
+.search-bar select {
+  border: none;
+  padding: 10px;
+  border-radius: 30px;
+  outline: none;
+}
+
+.search-bar input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.search-btn {
+  background: #f39c12;
+  border: none;
+  padding: 10px 20px;
+  color: #fff;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.search-btn:hover {
+  background: #e67e22;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .search-bar {
+    border-radius: 20px;
+  }
+}

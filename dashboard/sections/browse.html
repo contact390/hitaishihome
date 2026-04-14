@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Properties</title>
+</head>
+
+<body style="font-family:Arial;background:#f3f4f6;margin:0;padding:20px;">
+
+  <h2 style="text-align:center;margin-bottom:25px;font-size:26px;color:#111;">
+    All Properties
+  </h2>
+
+  <!-- SEARCH & FILTERS -->
+  <div style="display:flex; gap:12px; align-items:center; justify-content:center; margin-bottom:16px; flex-wrap:wrap;">
+    <input id="propSearch" type="search" placeholder="Search properties (city, address, title...)"
+      style="width:320px; padding:10px 12px; border-radius:8px; border:1px solid #d1d5db; font-size:15px;">
+
+    <label style="display:flex; align-items:center; gap:8px; font-size:14px;">
+      <input id="filterBuy" type="checkbox" checked>
+      Buy
+    </label>
+
+    <label style="display:flex; align-items:center; gap:8px; font-size:14px;">
+      <input id="filterRent" type="checkbox" checked>
+      Rent
+    </label>
+  </div>
+
+  <!-- GRID CONTAINER -->
+  <div id="props"
+       style="
+         display:flex;
+         flex-wrap:wrap;
+         gap:20px;
+         justify-content:center;
+         padding:10px;
+       ">
+  </div>
+
+<script>
+/* ---------------------------- LOAD PROPERTIES + FILTERS ---------------------------- */
+window.allProperties = [];
+
+function determineIsForRent(p) {
+  return (p.type && p.type.toLowerCase() === 'rent') ||
+         (p.propertyType && p.propertyType.toLowerCase().includes('rent'));
+}
+
+function renderProperties() {
+  const container = document.getElementById('props');
+  const search = (document.getElementById('propSearch').value || '').trim().toLowerCase();
+  const showBuy = document.getElementById('filterBuy').checked;
+  const showRent = document.getElementById('filterRent').checked;
+
+  const list = (window.allProperties || []).filter(p => {
+    // type filter
+    const isRent = determineIsForRent(p);
+    if (!showBuy && !showRent) return false;
+    if (isRent && !showRent) return false;
+    if (!isRent && !showBuy) return false;
+
+    if (!search) return true;
+
+    const hay = (`${p.title || ''} ${p.address || ''} ${p.city || ''} ${p.propertyType || ''} ${p.type || ''}`).toLowerCase();
+    return hay.indexOf(search) !== -1;
+  });
+
+  if (!list.length) {
+    container.innerHTML = '<div style="padding:20px; color:#374151;">No properties found.</div>';
+    return;
+  }
+
+  container.innerHTML = '';
+  list.forEach(p => container.innerHTML += createCardHtml(p));
+}
+
+function createCardHtml(p) {
+  /* Resolve image URL */
+  let img = "data:image/svg+xml;utf8,\
+    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 120'>\
+      <rect width='100%' height='100%' fill='#e5e7eb'/>\
+      <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#9ca3af' font-size='14'>No Image</text>\
+    </svg>";
+
+  if (p.imageUrl) {
+    let stored = p.imageUrl.toString().trim();
+    stored = stored.replace(/^\/+/, '');
+    if (!stored.startsWith('uploads')) stored = 'uploads/' + stored;
+    img = 'http://localhost:5001/' + stored;
+  }
+
+  const gmap = encodeURIComponent(p.address || p.city || '');
+  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${gmap}`;
+  const isForRent = determineIsForRent(p);
+  const buttonText = isForRent ? 'Rent Now' : 'Buy Now';
+  const buttonColor = isForRent ? '#059669' : '#2563eb';
+
+  const card = `
+  <div class="prop-card"
+    style="
+      width:300px;
+      background:white;
+      border-radius:14px;
+      box-shadow:0 4px 14px rgba(0,0,0,0.12);
+      overflow:hidden;
+      cursor:pointer;
+      transition:all .25s;
+    "
+    onmouseover="this.style.transform='scale(1.04)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.20)'"
+    onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 14px rgba(0,0,0,0.12)'"
+  >
+
+    <div style="width:100%; height:190px; position:relative;">
+      <img src="${img}" style="width:100%; height:100%; object-fit:cover;">
+
+      <!-- HEART ICON -->
+      <div onclick="toggleHeart(this, '${p.id}')"
+        style="
+          position:absolute; top:10px; right:10px;
+          background:white;
+          width:40px; height:40px;
+          border-radius:50%;
+          display:flex; justify-content:center; align-items:center;
+          font-size:22px; cursor:pointer;
+          box-shadow:0 2px 6px rgba(0,0,0,0.25);
+          transition:.2s;
+        ">🤍</div>
+    </div>
+
+    <div style="padding:15px;">
+
+      <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+        <div style="font-size:14px;"><b>Type:</b> ${p.type || ''}</div>
+        <div style="font-size:14px;"><b>Property:</b> ${p.propertyType || ''}</div>
+      </div>
+
+      <div style="font-size:14px; margin-bottom:10px;">
+        <b>Bedrooms:</b> ${p.bedrooms || ''}
+      </div>
+
+      <div style="font-size:14px; margin-bottom:5px;">
+        <b>City:</b> ${p.city || ''}
+      </div>
+
+      <a href="${mapUrl}" target="_blank" style="text-decoration:none;">
+        <div style="
+          font-size:14px;
+          color:#1d4ed8;
+          margin-bottom:12px;
+          display:flex;
+          align-items:center;
+          gap:6px;
+        ">
+          <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png"
+               style="width:16px;height:16px;">
+          ${p.address || 'Open in Google Maps'}
+        </div>
+      </a>
+
+      <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+        <div style="font-size:16px; color:#059669; font-weight:bold;">
+          ₹ ${p.price || ''}
+        </div>
+        <div style="font-size:14px;">
+          <b>Pincode:</b> ${p.pincode || ''}
+        </div>
+      </div>
+
+      <div style="
+        background:#f9fafb;
+        border:1px solid #e5e7eb;
+        padding:10px;
+        font-size:13px;
+        border-radius:8px;
+        color:#374151;
+      ">
+        <b>Features:</b><br>
+        ${p.features || 'No additional features'}
+      </div>
+
+      <button onclick="openForm('${p.id}', '${(p.title||'').replace(/'/g, "\\'")}', ${isForRent})"
+        style="
+          width:100%;
+          padding:12px;
+          margin-top:12px;
+          background:${buttonColor};
+          color:white;
+          border:none;
+          border-radius:8px;
+          font-size:15px;
+          cursor:pointer;
+          transition:0.3s;
+        "
+        onmouseover="this.style.opacity='0.9'"
+        onmouseout="this.style.opacity='1'">
+        ${buttonText}
+      </button>
+
+    </div>
+  </div>`;
+
+  return card;
+}
+
+async function loadNewProperties() {
+  const container = document.getElementById('props');
+  container.innerHTML = 'Loading...';
+
+  try {
+    const res = await fetch('http://localhost:5001/api/newproperties');
+    const data = await res.json();
+    if (!data.success) { container.innerHTML = 'Failed to load properties'; return; }
+
+    window.allProperties = data.properties || [];
+    renderProperties();
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = 'Error loading properties.';
+  }
+}
+
+/* ---------------- HEART TOGGLE (unchanged behavior) ---------------- */
+async function toggleHeart(el, propertyId, p) {
+  if (!el) return;
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  if (!user || !user.id) { alert('Please login'); return; }
+
+  const currentlyLiked = el.getAttribute('data-liked') === '1';
+  if (!currentlyLiked) {
+    el.innerText = '❤️'; el.setAttribute('data-liked', '1'); el.style.color = 'red';
+    el.style.background = 'white'; el.style.borderRadius = '50%';
+    el.style.transition = 'transform .12s ease'; el.style.transform = 'scale(1.08)';
+    setTimeout(() => el.style.transform = 'scale(1)', 140);
+  } else {
+    el.innerText = '🤍'; el.setAttribute('data-liked', '0'); el.style.color = '#888';
+    el.style.transform = 'scale(1.03)'; setTimeout(() => el.style.transform = 'scale(1)', 120);
+  }
+
+  try {
+    if (!currentlyLiked) {
+      const res = await fetch('http://localhost:5001/api/newproperties/interest', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, propertyListingId: propertyId })
+      });
+      const j = await res.json();
+      if (!j.success) { el.innerText = '🤍'; el.setAttribute('data-liked', '0'); el.style.color = '#888'; alert(j.message || 'Failed to add interest'); return; }
+
+      const realP = p || (window.allProperties || []).find(x => x.id == propertyId) || {};
+      const image = (realP && (realP.images || realP.imageUrl) && (realP.images || [realP.imageUrl])[0]) ? ((realP.images && realP.images[0]) || realP.imageUrl) : null;
+      const imgUrl = image ? (image.toString().startsWith('http') ? image.toString() : ('http://localhost:5001/' + image.toString().replace(/^\/+/, ''))) : '/images/placeholder.png';
+
+      const interestObj = {
+        interestId: j.interestId || j.insertId || null,
+        propertyId: propertyId,
+        title: (realP && (realP.title || realP.name)) ? (realP.title || realP.name) : '',
+        price: realP && realP.price ? realP.price : '',
+        address: realP && realP.address ? realP.address : (realP && realP.city ? realP.city : ''),
+        images: [imgUrl],
+        createdAt: new Date().toISOString()
+      };
+
+      window.dispatchEvent(new CustomEvent('interestAdded', { detail: interestObj }));
+    } else {
+      const res = await fetch('http://localhost:5001/api/newproperties/interest', {
+        method: 'DELETE', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, propertyListingId: propertyId })
+      });
+      const j = await res.json();
+      if (!j.success) { el.innerText = '❤️'; el.setAttribute('data-liked', '1'); el.style.color = 'red'; alert(j.message || 'Failed to remove interest'); return; }
+      window.dispatchEvent(new CustomEvent('interestRemoved', { detail: { propertyId } }));
+    }
+  } catch (err) {
+    console.error('toggleHeart error', err);
+    if (!currentlyLiked) { el.innerText = '🤍'; el.setAttribute('data-liked', '0'); el.style.color = '#888'; }
+    else { el.innerText = '❤️'; el.setAttribute('data-liked', '1'); el.style.color = 'red'; }
+    alert('Connection error');
+  }
+}
+
+// Wire filters
+document.getElementById('propSearch').addEventListener('input', renderProperties);
+document.getElementById('filterBuy').addEventListener('change', renderProperties);
+document.getElementById('filterRent').addEventListener('change', renderProperties);
+
+// Apply URL params (if present)
+function applyUrlParams() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('search') || params.get('q') || '';
+    if (q) document.getElementById('propSearch').value = decodeURIComponent(q);
+
+    if (params.has('buy')) document.getElementById('filterBuy').checked = params.get('buy') !== '0';
+    if (params.has('rent')) document.getElementById('filterRent').checked = params.get('rent') !== '0';
+  } catch (e) {
+    console.warn('applyUrlParams error', e);
+  }
+}
+
+applyUrlParams();
+loadNewProperties();
+</script>
+
+
+<!-- ---------------- UNIVERSAL FORM POPUP ---------------- -->
+<div id="formPopup" style="
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.45);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+">
+  <div style="
+    background:white;
+    width:90%;
+    max-width:420px;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 18px rgba(0,0,0,0.3);
+  ">
+
+    <h3 id="formTitle" style="text-align:center;margin-bottom:15px;color:#111;"></h3>
+
+   <form id="propertyForm" style="background:#ffffff; padding:25px; border-radius:12px; 
+      box-shadow:0 4px 20px rgba(0,0,0,0.12); font-family:Arial;">
+
+  <input type="hidden" id="propertyId">
+  <input type="hidden" id="isRent">
+
+  <label style="font-weight:bold; font-size:14px; color:#333;">Name</label>
+  <input type="text" id="formName" required
+    style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ccc; 
+    border-radius:8px; font-size:15px; transition:0.3s;">
+
+  <label style="font-weight:bold; font-size:14px; color:#333;">Phone</label>
+  <input type="text" id="formPhone" required maxlength="10"
+    style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ccc; 
+    border-radius:8px; font-size:15px; transition:0.3s;">
+
+  <label style="font-weight:bold; font-size:14px; color:#333;">Email</label>
+  <input type="email" id="formEmail" required
+    style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ccc; 
+    border-radius:8px; font-size:15px; transition:0.3s;">
+
+  <label style="font-weight:bold; font-size:14px; color:#333;">Message</label>
+  <textarea id="formMsg" rows="3"
+    style="width:100%; padding:12px; border:1px solid #ccc; border-radius:8px; 
+    font-size:15px; margin-bottom:20px; resize:none; transition:0.3s;"></textarea>
+
+  <button type="submit" id="submitButton"
+    style="width:100%; padding:14px; background:#16a34a; color:white; border:none; 
+    border-radius:10px; margin-top:10px; font-size:17px; cursor:pointer; 
+    font-weight:bold; letter-spacing:0.5px; transition:0.3s;">
+    Submit Request
+  </button>
+
+  <button type="button" onclick="closeForm()"
+    style="width:100%; padding:12px; background:#ef4444; color:white; border:none; 
+    border-radius:10px; margin-top:12px; font-size:16px; cursor:pointer; 
+    font-weight:bold; transition:0.3s;">
+    Cancel
+  </button>
+</form>
+
+  </div>
+</div>
+
+<script>
+// Global variables
+let currentIsRent = false;
+
+function openForm(id, title, isRent) {
+  currentIsRent = isRent;
+  document.getElementById("propertyId").value = id;
+  document.getElementById("isRent").value = isRent;
+  document.getElementById("formTitle").innerText = isRent ? "Rent Property" : "Buy Property";
+  
+  // Update button color based on rent/buy
+  const submitButton = document.getElementById("submitButton");
+  submitButton.style.background = isRent ? "#059669" : "#2563eb";
+  
+  document.getElementById("formPopup").style.display = "flex";
+}
+
+function closeForm() {
+  document.getElementById("formPopup").style.display = "none";
+  document.getElementById("propertyForm").reset();
+}
+
+/* ---------------- SUBMIT PROPERTY FORM ---------------- */
+document.getElementById("propertyForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const isRent = document.getElementById("isRent").value === "true";
+  const apiEndpoint = isRent ? "rentproperty" : "buyproperty";
+  const actionText = isRent ? "rent" : "buy";
+
+  const payload = {
+    propertyId: document.getElementById("propertyId").value,
+    name: document.getElementById("formName").value,
+    phone: document.getElementById("formPhone").value,
+    email: document.getElementById("formEmail").value,
+    message: document.getElementById("formMsg").value
+  };
+
+  try {
+    const res = await fetch(`http://localhost:5001/api/${apiEndpoint}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      alert(`Your ${actionText} request has been submitted!`);
+      closeForm();
+    } else {
+      alert("Failed: " + data.message);
+    }
+  } catch (error) {
+    console.error("Form submission error:", error);
+    alert("Network error. Please try again.");
+  }
+});
+</script>
+
+
+<!-- ---------------- RESPONSIVE CSS (INLINE STYLE IN BODY) ---------------- -->
+<div style="display:none;">
+  <!-- This div contains responsive CSS that will be applied via JS -->
+  <style id="responsiveStyles">
+    @media (max-width: 480px) {
+      #props {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+      }
+      .prop-card {
+        width: 100% !important;
+      }
+    }
+
+    @media (min-width: 481px) and (max-width: 768px) {
+      #props {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+      }
+      .prop-card {
+        width: 100% !important;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1200px) {
+      #props {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr 1fr !important;
+      }
+    }
+  </style>
+</div>
+
+<script>
+// Apply responsive styles
+document.addEventListener('DOMContentLoaded', function() {
+  const styleContent = document.getElementById('responsiveStyles').textContent;
+  const style = document.createElement('style');
+  style.textContent = styleContent;
+  document.head.appendChild(style);
+});
+</script>
+
+</body>
+</html>

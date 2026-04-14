@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+
+  <div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("../navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+
+<section style="display: flex; justify-content: center; padding: 20px;">
+  <div style="display: flex; flex-wrap: wrap; gap: 0; width: 1460px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); background-color: white;">
+    <div style="flex: 1 1 550px;">
+      <img src="https://www.hmda.gov.in/wp-content/uploads/2020/07/HMDA1Logo1.jpg" 
+           style="width: 100%; height: 400px; object-fit: cover;">
+    </div>
+    <div style="flex: 1 1 910px;">
+      <img src="https://img.thecontentserver.com/ac5adbe3-76ec-48ea-b0e4-5dc8744c420c/1_th.jpg" 
+           style="width: 100%; height: 400px; object-fit: cover;">
+    </div>
+
+  </div>
+</section>
+<section style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; padding: 40px;">
+  <div style="flex: 1; min-width: 300px; padding-right: 20px;">
+    <h1 style="font-size: 32px; margin-bottom: 20px;">Welcome to REALESTATE SERVICES</h1>
+    <p style="font-size: 18px; line-height: 1.6; margin-bottom: 20px;">
+      Real estate builders play a vital role in shaping the urban landscape and providing people with places to live, work, and thrive. From designing residential homes and apartments to constructing commercial complexes and townships, builders are at the heart of the real estate industry.
+    </p>
+    <p style="font-size: 18px; line-height: 1.6;">
+      A real estate builder is responsible for transforming blueprints into reality—overseeing construction, ensuring quality standards, managing labor, materials, safety protocols, and adhering to regulatory requirements. Their work involves collaboration with architects, engineers, contractors, and government authorities to deliver projects that meet both functional and aesthetic expectations.
+
+      With growing demand for modern and sustainable living spaces, today’s builders are also focusing on eco-friendly designs, smart infrastructure, and luxury amenities. Reputed builders often have a portfolio of completed projects that showcase their expertise, reliability, and commitment to customer satisfaction.
+    </p>
+  </div>
+
+  
+  <div style="flex: 1; min-width: 300px;">
+    <table style="width: 60%; min-height:100px;margin: -100px;margin-left:-10px;border-collapse: collapse; border: 1px solid #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.1); background-color: #41be22e9;">
+      <thead style="background-color: #e6f0ff;">
+        <tr>
+          <th style="padding: 20px; border: 1px solid #ddd; text-align: left; font-size: 20px;">Online Realestate Services</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding: 18px; border: 1px solid #ddd;">PLOTS</td></tr>
+        <td style="padding: 18px; border: 1px solid #ebeeeb;">HOUSES</td></tr>
+        <tr><td style="padding: 18px; border: 1px solid #ddd;">DUPLEX APRTMENTS</td></tr>
+        <tr><td style="padding: 18px; border: 1px solid #ddd;">FUNISHED</td></tr>
+        <tr><td style="padding: 18px; border: 1px solid #ddd;">ESTATES</td></tr>
+        <tr><td style="padding: 18px; border: 1px solid #ddd;">ENGINEERING</td></tr>
+        <tr><td style="padding: 18px; border: 1px solid #ddd;">FARM HOUSES</td></tr>
+        <tr><td style="padding: 18px; border: 1px solid #ddd;">FLATS</td></tr>
+        <tr><td style="padding: 18px; border: 1px solid #ddd;">VILLAS</td></tr>
+      </tbody>
+    </table>
+  </div>
+  
+</section>
+<section style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; padding: 40px;">
+  <div style="flex: 1; min-width: 300px; padding: 20px; background-color: rgb(78, 89, 208); border-radius: 12px; color: white;">
+    <h1 style="font-size: 36px; margin-bottom: 24px;">✅ Choosing the Right Builder</h1>
+    <h2 style="font-size: 28px; margin-bottom: 18px;">A reputed real estate builder brings:</h2>
+  
+    <p style="font-size: 20px; line-height: 1.8; margin-bottom: 24px;">
+      Experience & trust<br>
+
+      Transparent dealings<br>
+      
+      On-time delivery<br>
+      
+      High-quality construction<br>
+      
+      Customer-focused service<br>
+    </p>
+  
+    <p style="font-size: 20px; line-height: 1.8; margin-bottom: 24px;">
+      <strong>🏙 Role in Urban Growth</strong>With the rapid pace of urbanization, builders are instrumental in developing smart cities, eco-friendly communities, and modern infrastructures. Their innovation shapes how people live, work, and connect—offering everything from budget apartments to luxury villas, office spaces to retail hubs.
+      
+    </p>
+  
+    <p style="font-size: 20px; line-height: 1.8;">
+      <strong>Affordable Housing Initiatives:</strong><br>
+      Government programs like Pradhan Mantri Awas Yojana (PMAY) are expanding affordable housing, especially in tier-2 and tier-3 cities, supported by tax benefits and subsidies. ​
+    </p>
+  </div>
+  <div style="flex: 1; min-width: 300px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+    <div style="width: 300px; padding: 15px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); background-color: white; text-align: center;">
+      <h3>APARTMENTS</h3>
+      <div style="width: 150px; height: 150px; border-radius: 50%; overflow: hidden; margin: auto;">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyY2j9wAB7TiCtO8Arohh-Ddy_sUc5hO_WAQ&s" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+    </div>
+    <div style="width: 300px; padding: 15px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); background-color: white; text-align: center;">
+      <h3>DUPLEX APTS</h3>
+      <div style="width: 150px; height: 150px; border-radius: 50%; overflow: hidden; margin: auto;">
+        <img src="https://live.staticflickr.com/65535/48309550786_ed5785779e_b.jpg" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+    </div>
+    <div style="width: 300px; padding: 15px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); background-color: white; text-align: center;">
+      <h3>FURNISHED</h3>
+      <div style="width: 150px; height: 150px; border-radius: 50%; overflow: hidden; margin: auto;">
+        <img src="https://pd.w.org/2024/01/64565b9c7d98d71b3.40210501.jpg" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+    </div>
+    <div style="width: 300px; padding: 15px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); background-color: white; text-align: center;">
+      <h3>HOUSE</h3>
+      <div style="width: 150px; height: 150px; border-radius: 50%; overflow: hidden; margin: auto;">
+        <img src="https://live.staticflickr.com/3195/3016945334_41247b9521_b.jpg" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+    </div>
+    <div style="width: 300px; padding: 15px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); background-color: white; text-align: center;">
+      <h3>LUXURY Apts</h3>
+      <div style="width: 150px; height: 150px; border-radius: 50%; overflow: hidden; margin: auto;">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStvJ0mPA_MvB6vFse1GH6iOx4atPKthAxjAQ&s" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+    </div>
+    <div style="width: 300PX; padding: 15px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); background-color: white; text-align: center;">
+      <h3>VILLAS</h3>
+      <div style="width: 150px; height: 150px; border-radius: 50%; overflow: hidden; margin: auto;">
+        <img src="https://images.rawpixel.com/image_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvcHg1OTk4MzUtaW1hZ2Uta3d5cDQ3dHAuanBn.jpg" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+    </div>
+  </div>
+</section>
+<section style="padding: 40px; background-color: #f0f2f5;">
+  <h1 class="section-title">Our Documents</h1>
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+    <div style="width: 220px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 20px; text-align: center;">
+      <img src="https://cdn-icons-png.flaticon.com/512/196/196348.png" alt="HMDA Act Book Logo" style="width: 80px; height: 80px; margin-bottom: 15px;">
+      <h3>HMDA Act Book</h3>
+    </div>
+    <div style="width: 220px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 20px; text-align: center;">
+      <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" alt="CTS Logo" style="width: 80px; height: 80px; margin-bottom: 15px;">
+      <h3>CTS - HMA</h3>
+    </div>
+    <div style="width: 220px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 20px; text-align: center;">
+      <img src="https://cdn-icons-png.flaticon.com/512/854/854894.png" alt="Maps Logo" style="width: 80px; height: 80px; margin-bottom: 15px;">
+      <h3>Maps</h3>
+    </div>
+    <div style="width: 220px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 20px; text-align: center;">
+      <img src="https://cdn-icons-png.flaticon.com/512/3039/3039409.png" alt="Directories Logo" style="width: 80px; height: 80px; margin-bottom: 15px;">
+      <h3>Directories</h3>
+    </div>
+
+  </div>
+</section>
+
+<section style="display: flex; justify-content: center; padding: 20px;">
+  <div style="display: flex; flex-wrap: wrap; gap: 0; width: 1460px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); background-color: white;">
+    
+    <div style="flex: 1 1 550px; padding: 20px;">
+      <p style="font-size: 20px; line-height: 1.8;">
+        <strong>🏗 Construction Quality</strong><br>
+        Use of High-Quality Materials – Top builders never cut corners on concrete, steel, wiring, etc.<br>
+        Attention to Detail – Finishing work like flooring, cabinetry, painting, and fittings is consistently well-done.
+      </p>
+      <p style="font-size: 20px; line-height: 1.8;">
+        <strong>🛠 Reputation & Track Record</strong><br>
+        Successful Projects Delivered – Look for timely delivery and no major complaints.<br>
+        Customer Reviews & Word of Mouth – Happy homeowners = reliable builder.
+      </p>
+      <p style="font-size: 20px; line-height: 1.8;">
+        <strong>🕒 Timely Delivery</strong><br>
+        On-Schedule Completion – Reliable builders stick to the promised possession dates.<br>
+        Efficient Project Management – They manage construction phases smartly to avoid unnecessary delays.
+      </p>
+      <p style="font-size: 20px; line-height: 1.8;">
+        <strong>🧑‍💼 Customer Service</strong><br>
+        Responsive Support – Queries and issues handled promptly during and post-purchase.<br>
+        Post-Sale Service – Dedicated team for possession, defects liability period, etc.
+      </p>
+    </div>
+    <div style="flex: 1 1 550px;">
+      <img src="https://assets.site-static.com/userFiles/4918/image/Photo-Blog/Photos-_Blogs_1678520315.jpg"
+           style="width: 100%; height: 100%; max-height: 100%; object-fit: cover;">
+    </div>
+
+  </div>
+</section>
+<section style="padding: 60px 20px; background-color: #f4f6f8; font-family: 'Segoe UI', sans-serif;">
+  <h2 class="section-title">Architects, Builders & Kitchen Design</h2>
+  
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: 40px; max-width: 1400px; margin: 0 auto;">
+    <div style="flex: 1 1 60%; min-width: 500px; display: flex; flex-direction: column; justify-content: stretch;">
+      <h3 style="font-size: 24px; margin-bottom: 20px;">🧩 How They Work Together</h3>
+      <table style="flex: 1; height: 100%; width: 100%; border-collapse: collapse; background: white; box-shadow: 0 4px 16px rgba(0,0,0,0.1); border-radius: 12px; overflow: hidden; font-size: 17px;">
+        <thead style="background-color: #004aad; color: white;">
+          <tr>
+            <th style="padding: 40px; text-align: left;">Role</th>
+            <th style="padding: 40px; text-align: left;">Contribution</th>
+            <th style="padding: 40px; text-align: left;">Collaborates With</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 40px;">Architect</td>
+            <td style="padding: 40px;">Vision, structure, layout</td>
+            <td style="padding: 40px;">Builders, Interior Designers</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 40px;">Builder</td>
+            <td style="padding: 40px;">Physical construction</td>
+            <td style="padding: 40px;">Architects, Kitchen Designers</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 40px;">Kitchen Designer</td>
+            <td style="padding: 40px;">Interior functionality & aesthetics</td>
+            <td style="padding: 40px;">Architects, Builders</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 40px;">Interior Designer</td>
+            <td style="padding: 40px;">Color schemes, textures, decor</td>
+            <td style="padding: 40px;">Architects, Builders</td>
+          </tr>
+          <tr>
+            <td style="padding: 40px;">Project Manager</td>
+            <td style="padding: 40px;">Timeline, budget, team coordination</td>
+            <td style="padding: 40px;">All stakeholders</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="flex: 1 1 35%; min-width: 320px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
+      <div style="flex: 1; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+        <h3 style="font-size: 20px; margin-bottom: 10px;">🏛 Architects</h3>
+        <ul style="font-size: 15px; line-height: 1.7; color: #444; padding-left: 20px;">
+          <li>Innovative space planning</li>
+          <li>Functional & aesthetic design</li>
+          <li>Eco-conscious architecture</li>
+          <li>Compliance with local codes</li>
+        </ul>
+      </div>
+      <div style="flex: 1; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+        <h3 style="font-size: 20px; margin-bottom: 10px;">🏗 Builders</h3>
+        <ul style="font-size: 15px; line-height: 1.7; color: #444; padding-left: 20px;">
+          <li>Reliable construction quality</li>
+          <li>Timely project completion</li>
+          <li>Legal and regulatory transparency</li>
+          <li>Integrated infrastructure solutions</li>
+        </ul>
+      </div>
+      <div style="flex: 1; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+        <h3 style="font-size: 20px; margin-bottom: 10px;">🍽 Kitchen Design</h3>
+        <ul style="font-size: 15px; line-height: 1.7; color: #444; padding-left: 20px;">
+          <li>Ergonomic layouts</li>
+          <li>Custom modular cabinetry</li>
+          <li>Durable materials & finishes</li>
+          <li>Smart appliances integration</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+<section style="padding: 60px 20px; background-color: #f4f6f8; font-family: 'Segoe UI', sans-serif;">
+  <h2 class="section-title">📚 Related Articles on Real Estate Builders</h2>
+  
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1200px; margin: 0 auto;">
+    
+    <!-- Smaller Circular Article Card 1 -->
+    <div style="background: white; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 160px; height: 160px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+      <img src="https://img.icons8.com/ios-filled/50/004aad/blueprint.png" alt="Blueprint Icon" style="width: 32px; margin-bottom: 8px; border-radius: 50%;">
+      <h3 style="font-size: 12px; color: #004aad;">Top 10 Qualities in a Builder</h3>
+    </div>
+
+    <!-- Smaller Circular Article Card 2 -->
+    <div style="background: white; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 160px; height: 160px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+      <img src="https://img.icons8.com/ios-filled/50/004aad/contract.png" alt="RERA Icon" style="width: 32px; margin-bottom: 8px; border-radius: 50%;">
+      <h3 style="font-size: 12px; color: #004aad;">Why RERA Approval Matters</h3>
+    </div>
+
+    <!-- Smaller Circular Article Card 3 -->
+    <div style="background: white; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 160px; height: 160px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+      <img src="https://img.icons8.com/ios-filled/50/607d8b/voice-presentation.png" alt="Smart Home Icon" style="width: 32px; margin-bottom: 8px; border-radius: 50%;">
+      <h3 style="font-size: 12px; color: #004aad;">Smart Homes by Modern Builders</h3>
+    </div>
+
+    <!-- Smaller Circular Article Card 4 -->
+    <div style="background: white; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 160px; height: 160px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+      <img src="https://img.icons8.com/ios-filled/50/004aad/to-do.png" alt="Checklist Icon" style="width: 32px; margin-bottom: 8px; border-radius: 50%;">
+      <h3 style="font-size: 12px; color: #004aad;">Questions to Ask Your Builder</h3>
+    </div>
+
+  </div>
+</section>
+<section style="padding: 80px 20px; background-color: #ffffff; font-family: 'Segoe UI', sans-serif;">
+    <div style="max-width: 1100px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 40px; align-items: center;">
+      
+      <!-- Text Content -->
+      <div style="flex: 1 1 500px;">
+        <h2 class="section-title">🏗 About Us</h2>
+        <p style="font-size: 16px; line-height: 1.6; color: #444;">
+          At <strong>Future Foundations Builders</strong>, we are more than just real estate developers — we are dream enablers. With over a decade of experience, we specialize in crafting homes and commercial spaces that blend innovative design, sustainability, and timeless value.
+        </p>
+        <p style="font-size: 16px; line-height: 1.6; color: #444; margin-top: 15px;">
+          Our team of architects, engineers, and designers work hand-in-hand to ensure each project meets the highest standards of quality and compliance. Whether it's luxury residences, modern smart homes, or eco-friendly communities, we build with purpose and passion.
+        </p>
+        <p style="font-size: 16px; line-height: 1.6; color: #444; margin-top: 15px;">
+          Trust, transparency, and customer satisfaction are the cornerstones of everything we do. Join us in building a better tomorrow — one property at a time.
+        </p>
+      </div>
+      
+      <!-- Image or Illustration -->
+      <div style="flex: 1 1 400px; text-align: center;">
+        <img src="https://img.icons8.com/clouds/500/real-estate.png" alt="About Us Real Estate" style="max-width: 100%; height: auto; border-radius: 16px;">
+      </div>
+      
+    </div>
+</section>
+  
+<section style="padding: 80px 20px; background-color: #f9fbfc; font-family: 'Segoe UI', sans-serif;">
+    <h2 class="section-title">🏘 Our Properties</h2>
+    
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
+  
+      <!-- Property Card 1 -->
+      <div style="background: white; border-radius: 20px; box-shadow: 0 4px 14px rgba(0,0,0,0.05); width: 320px; overflow: hidden;">
+        <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be" alt="Luxury Apartment" style="width: 100%; height: 200px; object-fit: cover;">
+        <div style="padding: 20px;">
+          <h3 style="font-size: 18px; color: #004aad; margin-bottom: 10px;">Skyline Residences</h3>
+          <p style="font-size: 14px; color: #555;">2 & 3 BHK luxury apartments with smart home features and a skyline view in the heart of the city.</p>
+          <a href="#" style="display: inline-block; margin-top: 15px; color: #004aad; text-decoration: underline;">View Details</a>
+        </div>
+      </div>
+  
+      <!-- Property Card 2 -->
+      <div style="background: white; border-radius: 20px; box-shadow: 0 4px 14px rgba(0,0,0,0.05); width: 320px; overflow: hidden;">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="Villas" style="width: 100%; height: 200px; object-fit: cover;">
+        <div style="padding: 20px;">
+          <h3 style="font-size: 18px; color: #004aad; margin-bottom: 10px;">Palm Grove Villas</h3>
+          <p style="font-size: 14px; color: #555;">Spacious 4 BHK villas with private gardens and premium clubhouse amenities.</p>
+          <a href="#" style="display: inline-block; margin-top: 15px; color: #004aad; text-decoration: underline;">View Details</a>
+        </div>
+      </div>
+      <div style="background: white; border-radius: 20px; box-shadow: 0 4px 14px rgba(0,0,0,0.05); width: 320px; overflow: hidden;">
+        <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994" alt="Affordable Housing" style="width: 100%; height: 200px; object-fit: cover;">
+        <div style="padding: 20px;">
+          <h3 style="font-size: 18px; color: #004aad; margin-bottom: 10px;">Harmony Heights</h3>
+          <p style="font-size: 14px; color: #555;">Affordable housing with modern design, ideal for first-time homebuyers and families.</p>
+          <a href="#" style="display: inline-block; margin-top: 15px; color: #004aad; text-decoration: underline;">View Details</a>
+        </div>
+      </div>
+  
+    </div>
+</section>
+<section style="padding: 80px 20px; background-color: #f4f6f8; font-family: 'Segoe UI', sans-serif;">
+    <h2 class="section-title">🏗 Our Projects</h2>
+  
+    <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px;">
+      <div style="background: white; border-radius: 20px; overflow: hidden; display: flex; flex-wrap: wrap; box-shadow: 0 8px 20px rgba(0,0,0,0.05);">
+        <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914" alt="Urban Rise" style="width: 100%; max-width: 400px; object-fit: cover;">
+        <div style="padding: 30px; flex: 1;">
+          <h3 style="font-size: 22px; color: #004aad;">Urban Rise Towers</h3>
+          <p style="font-size: 15px; color: #555; margin: 15px 0;">A premium high-rise community with skyline views and luxury amenities.</p>
+          <p style="font-size: 14px; color: #888;">📍 Sector 45, New City</p>
+        </div>
+      </div>
+      <div style="background: white; border-radius: 20px; overflow: hidden; display: flex; flex-wrap: wrap; box-shadow: 0 8px 20px rgba(0,0,0,0.05);">
+        <img src="https://images.pexels.com/photos/15793177/pexels-photo-15793177/free-photo-of-valley-and-green-mountains-at-dawn.jpeg" alt="Eco Valley" style="width: 100%; max-width: 400px; object-fit: cover;">
+        <div style="padding: 30px; flex: 1;">
+          <h3 style="font-size: 22px; color: #004aad;">Eco Valley Greens</h3>
+          <p style="font-size: 15px; color: #555; margin: 15px 0;">Modern villas in nature-inspired settings for a green, serene lifestyle.</p>
+          <p style="font-size: 14px; color: #888;">📍 Riverdale West</p>
+        </div>
+      </div>
+  
+      <!-- Project Block 3 -->
+      <div style="background: white; border-radius: 20px; overflow: hidden; display: flex; flex-wrap: wrap; box-shadow: 0 8px 20px rgba(0,0,0,0.05);">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="Skyline Residency" style="width: 100%; max-width: 400px; object-fit: cover;">
+        <div style="padding: 30px; flex: 1;">
+          <h3 style="font-size: 22px; color: #004aad;">Skyline Residency</h3>
+          <p style="font-size: 15px; color: #555; margin: 15px 0;">Luxury apartments that offer breathtaking views and premium living.</p>
+          <p style="font-size: 14px; color: #888;">📍 Marina District</p>
+        </div>
+      </div>
+  
+    </div>
+</section>
+  
+  
+<script>
+  function toggleMenu() {
+    var menu = document.getElementById('mobileMenu');
+    menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+  }
+
+  function toggleSub(anchor) {
+    var submenu = anchor.nextElementSibling;
+    submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+  }
+   document.querySelectorAll("li").forEach(li => {
+      li.addEventListener("mouseover", () => {
+         const ul = li.querySelector("ul");
+         if(ul) ul.style.display = "block";
+      });
+      li.addEventListener("mouseleave", () => {
+         const ul = li.querySelector("ul");
+         if(ul) ul.style.display = "none";
+      });
+   });
+  function toggleMenu() {
+    var menu = document.getElementById('mobileMenu');
+    menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+  }
+
+  function toggleSub(anchor) {
+    var submenu = anchor.nextElementSibling;
+    submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+  }
+   document.querySelectorAll("li").forEach(li => {
+      li.addEventListener("mouseover", () => {
+         const ul = li.querySelector("ul");
+         if(ul) ul.style.display = "block";
+      });
+      li.addEventListener("mouseleave", () => {
+         const ul = li.querySelector("ul");
+         if(ul) ul.style.display = "none";
+      });
+   });
+</script>
+
+
+
+
+
+
+
+
+<!-- footer -->
+<div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+
+
+
+
+
+</body>
+</html>

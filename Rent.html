@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+
+
+<div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("../navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+
+
+
+  <h1 style="text-align: center; color: #2c3e50; margin-bottom: 40px;margin-top: 128px;">Available Rentals</h1>
+
+  <div style="display: flex; gap: 20px; margin: 0 2%; padding-bottom: 30px;">
+    <!-- Filter Sidebar -->
+    <div style="width: 25%; padding: 10px; background: white; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); border-radius: 8px;">
+      <div style="margin-left: 15%;">
+        <h3 style="font-size: 28px; margin-top: 0;">Filters</h3>
+        <div id="filterContainer" style="color: #000; font-size: 15px;">
+          Loading filters...
+        </div>
+      </div>
+    </div>
+
+    <!-- Properties Display Area -->
+    <div style="width: 75%;">
+      <div id="propertiesContainer" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between;">
+        <!-- Properties will be injected here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allProperties = []; // Store all properties for filtering
+    let activeFilters = {}; // Track active filters
+
+    async function fetchPropertiesAndFilters() {
+      const propertyContainer = document.getElementById('propertiesContainer');
+      const filterContainer = document.getElementById('filterContainer');
+
+      try {
+        const [propertiesResponse, filtersResponse] = await Promise.all([
+          fetch('http://localhost:5001/api/newproperties/rent'),
+          fetch('http://localhost:5001/api/get/filters_re')
+        ]);
+
+        if (!propertiesResponse.ok || !filtersResponse.ok) {
+          throw new Error('Server not reachable');
+        }
+
+        const propertiesData = await propertiesResponse.json();
+        const filtersData = await filtersResponse.json();
+
+        allProperties = propertiesData.properties || [];
+        const types = filtersData.types || [];
+        const cities = filtersData.cities || [];
+
+        filterContainer.innerHTML = '';
+
+        const addFilterSection = (title, values, filterKey) => {
+          const section = document.createElement('div');
+          section.innerHTML = `<h4 style="font-size: 22px; margin-bottom: 10px;">${title}</h4>`;
+
+          values.forEach(value => {
+            const checkboxId = `${filterKey}-${value.replace(/\s+/g, '-')}`;
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = checkboxId;
+            checkbox.value = value;
+            checkbox.name = filterKey;
+            checkbox.style.marginRight = '8px';
+
+            checkbox.addEventListener('change', () => {
+              if (checkbox.checked) {
+                if (!activeFilters[filterKey]) {
+                  activeFilters[filterKey] = [];
+                }
+                activeFilters[filterKey].push(value);
+              } else {
+                activeFilters[filterKey] = activeFilters[filterKey].filter(v => v !== value);
+                if (activeFilters[filterKey].length === 0) {
+                  delete activeFilters[filterKey];
+                }
+              }
+              applyFilters();
+            });
+
+            const label = document.createElement('label');
+            label.htmlFor = checkboxId;
+            label.textContent = value;
+            label.style = "cursor: pointer; margin-bottom: 10px; display: flex; align-items: center; font-size: 14px;";
+
+            const optionContainer = document.createElement('div');
+            optionContainer.style = "margin-bottom: 5px; display: flex; align-items: center;";
+            optionContainer.appendChild(checkbox);
+            optionContainer.appendChild(label);
+
+            section.appendChild(optionContainer);
+          });
+
+          filterContainer.appendChild(section);
+        };
+
+        if (types.length > 0) {
+          addFilterSection('Property Type', types, 'propertyType');
+        }
+        if (cities.length > 0) {
+          addFilterSection('City', cities, 'city');
+        }
+
+        if (types.length === 0 && cities.length === 0) {
+          filterContainer.innerHTML = '<p style="color:#777;">No filters available.</p>';
+        }
+
+        renderProperties(allProperties);
+
+      } catch (err) {
+        console.error('Error fetching properties:', err);
+        propertyContainer.innerHTML = `<p style="text-align: center; color: red; font-size: 18px;">Failed to load properties. Please try again later.</p>`;
+        filterContainer.innerHTML = `<p style="color: red;">Failed to load filters.</p>`;
+      }
+    }
+
+    function applyFilters() {
+      if (Object.keys(activeFilters).length === 0) {
+        renderProperties(allProperties);
+        return;
+      }
+
+      const filteredProperties = allProperties.filter(property => {
+        return Object.keys(activeFilters).every(filterKey => {
+          // Check if property has the filter field and it matches any active filter value
+          return property[filterKey] && activeFilters[filterKey].includes(property[filterKey]);
+        });
+      });
+
+      renderProperties(filteredProperties);
+    }
+
+    function renderProperties(properties) {
+      const propertyContainer = document.getElementById('propertiesContainer');
+      
+      propertyContainer.innerHTML = '';
+      
+      if (properties.length === 0) {
+        propertyContainer.innerHTML = `
+          <div style="width: 100%; text-align: center; padding: 40px;">
+            <p style="font-size: 18px; color: #7f8c8d;">No properties match your filters.</p>
+            <button onclick="clearFilters()" style="
+              background: #007bff;
+              color: white;
+              border: none;
+              padding: 10px 20px;
+              border-radius: 5px;
+              cursor: pointer;
+              margin-top: 10px;
+              font-size: 14px;
+            ">Clear Filters</button>
+          </div>
+        `;
+        return;
+      }
+
+      properties.forEach(prop => {
+        const card = document.createElement('div');
+        card.className = 'property-card';
+        card.setAttribute('style', `
+          display: flex; 
+          border: 1px solid #ddd; 
+          padding: 15px; 
+          width: 90%; 
+          background: white; 
+          box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); 
+          border-radius: 8px; 
+          align-items: center; 
+          gap: 15px;
+          margin-bottom: 15px;
+        `);
+
+        const imgSrc = prop.images?.length > 0 ? `data:image/jpeg;base64,${prop.images[0]}` : 'https://via.placeholder.com/300x200';
+
+        card.innerHTML = `
+          <!-- Left: Image -->
+          <div style="width: 35%; border-radius: 5px; overflow: hidden; position: relative;">
+            <img src="${imgSrc}" alt="${prop.title || 'Property'}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 5px;">
+            <div style="position: absolute; top: 10px; right: 10px;">
+              <button style="background: rgba(255,255,255,0.8); border: none; border-radius: 50%; padding: 5px;">
+                ❤️
+              </button>
+            </div>
+          </div>
+
+          <!-- Right: Property Details -->
+          <div style="width: 65%;">
+            <h4 style="margin: 0; font-size: 18px;">${prop.title || 'Untitled Property'}</h4>
+            <p style="margin: 3px 0; font-size: 14px; color: #333;">
+              <strong>${prop.bedrooms || 'N/A'} BHK ${prop.propertyType || 'Property'}</strong> in ${prop.city || 'Unknown City'}, ${prop.state || 'Unknown State'}
+            </p>
+
+            <!-- Row: Price & Details -->
+            <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; margin: 5px 0;">
+              <p style="color: #000; margin: 0;">₹${prop.price || '0'} <span style="font-weight: normal;">/month</span></p>
+              <p style="margin: 0;">${prop.area || 'N/A'} sqft</p>
+              <p style="margin: 0;">${prop.bedrooms || 'N/A'} BHK | ${prop.bathrooms || 'N/A'} Baths</p>
+            </div>
+
+            <!-- Additional Details -->
+            <p style="margin: 3px 0; font-size: 13px;">${prop.deposit ? '+ Deposit ₹' + prop.deposit : ''}</p>
+            <p style="font-size: 13px;">
+              <strong>Highlights:</strong>
+              ${prop.facing ? `<span style="background: #f0f0f0; padding: 3px 6px; border-radius: 5px;">${prop.facing} Facing</span>` : ''}
+              ${prop.furnishing ? `<span style="background: #f0f0f0; padding: 3px 6px; border-radius: 5px;">${prop.furnishing}</span>` : ''}
+            </p>
+
+            <!-- Description -->
+            <p style="font-size: 12px; color: #555;">${prop.description || 'No description available'}</p>
+
+            <!-- Posted Info -->
+            <p style="font-size: 12px; margin: 5px 0; color: #777;">${prop.posted_time || 'Recently'} <strong>• ${prop.posted_by || 'Owner'}</strong></p>
+
+            <!-- Buttons -->
+            <div style="display: flex; gap: 10px;">
+              <button style="background: white; color: #007bff; border: 1px solid #007bff; padding: 5px 15px; border-radius: 5px; font-size: 14px;">
+                View Number
+              </button>
+              <button style="background: #007bff; color: white; padding: 5px 15px; border: none; border-radius: 5px; font-size: 14px;">
+                📞 Contact
+              </button>
+            </div>
+          </div>
+        `;
+        propertyContainer.appendChild(card);
+      });
+    }
+
+    function clearFilters() {
+      // Uncheck all checkboxes
+      document.querySelectorAll('#filterContainer input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+      
+      // Clear active filters
+      activeFilters = {};
+      
+      // Render all properties
+      renderProperties(allProperties);
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchPropertiesAndFilters);
+  </script>
+
+
+<div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+
+</body>
+</html>

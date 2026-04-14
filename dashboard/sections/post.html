@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Post New Property (Fresh)</title>
+</head>
+<body style="font-family:Arial;background:#f3f4f6;padding:20px;">
+
+  <h2 style="text-align:center;margin-bottom:14px;color:#111;font-weight:600;">Post New Property</h2>
+
+  <form id="newPropForm" enctype="multipart/form-data" style="max-width:760px;margin:0 auto;background:white;padding:22px;border-radius:12px;box-shadow:0 6px 20px rgba(12,18,34,0.08);">
+
+    <!-- Row: Type + Property Type -->
+    <div style="display:flex;gap:14px;margin-bottom:12px;">
+      <div style="flex:1;">
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Type</label>
+        <select name="propType" required style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;background:white;">
+          <option value="">Select Type</option>
+          <option value="sell">Sell</option>
+          <option value="rent">Rent</option>
+        </select>
+      </div>
+      <div style="flex:1;">
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Property Type</label>
+        <select name="propPropertyType" required style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;background:white;">
+          <option value="">Select Property Type</option>
+          <option value="house">House</option>
+          <option value="apartment">Apartment</option>
+          <option value="villa">Villa</option>
+          <option value="land">Land</option>
+          <option value="commercial">Commercial</option>
+          <option value="farmhouse">Farmhouse</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- City -->
+    <div style="margin-bottom:12px;">
+      <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">City</label>
+      <input type="text" name="propCity" required placeholder="Enter city" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+    </div>
+
+    <!-- Row: Bedrooms + Pincode -->
+    <div style="display:flex;gap:14px;margin-bottom:12px;">
+      <div style="flex:1;">
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Bedrooms</label>
+        <select name="propBedrooms" required style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+          <option value="">Select Bedrooms</option>
+          <option value="1BHK">1 BHK</option>
+          <option value="2BHK">2 BHK</option>
+          <option value="3BHK">3 BHK</option>
+        </select>
+      </div>
+      <div style="flex:1;">
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Pincode</label>
+        <input type="text" name="propPincode" required maxlength="6" placeholder="Enter pincode" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+    </div>
+
+    <!-- Price -->
+    <div style="margin-bottom:12px;">
+      <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Price</label>
+      <input type="text" name="propPrice" placeholder="Price or rent amount" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+    </div>
+
+    <!-- Extended property details -->
+    <div style="margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Locality</label>
+        <input type="text" name="locality" placeholder="Locality" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Nearby Landmarks</label>
+        <input type="text" name="nearbyLandmarks" placeholder="Landmarks" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Built Up Area</label>
+        <input type="text" name="builtUpArea" placeholder="e.g. 1200 sqft" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Carpet Area</label>
+        <input type="text" name="carpetArea" placeholder="e.g. 900 sqft" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Plot Area</label>
+        <input type="text" name="plotArea" placeholder="Plot area" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Bathrooms</label>
+        <input type="text" name="bathrooms" placeholder="Number of bathrooms" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Balcony Count</label>
+        <input type="text" name="balconyCount" placeholder="Balcony count" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Floor Number</label>
+        <input type="text" name="floorNumber" placeholder="Floor number" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Total Floors</label>
+        <input type="text" name="totalFloors" placeholder="Total floors" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Maintenance Charges</label>
+        <input type="text" name="maintenanceCharges" placeholder="Maintenance" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Deposit</label>
+        <input type="text" name="deposit" placeholder="Deposit" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div style="grid-column:1/-1;display:flex;align-items:center;gap:8px;">
+        <input type="checkbox" id="negotiable" name="negotiable" style="width:16px;height:16px;" />
+        <label for="negotiable">Negotiable</label>
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Video URL</label>
+        <input type="text" name="videoUrl" placeholder="Video link" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Furnishing Status</label>
+        <input type="text" name="furnishingStatus" placeholder="Furnished / Semi-Furnished / Unfurnished" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Age Of Property</label>
+        <input type="text" name="ageOfProperty" placeholder="Age" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Facing</label>
+        <input type="text" name="facing" placeholder="Facing" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Parking Availability</label>
+        <input type="text" name="parkingAvailability" placeholder="Parking" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Water Source</label>
+        <input type="text" name="waterSource" placeholder="Water source" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Power Backup</label>
+        <input type="text" name="powerBackup" placeholder="Power backup" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Flooring Type</label>
+        <input type="text" name="flooringType" placeholder="Flooring" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div style="grid-column:1/-1;">
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Amenities (comma separated)</label>
+        <input type="text" name="amenities" placeholder="e.g. Lift, Gym, Pool" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Ownership Type</label>
+        <input type="text" name="ownershipType" placeholder="Ownership" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Documents Available</label>
+        <input type="text" name="documentsAvailable" placeholder="Documents" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div style="grid-column:1/-1;display:flex;align-items:center;gap:8px;">
+        <input type="checkbox" id="loanAvailable" name="loanAvailable" style="width:16px;height:16px;" />
+        <label for="loanAvailable">Loan Available</label>
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Owner Name</label>
+        <input type="text" name="ownerName" placeholder="Owner name" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Contact Mobile</label>
+        <input type="text" name="contactMobile" placeholder="Mobile" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Contact Alt</label>
+        <input type="text" name="contactAlt" placeholder="Alternate contact" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Contact Email</label>
+        <input type="email" name="contactEmail" placeholder="Email" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div style="grid-column:1/-1;display:flex;align-items:center;gap:8px;">
+        <input type="checkbox" id="readyToMove" name="readyToMove" style="width:16px;height:16px;" />
+        <label for="readyToMove">Ready To Move</label>
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Pets Allowed</label>
+        <input type="text" name="petsAllowed" placeholder="Pets" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div>
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Ideal For</label>
+        <input type="text" name="idealFor" placeholder="Ideal for" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+      <div style="grid-column:1/-1;">
+        <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Special Features</label>
+        <input type="text" name="specialFeatures" placeholder="Special features" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+      </div>
+    </div>
+
+    <!-- Full Address -->
+    <div style="margin-bottom:12px;">
+      <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Full Address</label>
+      <textarea name="propAddress" required rows="3" placeholder="Full address..." style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;"></textarea>
+    </div>
+
+    <!-- Image upload styled -->
+    <div style="margin-bottom:12px;">
+      <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Property Images</label>
+      <div style="border:2px dashed #c7f0d8;border-radius:8px;padding:12px;display:flex;align-items:center;gap:12px;">
+        <input type="file" name="propImage" accept="image/*" style="flex:0 0 auto;" />
+        <div style="color:#6b7280;font-size:13px;">No files selected</div>
+      </div>
+      <div style="margin-top:8px;background:#f8faf9;padding:10px;border-radius:6px;border-left:4px solid #22c55e;color:#374151;font-size:13px;margin-bottom:4px;">
+        <div style="font-weight:600;margin-bottom:6px;">Upload Requirements:</div>
+        <div>- Maximum 5 images</div>
+        <div>- Supported formats: JPG, PNG, WebP</div>
+        <div>- Maximum file size: 5MB per image</div>
+      </div>
+    </div>
+
+    <!-- Rent-specific options: visible only when Type = rent -->
+    <div id="rentOptions" style="display:none;margin-bottom:12px;">
+      <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Rent For (select one or more)</label>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <label style="display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:6px;border:1px solid #e6eef8;background:#fff;"><input type="checkbox" name="rentFor" value="men"> Men</label>
+        <label style="display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:6px;border:1px solid #e6eef8;background:#fff;"><input type="checkbox" name="rentFor" value="women"> Women</label>
+        <label style="display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:6px;border:1px solid #e6eef8;background:#fff;"><input type="checkbox" name="rentFor" value="bachelors"> Bachelors</label>
+        <label style="display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:6px;border:1px solid #e6eef8;background:#fff;"><input type="checkbox" name="rentFor" value="couples"> Couples</label>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div style="margin-bottom:12px;">
+      <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Features</label>
+      <input type="text" name="propFeatures" placeholder="e.g. 3 BHK, Furnished, Parking" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+    </div>
+
+    <!-- Description -->
+    <div style="margin-bottom:14px;">
+      <label style="display:block;margin-bottom:6px;font-weight:600;color:#333;">Description</label>
+      <textarea name="propDesc" rows="4" placeholder="Describe the property in detail..." style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;"></textarea>
+    </div>
+
+    <div style="display:flex;justify-content:center;">
+      <button type="submit" style="width:100%;max-width:420px;padding:12px 18px;background:#10b981;color:white;border:none;border-radius:10px;font-size:16px;cursor:pointer;box-shadow:0 6px 18px rgba(16,185,129,0.18);">
+        Post Property
+      </button>
+    </div>
+
+    <div id="msg" style="margin-top:12px;font-size:14px;text-align:center;color:#111;"></div>
+  </form>
+
+  <script>
+    // Show/hide rent options depending on Type select
+    (function() {
+      const typeSelect = document.querySelector('select[name="propType"]');
+      const rentOptions = document.getElementById('rentOptions');
+      if (typeSelect) {
+        const update = () => {
+          if (typeSelect.value === 'rent') {
+            rentOptions.style.display = 'block';
+          } else {
+            // hide and clear any checked boxes
+            rentOptions.style.display = 'none';
+            rentOptions.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+          }
+        };
+        typeSelect.addEventListener('change', update);
+        // initial state
+        update();
+      }
+    })();
+
+    document.getElementById('newPropForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const msgEl = document.getElementById('msg');
+
+      // Build FormData; checkboxes with same name will be appended automatically
+      const fd = new FormData(form);
+
+      // Attach logged-in userId so backend stores which user posted this property
+      try {
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        if (user && user.id) fd.append('userId', String(user.id));
+      } catch (e) {
+        // ignore if parsing fails
+      }
+
+      // Debug: collect rentFor values into a comma-separated string if needed
+      // (server will handle array or string). This is optional.
+      const rentChecks = Array.from(form.querySelectorAll('input[name="rentFor"]:checked')).map(i => i.value);
+      if (rentChecks.length) {
+        // Ensure we pass multiple values with the same key so multer/express
+        // will parse them as array on the server side.
+        // Remove any existing appended keys to avoid duplication.
+        // (FormData(form) already added checked boxes, but this enforces order.)
+        fd.delete('rentFor');
+        rentChecks.forEach(v => fd.append('rentFor', v));
+      }
+
+      msgEl.textContent = 'Posting...';
+
+      try {
+        const res = await fetch('http://localhost:5001/api/newproperty', {
+          method: 'POST',
+          body: fd
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          msgEl.style.color = 'green';
+          msgEl.textContent = 'Posted successfully! ID: ' + data.propertyId;
+          // build a property object to notify history UI (do not navigate)
+          const newProp = {
+            id: data.propertyId,
+            userId: (function(){ try{ const u=JSON.parse(localStorage.getItem('user')||'null'); return u && u.id ? u.id : null;}catch(e){return null;} })(),
+            type: form.elements['propType'].value || '',
+            propertyType: form.elements['propPropertyType'].value || '',
+            bedrooms: form.elements['propBedrooms'].value || '',
+            title: form.elements['propTitle'] ? form.elements['propTitle'].value : '',
+            description: form.elements['propDesc'] ? form.elements['propDesc'].value : '',
+            price: form.elements['propPrice'] ? form.elements['propPrice'].value : '',
+            city: form.elements['propCity'] ? form.elements['propCity'].value : '',
+            address: form.elements['propAddress'] ? form.elements['propAddress'].value : '',
+            pincode: form.elements['propPincode'] ? form.elements['propPincode'].value : '',
+            features: form.elements['propFeatures'] ? form.elements['propFeatures'].value : '',
+            locality: form.elements['locality'] ? form.elements['locality'].value : '',
+            nearbyLandmarks: form.elements['nearbyLandmarks'] ? form.elements['nearbyLandmarks'].value : '',
+            builtUpArea: form.elements['builtUpArea'] ? form.elements['builtUpArea'].value : '',
+            carpetArea: form.elements['carpetArea'] ? form.elements['carpetArea'].value : '',
+            plotArea: form.elements['plotArea'] ? form.elements['plotArea'].value : '',
+            bathrooms: form.elements['bathrooms'] ? form.elements['bathrooms'].value : '',
+            balconyCount: form.elements['balconyCount'] ? form.elements['balconyCount'].value : '',
+            floorNumber: form.elements['floorNumber'] ? form.elements['floorNumber'].value : '',
+            totalFloors: form.elements['totalFloors'] ? form.elements['totalFloors'].value : '',
+            maintenanceCharges: form.elements['maintenanceCharges'] ? form.elements['maintenanceCharges'].value : '',
+            deposit: form.elements['deposit'] ? form.elements['deposit'].value : '',
+            negotiable: document.getElementById('negotiable') ? !!document.getElementById('negotiable').checked : false,
+            videoUrl: form.elements['videoUrl'] ? form.elements['videoUrl'].value : '',
+            furnishingStatus: form.elements['furnishingStatus'] ? form.elements['furnishingStatus'].value : '',
+            ageOfProperty: form.elements['ageOfProperty'] ? form.elements['ageOfProperty'].value : '',
+            facing: form.elements['facing'] ? form.elements['facing'].value : '',
+            parkingAvailability: form.elements['parkingAvailability'] ? form.elements['parkingAvailability'].value : '',
+            waterSource: form.elements['waterSource'] ? form.elements['waterSource'].value : '',
+            powerBackup: form.elements['powerBackup'] ? form.elements['powerBackup'].value : '',
+            flooringType: form.elements['flooringType'] ? form.elements['flooringType'].value : '',
+            amenities: form.elements['amenities'] ? form.elements['amenities'].value : '',
+            ownershipType: form.elements['ownershipType'] ? form.elements['ownershipType'].value : '',
+            documentsAvailable: form.elements['documentsAvailable'] ? form.elements['documentsAvailable'].value : '',
+            loanAvailable: document.getElementById('loanAvailable') ? !!document.getElementById('loanAvailable').checked : false,
+            ownerName: form.elements['ownerName'] ? form.elements['ownerName'].value : '',
+            contactMobile: form.elements['contactMobile'] ? form.elements['contactMobile'].value : '',
+            contactAlt: form.elements['contactAlt'] ? form.elements['contactAlt'].value : '',
+            contactEmail: form.elements['contactEmail'] ? form.elements['contactEmail'].value : '',
+            readyToMove: document.getElementById('readyToMove') ? !!document.getElementById('readyToMove').checked : false,
+            petsAllowed: form.elements['petsAllowed'] ? form.elements['petsAllowed'].value : '',
+            idealFor: form.elements['idealFor'] ? form.elements['idealFor'].value : '',
+            specialFeatures: form.elements['specialFeatures'] ? form.elements['specialFeatures'].value : '',
+            imageUrl: data.imageUrl || null,
+            createdAt: new Date().toISOString()
+          };
+          form.reset();
+          // dispatch event so history UI can append without navigation
+          try { window.dispatchEvent(new CustomEvent('propertyPosted', { detail: newProp })); } catch (e) { console.warn('dispatch failed', e); }
+        } else {
+          msgEl.style.color = 'red';
+          msgEl.textContent = data.message || 'Failed to post';
+        }
+      } catch (err) {
+        console.error(err);
+        msgEl.style.color = 'red';
+        msgEl.textContent = 'Error connecting to server';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Profiles - Hitaishi Homes</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; }
+    body { font-family: Arial, Helvetica, sans-serif; background: #f7fafc; color: #111; }
+    .container { max-width: 1200px; margin: 20px auto; padding: 20px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+    .header h1 { font-size: 28px; color: #222; margin: 0; }
+    .btn { padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: 600; transition: background-color 0.2s; text-decoration: none; display: inline-block; }
+    .btn-primary { background: #10b981; color: white; }
+    .btn-primary:hover { background: #0da271; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .search-box { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .search-box input { flex: 1; min-width: 200px; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; }
+    .profiles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+    .profile-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+    .profile-avatar { width: 60px; height: 60px; background: #10b981; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; margin-bottom: 15px; }
+    .profile-info { margin-bottom: 15px; }
+    .profile-info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+    .profile-info-label { font-weight: bold; color: #4b5563; }
+    .profile-info-value { color: #374151; word-break: break-word; }
+    .profile-actions { display: flex; gap: 10px; margin-top: 15px; }
+    .profile-actions button { flex: 1; padding: 8px 12px; font-size: 13px; }
+    .msg { padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; display: none; }
+    .msg.success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+    .msg.error { background: #fee2e2; color: #7f1d1d; border: 1px solid #fca5a5; }
+    .msg.info { background: #dbeafe; color: #0c2340; border: 1px solid #93c5fd; }
+    .loading { text-align: center; padding: 40px; font-size: 16px; color: #6b7280; grid-column: 1 / -1; }
+    .empty { text-align: center; padding: 40px; font-size: 16px; color: #6b7280; grid-column: 1 / -1; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+    .modal.show { display: flex; }
+    .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 400px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+    .modal-header { font-size: 18px; font-weight: bold; margin-bottom: 15px; }
+    .modal-body { margin-bottom: 20px; font-size: 14px; color: #374151; }
+    .modal-footer { display: flex; gap: 10px; justify-content: flex-end; }
+    .modal-footer button { padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    .modal-footer .cancel { background: #e5e7eb; color: #1f2937; }
+    .modal-footer .confirm { background: #ef4444; color: white; }
+    .spinner { display: inline-block; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fa fa-users"></i> Manage Profiles</h1>
+      <a href="index.html" class="btn btn-primary"><i class="fa fa-home"></i> Home</a>
+    </div>
+
+    <div id="msg" class="msg"></div>
+
+    <div class="search-box">
+      <input id="searchInput" type="text" placeholder="Search by username, email, or full name...">
+      <button class="btn btn-primary" id="searchBtn"><i class="fa fa-search"></i> Search</button>
+      <button class="btn btn-primary" id="reloadBtn"><i class="fa fa-refresh"></i> Reload</button>
+    </div>
+
+    <div id="profilesContainer" class="profiles-grid">
+      <div class="loading"><span class="spinner"><i class="fa fa-spinner"></i></span> Loading profiles...</div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">Confirm Delete</div>
+      <div class="modal-body">
+        Are you sure you want to delete the profile for <strong id="deleteUserName"></strong>? This action cannot be undone.
+      </div>
+      <div class="modal-footer">
+        <button class="cancel" id="cancelBtn">Cancel</button>
+        <button class="confirm" id="confirmBtn"><i class="fa fa-trash"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    'use strict';
+    
+    const API_BASE = "http://localhost:5001";
+    let allProfiles = [];
+    let deleteUserId = null;
+    let deleteUserName = null;
+
+    // Show message
+    function showMsg(message, type) {
+      type = type || 'info';
+      const msgEl = document.getElementById('msg');
+      msgEl.textContent = message;
+      msgEl.className = 'msg ' + type;
+      msgEl.style.display = 'block';
+      setTimeout(function() { 
+        msgEl.style.display = 'none'; 
+      }, 5000);
+    }
+
+    // Load all profiles
+    function loadAllProfiles() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        showMsg('Please login first', 'error');
+        setTimeout(function() { 
+          window.location.href = 'Login.html'; 
+        }, 2000);
+        return;
+      }
+
+      const container = document.getElementById('profilesContainer');
+      container.innerHTML = '<div class="loading"><span class="spinner"><i class="fa fa-spinner"></i></span> Loading profiles...</div>';
+
+      fetch(API_BASE + '/api/profiles/all', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      })
+      .then(function(res) {
+        console.log('Response status:', res.status);
+        return res.json();
+      })
+      .then(function(data) {
+        console.log('Response data:', data);
+        if (data.success && data.profiles) {
+          allProfiles = data.profiles;
+          console.log('Profiles loaded:', allProfiles.length);
+          renderProfiles(allProfiles);
+          if (allProfiles.length === 0) {
+            container.innerHTML = '<div class="empty">No profiles found</div>';
+          }
+        } else {
+          container.innerHTML = '<div class="empty">Failed to load profiles</div>';
+          showMsg(data.message || 'Error loading profiles', 'error');
+        }
+      })
+      .catch(function(err) {
+        console.error('Load profiles error:', err);
+        container.innerHTML = '<div class="empty">Error loading profiles: ' + err.message + '</div>';
+        showMsg('Connection error: ' + err.message, 'error');
+      });
+    }
+
+    // Render profiles
+    function renderProfiles(profiles) {
+      const container = document.getElementById('profilesContainer');
+      if (!profiles || profiles.length === 0) {
+        container.innerHTML = '<div class="empty">No profiles found</div>';
+        return;
+      }
+
+      var html = '';
+      for (var i = 0; i < profiles.length; i++) {
+        var profile = profiles[i];
+        var avatar = (profile.fullName || profile.username || 'U').charAt(0).toUpperCase();
+        var createdDate = new Date(profile.createdAt).toLocaleDateString();
+        
+        html += '<div class="profile-card">' +
+          '<div class="profile-avatar">' + avatar + '</div>' +
+          '<div class="profile-info">' +
+          '<div class="profile-info-row"><span class="profile-info-label">Name:</span><span class="profile-info-value">' + (profile.fullName || 'N/A') + '</span></div>' +
+          '<div class="profile-info-row"><span class="profile-info-label">Username:</span><span class="profile-info-value">' + profile.username + '</span></div>' +
+          '<div class="profile-info-row"><span class="profile-info-label">Email:</span><span class="profile-info-value">' + profile.email + '</span></div>' +
+          '<div class="profile-info-row"><span class="profile-info-label">Mobile:</span><span class="profile-info-value">' + (profile.mobile || 'N/A') + '</span></div>' +
+          '<div class="profile-info-row"><span class="profile-info-label">City:</span><span class="profile-info-value">' + (profile.city || 'N/A') + '</span></div>' +
+          '<div class="profile-info-row"><span class="profile-info-label">Joined:</span><span class="profile-info-value">' + createdDate + '</span></div>' +
+          '</div>' +
+          '<div class="profile-actions">' +
+          '<button class="btn btn-primary" onclick="viewProfile(' + profile.id + ')"><i class="fa fa-eye"></i> View</button>' +
+          '<button class="btn btn-danger" onclick="openDeleteModal(' + profile.id + ', \'' + (profile.fullName || profile.username).replace(/'/g, "\\'") + '\')"><i class="fa fa-trash"></i> Delete</button>' +
+          '</div>' +
+          '</div>';
+      }
+      container.innerHTML = html;
+    }
+
+    // Search profiles
+    function searchProfiles() {
+      var query = document.getElementById('searchInput').value.toLowerCase().trim();
+      if (!query) {
+        renderProfiles(allProfiles);
+        return;
+      }
+
+      var filtered = [];
+      for (var i = 0; i < allProfiles.length; i++) {
+        var p = allProfiles[i];
+        if ((p.fullName || '').toLowerCase().indexOf(query) > -1 ||
+            (p.username || '').toLowerCase().indexOf(query) > -1 ||
+            (p.email || '').toLowerCase().indexOf(query) > -1) {
+          filtered.push(p);
+        }
+      }
+      renderProfiles(filtered);
+    }
+
+    // View profile details
+    function viewProfile(userId) {
+      var profile = null;
+      for (var i = 0; i < allProfiles.length; i++) {
+        if (allProfiles[i].id === userId) {
+          profile = allProfiles[i];
+          break;
+        }
+      }
+      
+      if (!profile) {
+        showMsg('Profile not found', 'error');
+        return;
+      }
+
+      var details = '<strong>Full Name:</strong> ' + (profile.fullName || 'N/A') + '<br>' +
+        '<strong>Username:</strong> ' + profile.username + '<br>' +
+        '<strong>Email:</strong> ' + profile.email + '<br>' +
+        '<strong>Mobile:</strong> ' + (profile.mobile || 'N/A') + '<br>' +
+        '<strong>DOB:</strong> ' + (profile.dob || 'N/A') + '<br>' +
+        '<strong>Gender:</strong> ' + (profile.gender || 'N/A') + '<br>' +
+        '<strong>Address:</strong> ' + (profile.address || 'N/A') + '<br>' +
+        '<strong>City:</strong> ' + (profile.city || 'N/A') + '<br>' +
+        '<strong>Pincode:</strong> ' + (profile.pincode || 'N/A') + '<br>' +
+        '<strong>About:</strong> ' + (profile.about || 'N/A') + '<br>' +
+        '<strong>Joined:</strong> ' + new Date(profile.createdAt).toLocaleString();
+
+      var win = window.open('', 'Profile', 'width=600,height=600');
+      win.document.write('<!DOCTYPE html><html><head><title>Profile Details</title><style>body{font-family:Arial;padding:20px;background:#f7fafc;}.profile-detail{background:white;padding:20px;border-radius:10px;}h2{margin-bottom:15px;color:#10b981;}</style></head><body><div class="profile-detail"><h2>Profile Details</h2>' + details + '</div></body></html>');
+    }
+
+    // Open delete modal
+    function openDeleteModal(userId, userName) {
+      deleteUserId = userId;
+      deleteUserName = userName;
+      document.getElementById('deleteUserName').textContent = userName;
+      document.getElementById('deleteModal').classList.add('show');
+    }
+
+    // Close delete modal
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').classList.remove('show');
+      deleteUserId = null;
+      deleteUserName = null;
+    }
+
+    // Confirm delete
+    function confirmDelete() {
+      if (!deleteUserId) return;
+
+      var token = localStorage.getItem('token');
+      if (!token) {
+        showMsg('Please login first', 'error');
+        return;
+      }
+
+      closeDeleteModal();
+
+      fetch(API_BASE + '/api/profile/delete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ userId: deleteUserId })
+      })
+      .then(function(res) {
+        return res.json();
+      })
+      .then(function(data) {
+        if (data.success) {
+          showMsg('Profile for ' + deleteUserName + ' deleted successfully', 'success');
+          var newProfiles = [];
+          for (var i = 0; i < allProfiles.length; i++) {
+            if (allProfiles[i].id !== deleteUserId) {
+              newProfiles.push(allProfiles[i]);
+            }
+          }
+          allProfiles = newProfiles;
+          renderProfiles(allProfiles);
+        } else {
+          showMsg(data.message || 'Error deleting profile', 'error');
+        }
+      })
+      .catch(function(err) {
+        console.error('Delete profile error:', err);
+        showMsg('Connection error', 'error');
+      });
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Page loaded, loading profiles...');
+      loadAllProfiles();
+
+      document.getElementById('searchBtn').addEventListener('click', searchProfiles);
+      document.getElementById('reloadBtn').addEventListener('click', loadAllProfiles);
+      document.getElementById('cancelBtn').addEventListener('click', closeDeleteModal);
+      document.getElementById('confirmBtn').addEventListener('click', confirmDelete);
+
+      var searchInput = document.getElementById('searchInput');
+      if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter' || e.keyCode === 13) {
+            searchProfiles();
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

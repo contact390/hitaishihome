@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+    
+
+    <div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("../navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+
+   <!-- Animated Hero Banner -->
+<section style="position:relative;overflow:hidden;height:60vh;min-height:600px;color:#fff;text-align:center;display:flex;align-items:center;justify-content:center; z-index: -1;">
+    <!-- Background Slideshow -->
+    <div style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;">
+        <div style="position:absolute;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('images/background\ image1.png');background-size:cover;background-position:center;animation:fade 16s infinite;opacity:1;"></div>
+        <div style="position:absolute;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('images/background\ image3.png');background-size:cover;background-position:center;animation:fade 16s infinite 4s;opacity:0;"></div>
+        <div style="position:absolute;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('images/background\ image2.png');background-size:cover;background-position:center;animation:fade 16s infinite 8s;opacity:0;"></div>
+        <div style="position:absolute;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('images/background\ image4.png');background-size:cover;background-position:center;animation:fade 16s infinite 12s;opacity:0;"></div>
+    </div>
+    
+    <!-- Content -->
+    <div style="padding:20px;max-width:1200px;margin:0 auto;position:relative;z-index:1;">
+        <h1 style="font-size:2.5rem;margin-bottom:25px;font-weight:600;line-height:1.2;text-shadow:0 2px 10px rgba(0,0,0,0.3);animation:slideUp 1s ease-out;">
+            Premium Mall Properties <br>Across India
+        </h1>
+        <p style="font-size:1.2rem;max-width:800px;margin:0 auto 40px;text-shadow:0 2px 5px rgba(0,0,0,0.3);animation:slideUp 1s ease-out 0.2s;opacity:0;animation-fill-mode:forwards;">
+            Discover high-value retail spaces with 98% occupancy rates and exceptional ROI
+        </p>
+        <a href="#" style="background:#e63946;color:#fff;padding:16px 40px;border-radius:50px;text-decoration:none;font-weight:600;display:inline-block;transition:all 0.3s;font-size:1.1rem;box-shadow:0 5px 15px rgba(230,57,70,0.4);animation:slideUp 1s ease-out 0.4s;opacity:0;animation-fill-mode:forwards;border:2px solid #e63946;">
+            Book Consultation
+        </a>
+        </div>
+    </div>
+    <!-- Animation Keyframes -->
+    <style>
+        @keyframes fade {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            30% { opacity: 1; }
+            40% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</section>
+    <!-- Featured Malls -->
+    <section style="padding:60px 20px;max-width:1200px;margin:0 auto; z-index: -1;">
+        <h2 class="section-title">Our Featured Mall Properties <span style="display:block;width:80px;height:4px;background:#e63946;margin:15px auto 0;"></span></h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+            <div style="border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);transition:transform 0.3s;">
+                <img src="images/grand mall.png" alt="Hitashi Grand Mall Mumbai" style="width:100%;height:220px;object-fit:cover;">
+                <div style="padding:20px;">
+                    <h3 style="margin-top:0;color:#2b2d42;">Hitashi Grand Mall, Mumbai</h3>
+                    <p style="color:#666;"><i class="fas fa-map-marker-alt" style="margin-right:8px;color:#e63946;"></i> Prime Location: Bandra Kurla Complex</p>
+                    <p style="color:#666;"><i class="fas fa-expand" style="margin-right:8px;color:#e63946;"></i> 450,000 sq.ft retail space</p>
+                    <p style="color:#666;"><i class="fas fa-store" style="margin-right:8px;color:#e63946;"></i> 98% occupancy rate</p>
+                    <a href="#" style="color:#e63946;font-weight:600;text-decoration:none;display:inline-block;margin-top:15px;">Explore Spaces →</a>
+                </div>
+            </div>
+            <div style="border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);transition:transform 0.3s;">
+                <img src="images/urban_city.png" alt="Hitashi Urban Center Delhi" style="width:100%;height:220px;object-fit:cover;">
+                <div style="padding:20px;">
+                    <h3 style="margin-top:0;color:#2b2d42;">Hitashi Urban Center, Delhi</h3>
+                    <p style="color:#666;"><i class="fas fa-map-marker-alt" style="margin-right:8px;color:#e63946;"></i> Prime Location: Connaught Place</p>
+                    <p style="color:#666;"><i class="fas fa-expand" style="margin-right:8px;color:#e63946;"></i> 320,000 sq.ft retail space</p>
+                    <p style="color:#666;"><i class="fas fa-store" style="margin-right:8px;color:#e63946;"></i> 95% occupancy rate</p>
+                    <a href="#" style="color:#e63946;font-weight:600;text-decoration:none;display:inline-block;margin-top:15px;">Explore Spaces →</a>
+                </div>
+            </div>
+            <div style="border-radius:10px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);transition:transform 0.3s;">
+                <img src="images/plaza.png" alt="Hitashi Plaza Bangalore" style="width:100%;height:220px;object-fit:cover;">
+                <div style="padding:20px;">
+                    <h3 style="margin-top:0;color:#2b2d42;">Hitashi Plaza, Bangalore</h3>
+                    <p style="color:#666;"><i class="fas fa-map-marker-alt" style="margin-right:8px;color:#e63946;"></i> Prime Location: MG Road</p>
+                    <p style="color:#666;"><i class="fas fa-expand" style="margin-right:8px;color:#e63946;"></i> 280,000 sq.ft retail space</p>
+                    <p style="color:#666;"><i class="fas fa-store" style="margin-right:8px;color:#e63946;"></i> 97% occupancy rate</p>
+                    <a href="#" style="color:#e63946;font-weight:600;text-decoration:none;display:inline-block;margin-top:15px;">Explore Spaces →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Mall Development Process -->
+    <section style="padding:60px 20px;max-width:1200px;margin:0 auto; z-index: -1;">
+        <h2 class="section-title">Our Mall Development Process <span style="display:block;width:80px;height:4px;background:#e63946;margin:15px auto 0;"></span></h2>
+        <div style="position:relative;">
+            <div style="display:flex;justify-content:space-between;position:relative;margin-bottom:40px;">
+                <div style="width:70px;height:70px;background:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.5rem;z-index:2;">1</div>
+                <div style="width:70px;height:70px;background:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.5rem;z-index:2;">2</div>
+                <div style="width:70px;height:70px;background:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.5rem;z-index:2;">3</div>
+                <div style="width:70px;height:70px;background:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.5rem;z-index:2;">4</div>
+                <div style="width:70px;height:70px;background:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.5rem;z-index:2;">5</div>
+            </div>
+            <div style="position:absolute;top:35px;left:0;right:0;height:4px;background:#ddd;z-index:1;"></div>
+            <div style="display:flex;justify-content:space-between;text-align:center;margin-top:20px; z-index: -1;">
+                <div style="width:20%;">
+                    <h3 style="color:#2b2d42;font-size:1.1rem;">Market Research</h3>
+                    <p style="font-size:0.9rem;">In-depth analysis of demographics and demand</p>
+                </div>
+                <div style="width:20%;">
+                    <h3 style="color:#2b2d42;font-size:1.1rem;">Strategic Planning</h3>
+                    <p style="font-size:0.9rem;">Architectural design and tenant mix planning</p>
+                </div>
+                <div style="width:20%;">
+                    <h3 style="color:#2b2d42;font-size:1.1rem;">Construction</h3>
+                    <p style="font-size:0.9rem;">Quality construction with premium materials</p>
+                </div>
+                <div style="width:20%;">
+                    <h3 style="color:#2b2d42;font-size:1.1rem;">Leasing</h3>
+                    <p style="font-size:0.9rem;">Strategic tenant acquisition and placement</p>
+                </div>
+                <div style="width:20%;">
+                    <h3 style="color:#2b2d42;font-size:1.1rem;">Operations</h3>
+                    <p style="font-size:0.9rem;">Professional management for maximum returns</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Why Choose Our Malls -->
+    <section style="background:#f8f9fa;padding:60px 20px; z-index: -1;">
+        <div style="max-width:1200px;margin:0 auto;">
+            <h2 class="section-title">Why Invest in Hitashi Mall Properties? <span style="display:block;width:80px;height:4px;background:#e63946;margin:15px auto 0;"></span></h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;margin-top:40px;">
+                <div style="text-align:center;padding:30px 20px;background:#fff;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                    <div style="width:70px;height:70px;background:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+                        <i class="fas fa-chart-line" style="font-size:1.8rem;color:#fff;"></i>
+                    </div>
+                    <h3 style="color:#2b2d42;">High ROI</h3>
+                    <p>Average 12-18% annual return on investment across our properties</p>
+                </div>
+                <div style="text-align:center;padding:30px 20px;background:#fff;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                    <div style="width:70px;height:70px;background:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+                        <i class="fas fa-map-marked-alt" style="font-size:1.8rem;color:#fff;"></i>
+                    </div>
+                    <h3 style="color:#2b2d42;">Prime Locations</h3>
+                    <p>Strategically located in high-footfall commercial districts</p>
+                </div>
+                <div style="text-align:center;padding:30px 20px;background:#fff;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                    <div style="width:70px;height:70px;background:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+                        <i class="fas fa-shield-alt" style="font-size:1.8rem;color:#fff;"></i>
+                    </div>
+                    <h3 style="color:#2b2d42;">Secure Investment</h3>
+                    <p>100% legal clearance and RERA approved projects</p>
+                </div>
+                <div style="text-align:center;padding:30px 20px;background:#fff;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                    <div style="width:70px;height:70px;background:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+                        <i class="fas fa-cogs" style="font-size:1.8rem;color:#fff;"></i>
+                    </div>
+                    <h3 style="color:#2b2d42;">Modern Amenities</h3>
+                    <p>Smart parking, IoT integration, and premium facilities</p>
+                </div>
+            </div>
+        </div>
+    </section>
+     <!-- Location Map -->
+     <section style="padding:60px 20px;background:#f8f9fa; z-index: -1;">
+        <div style="max-width:1200px;margin:0 auto;">
+            <h2 class="section-title">Our Mall Locations Across India <span style="display:block;width:80px;height:4px;background:#e63946;margin:15px auto 0;"></span></h2>
+            <div style="height:500px;background:#ddd;border-radius:10px;overflow:hidden;position:relative;">
+                <!-- Map would be implemented with Google Maps API in production -->
+                <img src="images/location_map.png" alt="Hitashi Mall Locations in India" style="width:100%;height:100%;object-fit:cover;">
+                <div style="position:absolute;top:20px;left:20px;background:rgba(255,255,255,0.9);padding:15px;border-radius:5px;max-width:300px;">
+                    <h3 style="margin-top:0;color:#2b2d42;">Strategic Presence</h3>
+                    <p style="margin-bottom:0;">12 malls across 8 major cities with 5 new developments underway</p>
+                </div>
+                <div style="position:absolute;top:30%;left:25%;width:15px;height:15px;background:#e63946;border-radius:50%;"></div>
+                <div style="position:absolute;top:35%;left:30%;width:15px;height:15px;background:#e63946;border-radius:50%;"></div>
+                <div style="position:absolute;top:45%;left:35%;width:15px;height:15px;background:#e63946;border-radius:50%;"></div>
+                <div style="position:absolute;top:50%;left:40%;width:15px;height:15px;background:#e63946;border-radius:50%;"></div>
+                <div style="position:absolute;top:55%;left:45%;width:15px;height:15px;background:#e63946;border-radius:50%;"></div>
+                <div style="position:absolute;top:60%;left:50%;width:15px;height:15px;background:#e63946;border-radius:50%;"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-top:40px;">
+                <div style="text-align:center;">
+                    <h3 style="color:#2b2d42;">Mumbai</h3>
+                    <p>3 Properties</p>
+                </div>
+                <div style="text-align:center;">
+                    <h3 style="color:#2b2d42;">Delhi NCR</h3>
+                    <p>2 Properties</p>
+                </div>
+                <div style="text-align:center;">
+                    <h3 style="color:#2b2d42;">Bangalore</h3>
+                    <p>2 Properties</p>
+                </div>
+                <div style="text-align:center;">
+                    <h3 style="color:#2b2d42;">Hyderabad</h3>
+                    <p>1 Property</p>
+                </div>
+                <div style="text-align:center;">
+                    <h3 style="color:#2b2d42;">Chennai</h3>
+                    <p>1 Property</p>
+                </div>
+            </div>
+        </div>
+    </section>    
+    <!-- Investment Calculator -->
+    <section style="padding:60px 20px;background:#2b2d42;color:#fff; z-index: -1;">
+        <div style="max-width:800px;margin:0 auto;text-align:center;">
+            <h2 style="font-size:2.2rem;margin-bottom:20px;">Calculate Your Potential Returns</h2>
+            <p style="margin-bottom:40px;font-size:1.1rem;">Use our investment calculator to estimate your returns from Hitashi mall properties</p>
+            <div style="background:#fff;border-radius:10px;padding:30px;color:#333;text-align:left;">
+                <div style="margin-bottom:20px;">
+                    <label style="display:block;margin-bottom:8px;font-weight:600;">Investment Amount (₹)</label>
+                    <input type="range" min="5000000" max="50000000" step="500000" value="10000000" style="width:100%;margin-bottom:10px;">
+                    <div style="display:flex;justify-content:space-between;">
+                        <span>₹50L</span>
+                        <span>₹5Cr</span>
+                    </div>
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block;margin-bottom:8px;font-weight:600;">Property Location</label>
+                    <select style="width:100%;padding:10px;border-radius:5px;border:1px solid #ddd;">
+                        <option>Mumbai</option>
+                        <option>Delhi</option>
+                        <option>Bangalore</option>
+                        <option>Hyderabad</option>
+                        <option>Chennai</option>
+                    </select>
+                </div>
+                <button style="background:#e63946;color:#fff;border:none;padding:12px 30px;border-radius:5px;font-weight:600;cursor:pointer;width:100%;">Calculate Returns</button>
+                <div style="margin-top:30px;padding:20px;background:#f8f9fa;border-radius:5px;display:none;" id="result">
+                    <h4 style="margin-top:0;color:#2b2d42;">Projected Returns</h4>
+                    <p style="margin-bottom:10px;"><span style="font-weight:600;">Annual ROI:</span> ₹12,00,000 (12%)</p>
+                    <p style="margin-bottom:10px;"><span style="font-weight:600;">5 Year Value:</span> ₹1,76,23,000</p>
+                    <p><span style="font-weight:600;">10 Year Value:</span> ₹3,10,58,000</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Mall Investment Guide -->
+    <section style="background:#2c3e50;color:#fff;padding:60px 20px; z-index: -1;">
+        <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:50px;align-items:center;">
+            <div>
+                <h2 style="font-size:2.2rem;margin-bottom:20px;">Mall Investment Guide</h2>
+                <p style="margin-bottom:25px;">Download our comprehensive 35-page guide to investing in mall properties, covering:</p>
+                <ul style="padding-left:20px;margin-bottom:30px;">
+                    <li style="margin-bottom:10px;">Location analysis criteria</li>
+                    <li style="margin-bottom:10px;">Lease structuring strategies</li>
+                    <li style="margin-bottom:10px;">ROI calculation methods</li>
+                    <li style="margin-bottom:10px;">Tenant mix optimization</li>
+                    <li>Future growth projections</li>
+                </ul>
+                <a href="#download" style="background:#e67e22;color:#fff;padding:12px 30px;border-radius:4px;text-decoration:none;font-weight:600;display:inline-block;">Download Free Guide</a>
+            </div>
+            <div style="background:#fff;padding:30px;border-radius:8px;color:#333;box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+                <img src="images/mall_investment_guide.png" alt="Mall Investment Guide Cover" style="width:100%;border-radius:4px;">
+            </div>
+        </div>
+    </section>
+    <!-- Tenant Portfolio -->
+    <section style="background:#f8f9fa;padding:60px 20px; z-index: -1;">
+        <div style="max-width:1200px;margin:0 auto;">
+            <h2 class="section-title">Our Premium Tenant Portfolio <span style="display:block;width:80px;height:4px;background:#e63946;margin:15px auto 0;"></span></h2>
+            <p style="text-align:center;max-width:800px;margin:0 auto 50px;">Hitashi malls are home to India's most prestigious retail brands and international franchises</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:30px;align-items:center;">
+                <img src="brand1.png" alt="Premium Retail Brand" style="max-width:100%;height:auto;filter:grayscale(100%);opacity:0.7;transition:all 0.3s;">
+                <img src="brand2.png" alt="Premium Retail Brand" style="max-width:100%;height:auto;filter:grayscale(100%);opacity:0.7;transition:all 0.3s;">
+                <img src="brand3.png" alt="Premium Retail Brand" style="max-width:100%;height:auto;filter:grayscale(100%);opacity:0.7;transition:all 0.3s;">
+                <img src="brand4.png" alt="Premium Retail Brand" style="max-width:100%;height:auto;filter:grayscale(100%);opacity:0.7;transition:all 0.3s;">
+                <img src="brand5.png" alt="Premium Retail Brand" style="max-width:100%;height:auto;filter:grayscale(100%);opacity:0.7;transition:all 0.3s;">
+                <img src="brand6.png" alt="Premium Retail Brand" style="max-width:100%;height:auto;filter:grayscale(100%);opacity:0.7;transition:all 0.3s;">
+            </div>
+        </div>
+    </section>
+    <!-- Video Tour Section - Full Width -->
+<section style="padding:30px 0;background:#2c3e50;color:#fff; z-index: -1;">
+    <div style="max-width:1200px;margin:0 auto;text-align:center;">
+        <h2 style="font-size:1.8rem;margin-bottom:15px;font-weight:600;padding:0 20px;">Virtual Mall Tours</h2>
+        <p style="max-width:600px;margin:0 auto 25px;font-size:1rem;line-height:1.5;padding:0 20px;">Explore our premium mall properties through immersive 360° virtual tours</p>
+        
+        <!-- Full Width Video Container -->
+        <div style="width:100%;margin:0 auto 25px;">
+            <video autoplay loop muted playsinline style="width:100%;height:300px;object-fit:cover;border-radius:4px;">
+                <source src="images/mall_realestate.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <!-- Compact Tour Thumbnails -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-top:25px;padding:0 20px;">
+            <a href="#tour1" style="color:#fff;text-decoration:none;">
+                <div style="background:rgba(255,255,255,0.08);padding-bottom:10px;border-radius:6px;transition:all 0.3s ease;overflow:hidden;border:1px solid rgba(255,255,255,0.1);height:100%;">
+                    <div style="width:100%;height:120px;background:url('images/harbour\ front.png') center/cover;margin-bottom:10px;transition:transform 0.5s ease;"></div>
+                    <p style="margin:0;font-weight:600;font-size:0.9rem;padding:0 10px;">Harbourfront Galleria</p>
+                    <p style="margin:5px 10px 0;font-size:0.8rem;color:rgba(255,255,255,0.7);">Mumbai • 250+ Stores</p>
+                </div>
+            </a>
+            
+            <a href="#tour2" style="color:#fff;text-decoration:none;">
+                <div style="background:rgba(255,255,255,0.08);padding-bottom:10px;border-radius:6px;transition:all 0.3s ease;overflow:hidden;border:1px solid rgba(255,255,255,0.1);height:100%;">
+                    <div style="width:100%;height:120px;background:url('images/capital_emporium.png') center/cover;margin-bottom:10px;transition:transform 0.5s ease;"></div>
+                    <p style="margin:0;font-weight:600;font-size:0.9rem;padding:0 10px;">Capital Emporium</p>
+                    <p style="margin:5px 10px 0;font-size:0.8rem;color:rgba(255,255,255,0.7);">Delhi • Luxury Brands</p>
+                </div>
+            </a>
+            
+            <a href="#tour3" style="color:#fff;text-decoration:none;">
+                <div style="background:rgba(255,255,255,0.08);padding-bottom:10px;border-radius:6px;transition:all 0.3s ease;overflow:hidden;border:1px solid rgba(255,255,255,0.1);height:100%;">
+                    <div style="width:100%;height:120px;background:url('images/tech\ park\ plaza.png') center/cover;margin-bottom:10px;transition:transform 0.5s ease;"></div>
+                    <p style="margin:0;font-weight:600;font-size:0.9rem;padding:0 10px;">TechPark Plaza</p>
+                    <p style="margin:5px 10px 0;font-size:0.8rem;color:rgba(255,255,255,0.7);">Bangalore • Tech Hub</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Hover Effects -->
+    <style>
+        a:hover > div {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.15) !important;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border-color: rgba(255,255,255,0.3) !important;
+        }
+        a:hover div div {
+            transform: scale(1.05);
+        }
+    </style>
+</section>
+        <!-- Mall Amenities -->
+        <section style="background:#2b2d42;padding:80px 20px;color:#fff;position:relative;overflow:hidden; z-index: -1;">
+            <div style="max-width:1200px;margin:0 auto;position:relative;z-index:1;">
+                <h2 style="text-align:center;font-size:2.5rem;margin-bottom:20px;font-weight:700;">World-Class Mall Amenities</h2>
+                <div style="text-align:center;margin-bottom:50px;">
+                    <span style="display:inline-block;width:80px;height:4px;background:#e63946;"></span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;">
+                    <!-- Existing Cards -->
+                    <div style="background:rgba(255,255,255,0.08);padding:30px;border-radius:12px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);transition:all 0.3s ease;">
+                        <div style="font-size:2.5rem;color:#e63946;margin-bottom:20px;">🚗</div>
+                        <h3 style="margin-top:0;font-size:1.3rem;margin-bottom:15px;">Smart Parking</h3>
+                        <p style="margin:0;color:rgba(255,255,255,0.8);line-height:1.6;">Automated parking systems with 1000+ capacity and EV charging stations</p>
+                    </div>
+                    
+                    <div style="background:rgba(255,255,255,0.08);padding:30px;border-radius:12px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);transition:all 0.3s ease;">
+                        <div style="font-size:2.5rem;color:#e63946;margin-bottom:20px;">📶</div>
+                        <h3 style="margin-top:0;font-size:1.3rem;margin-bottom:15px;">High-Speed WiFi</h3>
+                        <p style="margin:0;color:rgba(255,255,255,0.8);line-height:1.6;">Enterprise-grade WiFi coverage throughout the property</p>
+                    </div>
+                    
+                    <div style="background:rgba(255,255,255,0.08);padding:30px;border-radius:12px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);transition:all 0.3s ease;">
+                        <div style="font-size:2.5rem;color:#e63946;margin-bottom:20px;">🛡️</div>
+                        <h3 style="margin-top:0;font-size:1.3rem;margin-bottom:15px;">24/7 Security</h3>
+                        <p style="margin:0;color:rgba(255,255,255,0.8);line-height:1.6;">AI-powered surveillance and trained security personnel</p>
+                    </div>
+                    
+                    <div style="background:rgba(255,255,255,0.08);padding:30px;border-radius:12px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);transition:all 0.3s ease;">
+                        <div style="font-size:2.5rem;color:#e63946;margin-bottom:20px;">❄️</div>
+                        <h3 style="margin-top:0;font-size:1.3rem;margin-bottom:15px;">HVAC Systems</h3>
+                        <p style="margin:0;color:rgba(255,255,255,0.8);line-height:1.6;">Centralized climate control with energy-efficient technology</p>
+                    </div>
+                    
+                    <div style="background:rgba(255,255,255,0.08);padding:30px;border-radius:12px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);transition:all 0.3s ease;">
+                        <div style="font-size:2.5rem;color:#e63946;margin-bottom:20px;">📱</div>
+                        <h3 style="margin-top:0;font-size:1.3rem;margin-bottom:15px;">Mobile App</h3>
+                        <p style="margin:0;color:rgba(255,255,255,0.8);line-height:1.6;">Dedicated app for visitors with navigation and offers</p>
+                    </div>
+                    
+                    <div style="background:rgba(255,255,255,0.08);padding:30px;border-radius:12px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);transition:all 0.3s ease;">
+                        <div style="font-size:2.5rem;color:#e63946;margin-bottom:20px;">👨‍👩‍👧‍👦</div>
+                        <h3 style="margin-top:0;font-size:1.3rem;margin-bottom:15px;">Family Lounges</h3>
+                        <p style="margin:0;color:rgba(255,255,255,0.8);line-height:1.6;">Dedicated spaces for families with premium amenities</p>
+                    </div>
+                    
+                    <!-- New Card 1 -->
+                    <div style="background:rgba(255,255,255,0.08);padding:30px;border-radius:12px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);transition:all 0.3s ease;">
+                        <div style="font-size:2.5rem;color:#e63946;margin-bottom:20px;">🍽️</div>
+                        <h3 style="margin-top:0;font-size:1.3rem;margin-bottom:15px;">Gourmet Food Court</h3>
+                        <p style="margin:0;color:rgba(255,255,255,0.8);line-height:1.6;">Curated dining experience with 30+ international cuisines</p>
+                    </div>
+                    
+                    <!-- New Card 2 -->
+                    <div style="background:rgba(255,255,255,0.08);padding:30px;border-radius:12px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);transition:all 0.3s ease;">
+                        <div style="font-size:2.5rem;color:#e63946;margin-bottom:20px;">🎭</div>
+                        <h3 style="margin-top:0;font-size:1.3rem;margin-bottom:15px;">Entertainment Zone</h3>
+                        <p style="margin:0;color:rgba(255,255,255,0.8);line-height:1.6;">Multiplex cinema, gaming arena, and live performance spaces</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Background Pattern -->
+            <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgZmlsbD0idXJsKCNwYXR0ZXJuKSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIvPjwvc3ZnPg==');opacity:0.3;z-index:0;"></div>
+            
+            <!-- Hover Effects -->
+            <style>
+                div[style*="background:rgba(255,255,255,0.08)"]:hover {
+                    transform: translateY(-5px) !important;
+                    background: rgba(255,255,255,0.15) !important;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                    border-color: rgba(255,255,255,0.3) !important;
+                }
+            </style>
+        </section>
+         <!-- Investment Options -->
+        <section style="padding:60px 20px;max-width:1200px;margin:0 auto; z-index: -1;">
+        <h2 class="section-title">Flexible Investment Options <span style="display:block;width:80px;height:4px;background:#e63946;margin:15px auto 0;"></span></h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+            <div style="border:1px solid #ddd;border-radius:10px;overflow:hidden;transition:all 0.3s;">
+                <div style="background:#f8f9fa;padding:20px;text-align:center;">
+                    <h3 style="margin:0;color:#2b2d42;">Retail Space Ownership</h3>
+                </div>
+                <div style="padding:20px;">
+                    <p style="color:#666;"><i class="fas fa-check" style="color:#e63946;margin-right:10px;"></i> Full ownership of retail unit</p>
+                    <p style="color:#666;"><i class="fas fa-check" style="color:#e63946;margin-right:10px;"></i> Customizable interiors</p>
+                    <p style="color:#666;"><i class="fas fa-check" style="color:#e63946;margin-right:10px;"></i> Lease to tenants of your choice</p>
+                    <p style="color:#666;"><i class="fas fa-check" style="color:#e63946;margin-right:10px;"></i> Long-term asset appreciation</p>
+                    <div style="text-align:center;margin-top:30px;">
+                        <a href="#" style="background:#e63946;color:#fff;padding:10px 25px;border-radius:30px;text-decoration:none;font-weight:600;display:inline-block;">Explore</a>
+                    </div>
+                </div>
+            </div>
+            <div style="border:1px solid #ddd;border-radius:10px;overflow:hidden;transition:all 0.3s;">
+                <div style="background:#f8f9fa;padding:20px;text-align:center;">
+                    <h3 style="margin:0;color:#2b2d42;">REIT Investment</h3>
+                </div>
+                <div style="padding:20px;">
+                    <p style="color:#666;"><i class="fas fa-check" style="color:#e63946;margin-right:10px;"></i> Invest from ₹25 lakhs</p>
+                    <p style="color:#666;"><i class="fas fa-check" style="color:#e63946;margin-right:10px;"></i> Quarterly dividend payments</p>
+                    <p style="color:#666;"><i class="fas fa-check" style="color:#e63946;margin-right:10px;"></i> Professional management</p>
+                    <p style="color:#666;"><i class="fas fa-check" style="color:#e63946;margin-right:10px;"></i> High liquidity option</p>
+                    <div style="text-align:center;margin-top:30px;">
+                        <a href="#" style="background:#e63946;color:#fff;padding:10px 25px;border-radius:30px;text-decoration:none;font-weight:600;display:inline-block;">Explore</a>
+                    </div>
+                </div>
+            </div>
+            <div style="border:1px solid #ddd;border-radius:10px;overflow:hidden;transition:all 0.3s;">
+                <div style="background:#f8f9fa;padding:20px;text-align:center;">
+                    <h3 style="margin:0;color:#2b2d42;">Anchorship Opportunity</h3>
+                </div>
+                <div style="padding:20px;">
+                    <p style="color:#666;"><i class="fas fa-check" style="color:#e63946;margin-right:10px;"></i> Prime anchor tenant spaces</p>
+                    <p style="color:#666;"><i class="fas fa-check" style="color:#e63946;margin-right:10px;"></i> Custom-built to your specifications</p>
+                    <p style="color:#666;"><i class="fas fa-check" style="color:#e63946;margin-right:10px;"></i> Long-term lease benefits</p>
+                    <p style="color:#666;"><i class="fas fa-check" style="color:#e63946;margin-right:10px;"></i> High visibility locations</p>
+                    <div style="text-align:center;margin-top:30px;">
+                        <a href="#" style="background:#e63946;color:#fff;padding:10px 25px;border-radius:30px;text-decoration:none;font-weight:600;display:inline-block;">Explore</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+        <!-- Upcoming Projects -->
+        <section style="background:#2b2d42;padding:60px 20px;color:#fff; z-index: -1;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 style="text-align:center;font-size:2.2rem;margin-bottom:40px;">Upcoming Mall Projects <span style="display:block;width:80px;height:4px;background:#e63946;margin:15px auto 0;"></span></h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+            <div style="background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;backdrop-filter:blur(5px);">
+                <img src="images/mallgoa.png" alt="Hitashi Seaside Mall Goa" style="width:100%;height:200px;object-fit:cover;">
+                <div style="padding:20px;">
+                    <h3 style="margin-top:0;">Hitashi Seaside Mall, Goa</h3>
+                    <p><i class="fas fa-map-marker-alt" style="margin-right:8px;color:#e63946;"></i> Prime beachfront location</p>
+                    <p><i class="fas fa-expand" style="margin-right:8px;color:#e63946;"></i> 350,000 sq.ft retail space</p>
+                    <p><i class="fas fa-calendar-alt" style="margin-right:8px;color:#e63946;"></i> Completion: Q4 2024</p>
+                    <a href="#" style="color:#e63946;font-weight:600;text-decoration:none;display:inline-block;margin-top:15px;">Pre-Book Now →</a>
+                </div>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;backdrop-filter:blur(5px);">
+                <img src="images/mall bang.png" alt="Hitashi Tech Mall Bangalore" style="width:100%;height:200px;object-fit:cover;">
+                <div style="padding:20px;">
+                    <h3 style="margin-top:0;">Hitashi Tech Mall, Bangalore</h3>
+                    <p><i class="fas fa-map-marker-alt" style="margin-right:8px;color:#e63946;"></i> IT corridor location</p>
+                    <p><i class="fas fa-expand" style="margin-right:8px;color:#e63946;"></i> 400,000 sq.ft retail space</p>
+                    <p><i class="fas fa-calendar-alt" style="margin-right:8px;color:#e63946;"></i> Completion: Q2 2025</p>
+                    <a href="#" style="color:#e63946;font-weight:600;text-decoration:none;display:inline-block;margin-top:15px;">Pre-Book Now →</a>
+                </div>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;backdrop-filter:blur(5px);">
+                <img src="images/mall_delhi.png" alt="Hitashi Heritage Mall Delhi" style="width:100%;height:200px;object-fit:cover;">
+                <div style="padding:20px;">
+                    <h3 style="margin-top:0;">Hitashi Heritage Mall, Delhi</h3>
+                    <p><i class="fas fa-map-marker-alt" style="margin-right:8px;color:#e63946;"></i> Central heritage district</p>
+                    <p><i class="fas fa-expand" style="margin-right:8px;color:#e63946;"></i> 280,000 sq.ft retail space</p>
+                    <p><i class="fas fa-calendar-alt" style="margin-right:8px;color:#e63946;"></i> Completion: Q3 2025</p>
+                    <a href="#" style="color:#e63946;font-weight:600;text-decoration:none;display:inline-block;margin-top:15px;">Pre-Book Now →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+        </section>
+            <!-- Market Trends -->
+        <section style="padding:80px 20px;background:#fff;position:relative; z-index: -1;">
+            <div style="max-width:1200px;margin:0 auto;">
+                <h2 style="text-align:center;font-size:2.5rem;margin-bottom:15px;color:#2c3e50;font-weight:700;">Indian Mall Market Trends 2023</h2>
+                <p style="text-align:center;max-width:700px;margin:0 auto 50px;color:#666;font-size:1.1rem;">Key insights shaping the future of retail real estate in India</p>
+                
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+                    <!-- Market Growth Card -->
+                    <div style="background:#fff;padding:0;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.08);overflow:hidden;transition:all 0.4s ease;border:1px solid #f0f0f0;">
+                        <div style="height:200px;overflow:hidden;position:relative;">
+                            <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Growing mall market" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+                            <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,0.7),transparent);padding:20px;color:#fff;">
+                                <h3 style="margin:0;color:#fff;font-size:1.4rem;">Market Growth</h3>
+                            </div>
+                        </div>
+                        <div style="padding:25px;">
+                            <p style="margin-bottom:20px;color:#555;line-height:1.6;">Indian retail real estate market projected to grow at 12.5% CAGR through 2027, with premium malls leading the expansion.</p>
+                            <div style="display:flex;align-items:center;">
+                                <div style="width:50px;height:50px;background:#f8e8e8;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-right:15px;flex-shrink:0;">
+                                    <span style="font-size:1.2rem;color:#e67e22;font-weight:bold;">12.5%</span>
+                                </div>
+                                <div>
+                                    <p style="margin:0;font-weight:600;color:#333;">Annual Growth Rate</p>
+                                    <p style="margin:0;font-size:0.9rem;color:#777;">2023-2027 Projection</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Consumer Trends Card -->
+                    <div style="background:#fff;padding:0;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.08);overflow:hidden;transition:all 0.4s ease;border:1px solid #f0f0f0;">
+                        <div style="height:200px;overflow:hidden;position:relative;">
+                            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Consumer shopping trends" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+                            <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,0.7),transparent);padding:20px;color:#fff;">
+                                <h3 style="margin:0;color:#fff;font-size:1.4rem;">Consumer Trends</h3>
+                            </div>
+                        </div>
+                        <div style="padding:25px;">
+                            <p style="margin-bottom:20px;color:#555;line-height:1.6;">Experiential retail dominates with F&B (25% space) and entertainment (15% space) becoming key mall anchors.</p>
+                            <div style="display:flex;align-items:center;justify-content:space-between;">
+                                <div style="text-align:center;">
+                                    <div style="width:60px;height:60px;background:#f8e8e8;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;">
+                                        <span style="font-size:1.2rem;color:#e67e22;font-weight:bold;">25%</span>
+                                    </div>
+                                    <p style="margin:0;font-size:0.9rem;">F&B Space</p>
+                                </div>
+                                <div style="text-align:center;">
+                                    <div style="width:60px;height:60px;background:#f8e8e8;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;">
+                                        <span style="font-size:1.2rem;color:#e67e22;font-weight:bold;">15%</span>
+                                    </div>
+                                    <p style="margin:0;font-size:0.9rem;">Entertainment</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Investment Patterns Card -->
+                    <div style="background:#fff;padding:0;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.08);overflow:hidden;transition:all 0.4s ease;border:1px solid #f0f0f0;">
+                        <div style="height:200px;overflow:hidden;position:relative;">
+                            <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Mall investment trends" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;">
+                            <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,0.7),transparent);padding:20px;color:#fff;">
+                                <h3 style="margin:0;color:#fff;font-size:1.4rem;">Investment Patterns</h3>
+                            </div>
+                        </div>
+                        <div style="padding:25px;">
+                            <p style="margin-bottom:20px;color:#555;line-height:1.6;">Institutional investors allocated $1.2B to Indian retail real estate in 2022, with 70% focused on Grade A malls.</p>
+                            <div style="background:#f9f9f9;border-radius:8px;padding:15px;">
+                                <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                                    <span style="font-size:0.9rem;">Grade A Malls</span>
+                                    <span style="font-weight:600;">70%</span>
+                                </div>
+                                <div style="height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden;">
+                                    <div style="width:70%;height:100%;background:#e67e22;"></div>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;margin-top:15px;">
+                                    <span style="font-size:0.9rem;">Total Investment</span>
+                                    <span style="font-weight:600;">$1.2B</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hover Animations -->
+            <style>
+                div[style*="box-shadow:0 10px 30px rgba(0,0,0,0.08)"]:hover {
+                    transform: translateY(-10px);
+                    box-shadow: 0 15px 40px rgba(0,0,0,0.15) !important;
+                }
+                div[style*="box-shadow:0 10px 30px rgba(0,0,0,0.08)"]:hover img {
+                    transform: scale(1.1);
+                }
+            </style>
+        </section>
+        <!-- Testimonials -->
+        <section style="padding:60px 20px;max-width:1200px;margin:0 auto; z-index: -1;">
+            <h2 class="section-title">What Our Investors Say <span style="display:block;width:80px;height:4px;background:#e63946;margin:15px auto 0;"></span></h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+                <div style="background:#fff;border-radius:10px;padding:30px;box-shadow:0 5px 15px rgba(0,0,0,0.05);position:relative;">
+                    <div style="color:#ffd700;margin-bottom:15px;">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p style="font-style:italic;margin-bottom:20px;">"Investing in Hitashi's Mumbai mall property was the best decision I made. The consistent 15% ROI has outperformed all my other investments."</p>
+                    <div style="display:flex;align-items:center;">
+                        <img src="images/rahul_mall.png" alt="Rahul Mehta Investor" style="width:50px;height:50px;border-radius:50%;object-fit:cover;margin-right:15px;">
+                        <div>
+                            <h4 style="margin:0;color:#2b2d42;">Rahul Mehta</h4>
+                            <p style="margin:0;color:#666;font-size:0.9rem;">Commercial Investor since 2015</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="background:#fff;border-radius:10px;padding:30px;box-shadow:0 5px 15px rgba(0,0,0,0.05);position:relative;">
+                    <div style="color:#ffd700;margin-bottom:15px;">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p style="font-style:italic;margin-bottom:20px;">"The professional management team at Hitashi handles everything, making it a completely hands-off investment with excellent returns."</p>
+                    <div style="display:flex;align-items:center;">
+                        <img src="images/priyasharma_mall_realestate.png" alt="Priya Sharma Investor" style="width:50px;height:50px;border-radius:50%;object-fit:cover;margin-right:15px;">
+                        <div>
+                            <h4 style="margin:0;color:#2b2d42;">Priya Sharma</h4>
+                            <p style="margin:0;color:#666;font-size:0.9rem;">NRI Investor</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="background:#fff;border-radius:10px;padding:30px;box-shadow:0 5px 15px rgba(0,0,0,0.05);position:relative;">
+                    <div style="color:#ffd700;margin-bottom:15px;">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <p style="font-style:italic;margin-bottom:20px;">"I've invested in three Hitashi properties across different cities, and each has delivered above-market returns with minimal vacancy periods."</p>
+                    <div style="display:flex;align-items:center;">
+                        <img src="images/vikram_patel_mall.png" alt="Vikram Patel Investor" style="width:50px;height:50px;border-radius:50%;object-fit:cover;margin-right:15px;">
+                        <div>
+                            <h4 style="margin:0;color:#2b2d42;">Vikram Patel</h4>
+                            <p style="margin:0;color:#666;font-size:0.9rem;">Portfolio Investor</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- FAQ -->
+        <section style="padding:60px 20px;background:#fff; z-index: -1;">
+            <div style="max-width:800px;margin:0 auto;">
+                <h2 style="text-align:center;font-size:2.2rem;margin-bottom:40px;color:#2c3e50;">Mall Investment FAQs</h2>
+                <div style="margin-bottom:20px;border:1px solid #eee;border-radius:8px;overflow:hidden;">
+                    <button style="width:100%;padding:20px;text-align:left;border:none;background:#f9f9f9;font-weight:600;font-size:1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">What's the minimum investment for mall properties? <span style="font-size:1.5rem;">+</span></button>
+                    <div style="padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.3s;">
+                        <p style="padding:20px 0;">The minimum investment typically starts at ₹5 crore for anchor retail spaces in our premium developments, with smaller boutique spaces available from ₹1.5 crore in select projects.</p>
+                    </div>
+                </div>
+                <div style="margin-bottom:20px;border:1px solid #eee;border-radius:8px;overflow:hidden;">
+                    <button style="width:100%;padding:20px;text-align:left;border:none;background:#f9f9f9;font-weight:600;font-size:1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">How are rental yields calculated? <span style="font-size:1.5rem;">+</span></button>
+                    <div style="padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.3s;">
+                        <p style="padding:20px 0;">Rental yields are calculated as annual rental income divided by total investment cost. Our malls typically offer 8-12% gross yields, with net yields (after expenses) of 6-9% depending on the location and property type.</p>
+                    </div>
+                </div>
+                <div style="margin-bottom:20px;border:1px solid #eee;border-radius:8px;overflow:hidden;">
+                    <button style="width:100%;padding:20px;text-align:left;border:none;background:#f9f9f9;font-weight:600;font-size:1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">What's the typical lease duration? <span style="font-size:1.5rem;">+</span></button>
+                    <div style="padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.3s;">
+                        <p style="padding:20px 0;">Standard lease terms are 3-5 years for retail stores with annual 5-8% rent escalations. Anchor tenants often sign 7-10 year leases with different escalation structures.</p>
+                    </div>
+                </div>
+                <div style="margin-bottom:20px;border:1px solid #eee;border-radius:8px;overflow:hidden;">
+                    <button style="width:100%;padding:20px;text-align:left;border:none;background:#f9f9f9;font-weight:600;font-size:1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">Do you assist with financing? <span style="font-size:1.5rem;">+</span></button>
+                    <div style="padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.3s;">
+                        <p style="padding:20px 0;">Yes, we have partnerships with leading banks and NBFCs that offer commercial real estate loans at competitive rates (typically 8-9.5% interest) for up to 60% of property value with 5-15 year tenures.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Newsletter -->
+        <section style="padding:60px 20px;background:#2b2d42;color:#fff;text-align:center; z-index: -1;">
+            <div style="max-width:600px;margin:0 auto;">
+                <h2 style="font-size:2.2rem;margin-bottom:20px;">Stay Updated on New Mall Opportunities</h2>
+                <p style="margin-bottom:30px;">Subscribe to our newsletter for exclusive investment opportunities, market insights, and project updates</p>
+                <form style="display:flex;max-width:500px;margin:0 auto;">
+                    <input type="email" placeholder="Your email address" style="flex:1;padding:12px 15px;border:none;border-radius:30px 0 0 30px;">
+                    <button type="submit" style="background:#e63946;color:#fff;border:none;padding:0 25px;border-radius:0 30px 30px 0;font-weight:600;cursor:pointer;">Subscribe</button>
+                </form>
+                <p style="font-size:0.8rem;margin-top:20px;opacity:0.8;">We respect your privacy. Unsubscribe at any time.</p>
+            </div>
+        </section>
+
+        <script>
+            // Simple script to show calculator results
+            document.querySelector('button').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('result').style.display = 'block';
+            });
+        </script>
+
+
+<div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+
+
+</body>
+</html>

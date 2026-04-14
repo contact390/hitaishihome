@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+  
+  <div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("../navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+  
+  <div style="width: 100%; max-width: 450px; margin-left: auto; margin-right: auto; margin-top: 30px; margin-bottom: 30px; padding: 2rem; background-color: white; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+    <h2 style="font-size: 24px; font-weight: bold; text-align: center; color: #1f2937; margin-bottom: 1.5rem;">Create Account</h2>
+    <form id="registerForm">
+      <input type="text" id="fullName" name="fullName" placeholder="Full Name" required style="width: 100%; padding: 0.75rem 1rem; background-color: #f9fafb; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; color: #374151; margin-bottom: 1rem; box-sizing: border-box; font-size: 14px; transition: border-color 0.2s;" onFocus="this.style.borderColor='#10b981'" onBlur="this.style.borderColor='#d1d5db'" />
+      <input type="text" id="username" name="username" placeholder="Username" required style="width: 100%; padding: 0.75rem 1rem; background-color: #f9fafb; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; color: #374151; margin-bottom: 1rem; box-sizing: border-box; font-size: 14px; transition: border-color 0.2s;" onFocus="this.style.borderColor='#10b981'" onBlur="this.style.borderColor='#d1d5db'" />
+      <input type="email" id="email" name="email" placeholder="Email Address" required style="width: 100%; padding: 0.75rem 1rem; background-color: #f9fafb; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; color: #374151; margin-bottom: 1rem; box-sizing: border-box; font-size: 14px; transition: border-color 0.2s;" onFocus="this.style.borderColor='#10b981'" onBlur="this.style.borderColor='#d1d5db'" />
+      <input type="text" id="mobile" name="mobile" placeholder="Mobile Number (10 digits)" required style="width: 100%; padding: 0.75rem 1rem; background-color: #f9fafb; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; color: #374151; margin-bottom: 1rem; box-sizing: border-box; font-size: 14px; transition: border-color 0.2s;" onFocus="this.style.borderColor='#10b981'" onBlur="this.style.borderColor='#d1d5db'" />
+      <input type="password" id="password" name="password" placeholder="Password (min 6 characters)" required style="width: 100%; padding: 0.75rem 1rem; background-color: #f9fafb; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; color: #374151; margin-bottom: 1rem; box-sizing: border-box; font-size: 14px; transition: border-color 0.2s;" onFocus="this.style.borderColor='#10b981'" onBlur="this.style.borderColor='#d1d5db'" />
+      <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required style="width: 100%; padding: 0.75rem 1rem; background-color: #f9fafb; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; color: #374151; margin-bottom: 1rem; box-sizing: border-box; font-size: 14px; transition: border-color 0.2s;" onFocus="this.style.borderColor='#10b981'" onBlur="this.style.borderColor='#d1d5db'" />
+    
+      <div id="errorMessage" style="display: none; padding: 0.75rem 1rem; font-size: 14px; color: #b91c1c; background-color: #fee2e2; border: 1px solid #fca5a5; border-radius: 0.5rem; margin-bottom: 1rem; text-align: left;"></div>
+      <div id="successMessage" style="display: none; padding: 0.75rem 1rem; font-size: 14px; color: #065f46; background-color: #d1fae5; border: 1px solid #6ee7b7; border-radius: 0.5rem; margin-bottom: 1rem; text-align: left;"></div>
+
+      <div id="loadingSpinner" style="display: none; text-align: center; margin-bottom: 1rem;">
+        <div style="display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f4f6; border-top: 3px solid #10b981; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        <p style="margin-top: 0.5rem; color: #6b7280; font-size: 14px;">Processing...</p>
+      </div>
+
+      <style>
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      </style>
+    
+      <button type="submit" style="width: 100%; padding: 0.75rem 1rem; color: white; background-color: #10b981; border-radius: 0.5rem; transition: background-color 0.2s, transform 0.1s; cursor: pointer; border: none; font-weight: bold; font-size: 16px; box-sizing: border-box;" onMouseOver="this.style.backgroundColor='#059669'" onMouseOut="this.style.backgroundColor='#10b981'" onMouseDown="this.style.transform='scale(0.98)'" onMouseUp="this.style.transform='scale(1)'">Register</button>
+    
+      <div style="text-align: center; font-size: 14px; margin-top: 1rem; color: #6b7280;">or</div>
+    
+      <div style="display: flex; justify-content: center; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap;">
+        <button type="button" style="display: flex; align-items: center; padding: 0.5rem 1rem; background-color: #f3f4f6; border: 1px solid #d1d5db; border-radius: 0.5rem; cursor: pointer; font-weight: 500; color: #374151; font-size: 13px; transition: background-color 0.2s;" onMouseOver="this.style.backgroundColor='#e5e7eb'" onMouseOut="this.style.backgroundColor='#f3f4f6'"><i class="fab fa-google" style="margin-right: 0.5rem;"></i> Gmail</button>
+        <button type="button" style="display: flex; align-items: center; padding: 0.5rem 1rem; background-color: #f3f4f6; border: 1px solid #d1d5db; border-radius: 0.5rem; cursor: pointer; font-weight: 500; color: #374151; font-size: 13px; transition: background-color 0.2s;" onMouseOver="this.style.backgroundColor='#e5e7eb'" onMouseOut="this.style.backgroundColor='#f3f4f6'"><i class="fab fa-facebook-f" style="margin-right: 0.5rem;"></i> Facebook</button>
+        <button type="button" style="display: flex; align-items: center; padding: 0.5rem 1rem; background-color: #f3f4f6; border: 1px solid #d1d5db; border-radius: 0.5rem; cursor: pointer; font-weight: 500; color: #374151; font-size: 13px; transition: background-color 0.2s;" onMouseOver="this.style.backgroundColor='#e5e7eb'" onMouseOut="this.style.backgroundColor='#f3f4f6'"><i class="fab fa-yahoo" style="margin-right: 0.5rem;"></i> Yahoo</button>
+      </div>
+    
+      <div style="margin-top: 1.5rem; text-align: center; font-size: 14px;">
+        Already have an account?
+        <a href="Login.html" style="color: #3b82f6; text-decoration: none; font-weight: 600; transition: color 0.2s;" onMouseOver="this.style.color='#1d4ed8'" onMouseOut="this.style.color='#3b82f6'">Login here</a>
+      </div>
+    </form>
+    
+    <script>
+      const form = document.getElementById("registerForm");
+      const errorBox = document.getElementById("errorMessage");
+      const successBox = document.getElementById("successMessage");
+      const loadingSpinner = document.getElementById("loadingSpinner");
+      const submitBtn = form.querySelector('button[type="submit"]');
+
+      // Validation functions
+      function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+      }
+
+      function validatePassword(password) {
+        return password && password.length >= 6;
+      }
+
+      function validateMobile(mobile) {
+        const mobileRegex = /^[0-9]{10}$/;
+        return mobileRegex.test(mobile.replace(/\D/g, ''));
+      }
+
+      function showError(message) {
+        errorBox.innerText = message;
+        errorBox.style.display = "block";
+        successBox.style.display = "none";
+      }
+
+      function showSuccess(message) {
+        successBox.innerText = message;
+        successBox.style.display = "block";
+        errorBox.style.display = "none";
+      }
+
+      function hideMessages() {
+        errorBox.style.display = "none";
+        successBox.style.display = "none";
+      }
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        
+        // Get form values
+        const fullName = document.getElementById("fullName").value.trim();
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const mobile = document.getElementById("mobile").value.trim();
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+
+        // Client-side validation
+        if (!fullName || !username || !email || !mobile || !password || !confirmPassword) {
+          showError("All fields are required");
+          return;
+        }
+
+        if (!validateEmail(email)) {
+          showError("Please enter a valid email address");
+          return;
+        }
+
+        if (!validatePassword(password)) {
+          showError("Password must be at least 6 characters long");
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          showError("Passwords do not match");
+          return;
+        }
+
+        if (!validateMobile(mobile)) {
+          showError("Please enter a valid 10-digit mobile number");
+          return;
+        }
+
+        // Show loading spinner
+        loadingSpinner.style.display = "block";
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = "0.6";
+        hideMessages();
+
+        try {
+          const formData = {
+            fullName: fullName,
+            username: username,
+            email: email,
+            mobile: mobile,
+            password: password,
+            confirmPassword: confirmPassword
+          };
+
+          const response = await fetch("http://localhost:5001/api/properties_re", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            showSuccess(data.message || "Registration successful! Redirecting to login...");
+            form.reset();
+            setTimeout(() => {
+              window.location.href = "Login.html";
+            }, 2000);
+          } else {
+            showError(data.message || "Registration failed. Please try again.");
+          }
+        } catch (err) {
+          console.error("Error:", err);
+          showError("Connection error. Please check if the server is running.");
+        } finally {
+          // Hide loading spinner
+          loadingSpinner.style.display = "none";
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = "1";
+        }
+      });
+    </script>
+  </div>
+
+
+
+<div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+
+</body>
+</html>

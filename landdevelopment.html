@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+
+    <div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("../navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+
+<!-- Animated Hero Section -->
+<div id="landHero" style="position:relative;overflow:hidden;color:#fff;text-align:center;padding:120px 20px;height:300px;">
+    <!-- Background images container -->
+    <div id="heroBackgrounds" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;">
+        <div style="position:absolute;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url('images/background_image1_land.png');background-size:cover;background-position:center;opacity:1;transition:opacity 1.5s ease-in-out;"></div>
+        <div style="position:absolute;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url('images/background_image2.jpg');background-size:cover;background-position:center;opacity:0;transition:opacity 1.5s ease-in-out;"></div>
+        <div style="position:absolute;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url('images/backgroundimage3.png');background-size:cover;background-position:center;opacity:0;transition:opacity 1.5s ease-in-out;"></div>
+    </div>
+    
+    <!-- Content -->
+    <div style="position:relative;z-index:1;">
+        <h1 style="font-size:2.8rem;margin-bottom:20px;">Premium Land & Development Sites</h1>
+        <p style="font-size:1.2rem;max-width:800px;margin:0 auto 30px;">Discover strategically located land parcels with exceptional development potential for residential, commercial, and mixed-use projects</p>
+        <a href="#contact" style="background:#4CAF50;color:#fff;padding:12px 30px;border-radius:5px;text-decoration:none;font-weight:bold;display:inline-block;">Explore Available Land</a>
+    </div>
+</div>
+
+<script>
+    // Background image slideshow animation
+    document.addEventListener('DOMContentLoaded', function() {
+        const hero = document.getElementById('heroBackgrounds');
+        const backgrounds = hero.children;
+        let current = 0;
+        
+        // Set initial active background
+        backgrounds[current].style.opacity = 1;
+        
+        // Change background every 5 seconds
+        setInterval(function() {
+            // Fade out current background
+            backgrounds[current].style.opacity = 0;
+            
+            // Move to next background
+            current = (current + 1) % backgrounds.length;
+            
+            // Fade in next background
+            backgrounds[current].style.opacity = 1;
+        }, 5000);
+    });
+</script>
+<!-- Animated Featured Land Listings -->
+<div style="padding:60px 20px;max-width:1200px;margin:0 auto;">
+    <h2 class="section-title">Featured Development Sites</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+        <!-- Card 1 with Animation -->
+        <div style="border:1px solid #ddd;border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);position:relative;transition:all 0.3s ease;transform:translateY(0);">
+            <div style="position:absolute;top:15px;left:15px;background:#4CAF50;color:#fff;padding:5px 10px;border-radius:4px;font-weight:bold;transition:all 0.3s ease;">PRIME LOCATION</div>
+            <img src="images/devtown.jpg" alt="Downtown Mixed-Use Site" style="width:100%;height:220px;object-fit:cover;transition:all 0.3s ease;">
+            <div style="padding:20px;">
+                <h3 style="margin-top:0;color:#4CAF50;transition:all 0.3s ease;">Downtown Mixed-Use Site</h3>
+                <p style="color:#666;transition:all 0.3s ease;"><i style="color:#4CAF50;margin-right:5px;">📍</i> Central Business District</p>
+                <p style="transition:all 0.3s ease;">2.5 acre infill site with zoning for up to 400 residential units and 50,000 sq.ft. commercial space</p>
+                <div style="display:flex;justify-content:space-between;margin-top:20px;">
+                    <span style="font-weight:bold;transition:all 0.3s ease;">$12.5M</span>
+                    <a href="#" style="color:#4CAF50;font-weight:bold;text-decoration:none;transition:all 0.3s ease;">View Details →</a>
+                </div>
+            </div>
+            <style>
+                div[style*="translateY(0)"]:hover {
+                    transform: translateY(-10px);
+                    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+                }
+                div[style*="translateY(0)"]:hover h3 {
+                    color: #3d8b40;
+                }
+                div[style*="translateY(0)"]:hover img {
+                    transform: scale(1.03);
+                }
+                div[style*="translateY(0)"]:hover div[style*="PRIME LOCATION"] {
+                    background: #3d8b40;
+                    transform: scale(1.05);
+                }
+                div[style*="translateY(0)"]:hover a {
+                    color: #3d8b40;
+                    transform: translateX(5px);
+                }
+            </style>
+        </div>
+
+        <!-- Card 2 with Animation -->
+        <div style="border:1px solid #ddd;border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);position:relative;transition:all 0.3s ease;transform:translateY(0);">
+            <div style="position:absolute;top:15px;left:15px;background:#4CAF50;color:#fff;padding:5px 10px;border-radius:4px;font-weight:bold;transition:all 0.3s ease;">MASTER PLAN</div>
+            <img src="images/suburban.jpg" alt="Suburban Residential Tract" style="width:100%;height:220px;object-fit:cover;transition:all 0.3s ease;">
+            <div style="padding:20px;">
+                <h3 style="margin-top:0;color:#4CAF50;transition:all 0.3s ease;">Suburban Residential Tract</h3>
+                <p style="color:#666;transition:all 0.3s ease;"><i style="color:#4CAF50;margin-right:5px;">📍</i> Growing Northwest Corridor</p>
+                <p style="transition:all 0.3s ease;">15 acre parcel approved for 120 single-family homes with utility infrastructure in place</p>
+                <div style="display:flex;justify-content:space-between;margin-top:20px;">
+                    <span style="font-weight:bold;transition:all 0.3s ease;">$8.2M</span>
+                    <a href="#" style="color:#4CAF50;font-weight:bold;text-decoration:none;transition:all 0.3s ease;">View Details →</a>
+                </div>
+            </div>
+            <style>
+                div[style*="translateY(0)"]:hover {
+                    transform: translateY(-10px);
+                    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+                }
+                div[style*="translateY(0)"]:hover h3 {
+                    color: #3d8b40;
+                }
+                div[style*="translateY(0)"]:hover img {
+                    transform: scale(1.03);
+                }
+                div[style*="translateY(0)"]:hover div[style*="MASTER PLAN"] {
+                    background: #3d8b40;
+                    transform: scale(1.05);
+                }
+                div[style*="translateY(0)"]:hover a {
+                    color: #3d8b40;
+                    transform: translateX(5px);
+                }
+            </style>
+        </div>
+
+        <!-- Card 3 with Animation -->
+        <div style="border:1px solid #ddd;border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);position:relative;transition:all 0.3s ease;transform:translateY(0);">
+            <div style="position:absolute;top:15px;left:15px;background:#4CAF50;color:#fff;padding:5px 10px;border-radius:4px;font-weight:bold;transition:all 0.3s ease;">ENTITLED</div>
+            <img src="images/waterfront_lands'.jpg" alt="Waterfront Commercial Site" style="width:100%;height:220px;object-fit:cover;transition:all 0.3s ease;">
+            <div style="padding:20px;">
+                <h3 style="margin-top:0;color:#4CAF50;transition:all 0.3s ease;">Waterfront Commercial Site</h3>
+                <p style="color:#666;transition:all 0.3s ease;"><i style="color:#4CAF50;margin-right:5px;">📍</i> Riverfront District</p>
+                <p style="transition:all 0.3s ease;">3.8 acre site with approved plans for 150-room hotel and 25,000 sq.ft. retail/restaurant space</p>
+                <div style="display:flex;justify-content:space-between;margin-top:20px;">
+                    <span style="font-weight:bold;transition:all 0.3s ease;">$15.9M</span>
+                    <a href="#" style="color:#4CAF50;font-weight:bold;text-decoration:none;transition:all 0.3s ease;">View Details →</a>
+                </div>
+            </div>
+            <style>
+                div[style*="translateY(0)"]:hover {
+                    transform: translateY(-10px);
+                    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+                }
+                div[style*="translateY(0)"]:hover h3 {
+                    color: #3d8b40;
+                }
+                div[style*="translateY(0)"]:hover img {
+                    transform: scale(1.03);
+                }
+                div[style*="translateY(0)"]:hover div[style*="ENTITLED"] {
+                    background: #3d8b40;
+                    transform: scale(1.05);
+                }
+                div[style*="translateY(0)"]:hover a {
+                    color: #3d8b40;
+                    transform: translateX(5px);
+                }
+            </style>
+        </div>
+    </div>
+</div>
+<!-- Land Investment Benefits -->
+<div style="background:#f8f9fa;padding:60px 20px;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title">Why Invest in Land Development?</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;">
+            <div style="text-align:center;padding:25px;background:#fff;border-radius:8px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                <div style="background:#4CAF50;width:60px;height:60px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;">📈</div>
+                <h3 style="margin-top:0;color:#4CAF50;">Appreciation Potential</h3>
+                <p>Land values typically appreciate faster than developed properties in growing markets</p>
+            </div>
+            <div style="text-align:center;padding:25px;background:#fff;border-radius:8px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                <div style="background:#4CAF50;width:60px;height:60px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;">🔄</div>
+                <h3 style="margin-top:0;color:#4CAF50;">Flexible Options</h3>
+                <p>Multiple exit strategies - develop, hold, or sell with entitlements for maximum value</p>
+            </div>
+            <div style="text-align:center;padding:25px;background:#fff;border-radius:8px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                <div style="background:#4CAF50;width:60px;height:60px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;">🏗️</div>
+                <h3 style="margin-top:0;color:#4CAF50;">Value Creation</h3>
+                <p>Strategic land acquisition and entitlements can significantly increase property value</p>
+            </div>
+            <div style="text-align:center;padding:25px;background:#fff;border-radius:8px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                <div style="background:#4CAF50;width:60px;height:60px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;">💰</div>
+                <h3 style="margin-top:0;color:#4CAF50;">Lower Maintenance</h3>
+                <p>Vacant land requires minimal maintenance compared to developed properties</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Land Types -->
+<div style="padding:60px 20px;max-width:1200px;margin:0 auto;">
+    <h2 class="section-title">Land & Development Site Types</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;">
+        <div style="background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <div style="background:#4CAF50;color:#fff;padding:15px;text-align:center;font-weight:bold;">Residential Land</div>
+            <div style="padding:20px;">
+                <ul style="padding-left:20px;">
+                    <li style="margin-bottom:10px;">Single-family home lots</li>
+                    <li style="margin-bottom:10px;">Multi-family development sites</li>
+                    <li style="margin-bottom:10px;">Master-planned community parcels</li>
+                    <li style="margin-bottom:10px;">Townhome/Condo sites</li>
+                    <li>Senior living communities</li>
+                </ul>
+            </div>
+        </div>
+        <div style="background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <div style="background:#4CAF50;color:#fff;padding:15px;text-align:center;font-weight:bold;">Commercial Land</div>
+            <div style="padding:20px;">
+                <ul style="padding-left:20px;">
+                    <li style="margin-bottom:10px;">Retail/restaurant pads</li>
+                    <li style="margin-bottom:10px;">Office development sites</li>
+                    <li style="margin-bottom:10px;">Hotel parcels</li>
+                    <li style="margin-bottom:10px;">Industrial/flex sites</li>
+                    <li>Mixed-use development land</li>
+                </ul>
+            </div>
+        </div>
+        <div style="background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <div style="background:#4CAF50;color:#fff;padding:15px;text-align:center;font-weight:bold;">Special Purpose</div>
+            <div style="padding:20px;">
+                <ul style="padding-left:20px;">
+                    <li style="margin-bottom:10px;">Medical/healthcare campuses</li>
+                    <li style="margin-bottom:10px;">Educational institution sites</li>
+                    <li style="margin-bottom:10px;">Religious assembly parcels</li>
+                    <li style="margin-bottom:10px;">Recreational land</li>
+                    <li>Agricultural conversion parcels</li>
+                </ul>
+            </div>
+        </div>
+        <div style="background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <div style="background:#4CAF50;color:#fff;padding:15px;text-align:center;font-weight:bold;">Entitled Land</div>
+            <div style="padding:20px;">
+                <ul style="padding-left:20px;">
+                    <li style="margin-bottom:10px;">Pre-approved residential</li>
+                    <li style="margin-bottom:10px;">Permitted commercial sites</li>
+                    <li style="margin-bottom:10px;">Planned unit developments</li>
+                    <li style="margin-bottom:10px;">Zoning-approved parcels</li>
+                    <li>Master-planned community sites</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Location Strategy -->
+<div style="background:#4CAF50;color:#fff;padding:60px 20px;">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;align-items:center;">
+        <div>
+            <h2 style="font-size:2.2rem;margin-bottom:20px;">Strategic Land Locations</h2>
+            <p style="font-size:1.1rem;margin-bottom:25px;">Our land parcels are strategically positioned in high-growth corridors with excellent development potential</p>
+            <ul style="padding-left:20px;font-size:1.1rem;">
+                <li style="margin-bottom:10px;">Proximity to major employment centers</li>
+                <li style="margin-bottom:10px;">Along planned transportation routes</li>
+                <li style="margin-bottom:10px;">In path of growth and urban expansion</li>
+                <li style="margin-bottom:10px;">Near quality schools and amenities</li>
+                <li>Areas with favorable demographic trends</li>
+            </ul>
+        </div>
+        <div style="background:#fff;border-radius:8px;padding:20px;box-shadow:0 5px 15px rgba(0,0,0,0.2);">
+            <img src="images/strategic.jpg" alt="Strategic Land Locations" style="width:100%;border-radius:5px;">
+        </div>
+    </div>
+</div>
+
+<!-- Due Diligence Checklist -->
+<div style="padding:60px 20px;max-width:1200px;margin:0 auto;">
+    <h2 class="section-title">Land Acquisition Due Diligence</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+        <div style="display:flex;gap:20px;">
+            <div style="color:#4CAF50;font-size:1.8rem;flex-shrink:0;">📝</div>
+            <div>
+                <h3 style="margin-top:0;color:#4CAF50;">Zoning & Entitlements</h3>
+                <p>Verify current zoning and development potential including density, height restrictions, and permitted uses</p>
+            </div>
+        </div>
+        <div style="display:flex;gap:20px;">
+            <div style="color:#4CAF50;font-size:1.8rem;flex-shrink:0;">💧</div>
+            <div>
+                <h3 style="margin-top:0;color:#4CAF50;">Utilities & Infrastructure</h3>
+                <p>Assess availability and capacity of water, sewer, electricity, gas, and telecommunications</p>
+            </div>
+        </div>
+        <div style="display:flex;gap:20px;">
+            <div style="color:#4CAF50;font-size:1.8rem;flex-shrink:0;">🌎</div>
+            <div>
+                <h3 style="margin-top:0;color:#4CAF50;">Environmental Factors</h3>
+                <p>Conduct Phase I ESA to identify potential contamination, wetlands, or protected species</p>
+            </div>
+        </div>
+        <div style="display:flex;gap:20px;">
+            <div style="color:#4CAF50;font-size:1.8rem;flex-shrink:0;">🏛️</div>
+            <div>
+                <h3 style="margin-top:0;color:#4CAF50;">Government Approvals</h3>
+                <p>Review required permits, impact fees, and development agreements with municipalities</p>
+            </div>
+        </div>
+        <div style="display:flex;gap:20px;">
+            <div style="color:#4CAF50;font-size:1.8rem;flex-shrink:0;">📊</div>
+            <div>
+                <h3 style="margin-top:0;color:#4CAF50;">Market Analysis</h3>
+                <p>Evaluate absorption rates, comparable sales, and demand drivers for proposed development</p>
+            </div>
+        </div>
+        <div style="display:flex;gap:20px;">
+            <div style="color:#4CAF50;font-size:1.8rem;flex-shrink:0;">🛣️</div>
+            <div>
+                <h3 style="margin-top:0;color:#4CAF50;">Access & Topography</h3>
+                <p>Assess site access, road frontage, grading requirements, and soil conditions</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Entitlement Process -->
+<div style="background:#f8f9fa;padding:60px 20px;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 class="section-title">Land Entitlement Process</h2>
+        <div style="display:flex;overflow-x:auto;gap:20px;padding-bottom:20px;scrollbar-width:none;">
+            <div style="min-width:250px;background:#fff;border-radius:8px;padding:25px;box-shadow:0 5px 15px rgba(0,0,0,0.1);text-align:center;flex-shrink:0;">
+                <div style="background:#4CAF50;color:#fff;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-weight:bold;">1</div>
+                <h3 style="margin-top:0;color:#4CAF50;">Pre-Application</h3>
+                <p>Initial meetings with planning staff to discuss project concept and requirements</p>
+            </div>
+            <div style="min-width:250px;background:#fff;border-radius:8px;padding:25px;box-shadow:0 5px 15px rgba(0,0,0,0.1);text-align:center;flex-shrink:0;">
+                <div style="background:#4CAF50;color:#fff;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-weight:bold;">2</div>
+                <h3 style="margin-top:0;color:#4CAF50;">Feasibility Study</h3>
+                <p>Technical analysis of zoning, environmental, and infrastructure constraints</p>
+            </div>
+            <div style="min-width:250px;background:#fff;border-radius:8px;padding:25px;box-shadow:0 5px 15px rgba(0,0,0,0.1);text-align:center;flex-shrink:0;">
+                <div style="background:#4CAF50;color:#fff;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-weight:bold;">3</div>
+                <h3 style="margin-top:0;color:#4CAF50;">Preliminary Design</h3>
+                <p>Conceptual site plans, building layouts, and community benefit packages</p>
+            </div>
+            <div style="min-width:250px;background:#fff;border-radius:8px;padding:25px;box-shadow:0 5px 15px rgba(0,0,0,0.1);text-align:center;flex-shrink:0;">
+                <div style="background:#4CAF50;color:#fff;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-weight:bold;">4</div>
+                <h3 style="margin-top:0;color:#4CAF50;">Public Hearings</h3>
+                <p>Presentations to planning commissions and city councils with community input</p>
+            </div>
+            <div style="min-width:250px;background:#fff;border-radius:8px;padding:25px;box-shadow:0 5px 15px rgba(0,0,0,0.1);text-align:center;flex-shrink:0;">
+                <div style="background:#4CAF50;color:#fff;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-weight:bold;">5</div>
+                <h3 style="margin-top:0;color:#4CAF50;">Final Approvals</h3>
+                <p>Receipt of all entitlements, development agreements, and building permits</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Zoning Guide -->
+<div style="padding:70px 20px;max-width:1200px;margin:0 auto;">
+    <h2 style="text-align:center;font-size:2.5rem;margin-bottom:15px;color:#2a7f3f;">Land Zoning & Use Guide</h2>
+    <p style="text-align:center;max-width:700px;margin:0 auto 50px;font-size:1.1rem;">Understanding zoning classifications and development potential</p>
+    
+    <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;">
+            <thead>
+                <tr style="background:#2a7f3f;color:#fff;">
+                    <th style="padding:15px;text-align:left;">Zoning Code</th>
+                    <th style="padding:15px;text-align:left;">Classification</th>
+                    <th style="padding:15px;text-align:left;">Allowed Uses</th>
+                    <th style="padding:15px;text-align:left;">Density/FAR</th>
+                    <th style="padding:15px;text-align:left;">Parking Ratio</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom:1px solid #ddd;">
+                    <td style="padding:15px;font-weight:bold;">R-1</td>
+                    <td style="padding:15px;">Single Family Residential</td>
+                    <td style="padding:15px;">Detached homes, parks, schools</td>
+                    <td style="padding:15px;">1-4 DU/acre</td>
+                    <td style="padding:15px;">2 spaces/unit</td>
+                </tr>
+                <tr style="border-bottom:1px solid #ddd;background:#f8f9fa;">
+                    <td style="padding:15px;font-weight:bold;">R-3</td>
+                    <td style="padding:15px;">Multi-Family Residential</td>
+                    <td style="padding:15px;">Apartments, condos, townhomes</td>
+                    <td style="padding:15px;">12-30 DU/acre</td>
+                    <td style="padding:15px;">1.5 spaces/studio<br>2 spaces/1+BR</td>
+                </tr>
+                <tr style="border-bottom:1px solid #ddd;">
+                    <td style="padding:15px;font-weight:bold;">C-2</td>
+                    <td style="padding:15px;">General Commercial</td>
+                    <td style="padding:15px;">Retail, offices, restaurants</td>
+                    <td style="padding:15px;">FAR 1.0-2.0</td>
+                    <td style="padding:15px;">4 spaces/1,000 sq.ft.</td>
+                </tr>
+                <tr style="border-bottom:1px solid #ddd;background:#f8f9fa;">
+                    <td style="padding:15px;font-weight:bold;">MX-1</td>
+                    <td style="padding:15px;">Mixed-Use</td>
+                    <td style="padding:15px;">Residential above commercial</td>
+                    <td style="padding:15px;">FAR 2.5-4.0</td>
+                    <td style="padding:15px;">Shared parking reductions</td>
+                </tr>
+                <tr style="border-bottom:1px solid #ddd;">
+                    <td style="padding:15px;font-weight:bold;">I-1</td>
+                    <td style="padding:15px;">Light Industrial</td>
+                    <td style="padding:15px;">Warehouses, R&D, flex space</td>
+                    <td style="padding:15px;">FAR 0.5-1.0</td>
+                    <td style="padding:15px;">1 space/1,000 sq.ft.</td>
+                </tr>
+                <tr style="background:#f8f9fa;">
+                    <td style="padding:15px;font-weight:bold;">OS</td>
+                    <td style="padding:15px;">Open Space</td>
+                    <td style="padding:15px;">Parks, recreation, conservation</td>
+                    <td style="padding:15px;">Varies</td>
+                    <td style="padding:15px;">Per use</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div style="margin-top:40px;background:#f0f7f2;padding:30px;border-radius:10px;">
+        <h3 style="margin-top:0;color:#2a7f3f;font-size:1.4rem;">Zoning Variance & Change Process</h3>
+        <p>Many parcels qualify for zoning changes or variances that can significantly increase development potential and value. Our team specializes in:</p>
+        <ul style="padding-left:20px;columns:2;column-gap:40px;">
+            <li style="margin-bottom:10px;">Comprehensive plan amendments</li>
+            <li style="margin-bottom:10px;">Rezoning petitions</li>
+            <li style="margin-bottom:10px;">Use permits</li>
+            <li style="margin-bottom:10px;">Density bonuses</li>
+            <li style="margin-bottom:10px;">Setback variances</li>
+            <li style="margin-bottom:10px;">Height exceptions</li>
+            <li style="margin-bottom:10px;">Parking reductions</li>
+            <li>Incentive zoning</li>
+        </ul>
+        <a href="#contact" style="background:#2a7f3f;color:#fff;padding:12px 25px;border-radius:5px;text-decoration:none;font-weight:bold;display:inline-block;margin-top:15px;">Consult Our Zoning Experts</a>
+    </div>
+</div>
+<!-- Investment Calculator -->
+<div style="background:#f8f9fa;padding:70px 20px;">
+    <div style="max-width:800px;margin:0 auto;background:#fff;border-radius:10px;padding:50px;box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+        <h2 style="text-align:center;font-size:2.2rem;margin-bottom:30px;color:#2a7f3f;">Land Investment Calculator</h2>
+        
+        <form id="investment-calculator" onsubmit="return false;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:25px;margin-bottom:25px;">
+                <div>
+                    <label style="display:block;margin-bottom:10px;font-weight:bold;color:#555;">Land Area (Acres)</label>
+                    <input type="number" id="land-area" style="width:90%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:1rem;" placeholder="e.g. 10" required>
+                </div>
+                <div>
+                    <label style="display:block;margin-bottom:10px;font-weight:bold;color:#555;">Price Per Acre ($)</label>
+                    <input type="number" id="price-per-acre" style="width:90%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:1rem;" placeholder="e.g. 250,000" required>
+                </div>
+            </div>
+            
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:25px;margin-bottom:25px;">
+                <div>
+                    <label style="display:block;margin-bottom:10px;font-weight:bold;color:#555;">Hold Period (Years)</label>
+                    <input type="number" id="hold-period" style="width:90%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:1rem;" placeholder="e.g. 5" min="1" max="20" required>
+                </div>
+                <div>
+                    <label style="display:block;margin-bottom:10px;font-weight:bold;color:#555;">Annual Appreciation (%)</label>
+                    <input type="number" id="appreciation-rate" style="width:90%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:1rem;" placeholder="e.g. 7" step="0.1" min="0" max="20" required>
+                </div>
+            </div>
+            
+            <div style="margin-bottom:25px;">
+                <label style="display:block;margin-bottom:10px;font-weight:bold;color:#555;">Carrying Costs (Annual $)</label>
+                <input type="number" id="carrying-costs" style="width:95%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:1rem;" placeholder="e.g. 15,000" required>
+            </div>
+            
+            <button type="button" onclick="calculateInvestment()" style="background:#2a7f3f;color:#fff;border:none;padding:14px;border-radius:6px;font-weight:bold;cursor:pointer;width:97%;font-size:1.1rem;margin-bottom:30px;transition:background 0.3s;" onmouseover="this.style.background='#228B22'" onmouseout="this.style.background='#2a7f3f'">Calculate Investment Potential</button>
+            
+            <div style="background:#f0f7f2;padding:25px;border-radius:8px;display:none;" id="land-results">
+                <h3 style="margin-top:0;color:#2a7f3f;text-align:center;">Projected Investment Returns</h3>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px;">
+                    <div style="text-align:center;">
+                        <p style="margin-bottom:5px;font-weight:bold;color:#555;">Total Purchase Price</p>
+                        <p style="margin-top:0;font-size:1.3rem;font-weight:bold;color:#2a7f3f;" id="total-price">$0</p>
+                    </div>
+                    <div style="text-align:center;">
+                        <p style="margin-bottom:5px;font-weight:bold;color:#555;">Future Value</p>
+                        <p style="margin-top:0;font-size:1.3rem;font-weight:bold;color:#2a7f3f;" id="future-value">$0</p>
+                    </div>
+                    <div style="text-align:center;">
+                        <p style="margin-bottom:5px;font-weight:bold;color:#555;">Total Carrying Costs</p>
+                        <p style="margin-top:0;font-size:1.3rem;font-weight:bold;color:#2a7f3f;" id="total-costs">$0</p>
+                    </div>
+                    <div style="text-align:center;">
+                        <p style="margin-bottom:5px;font-weight:bold;color:#555;">Net Profit</p>
+                        <p style="margin-top:0;font-size:1.3rem;font-weight:bold;color:#2a7f3f;" id="net-profit">$0</p>
+                    </div>
+                    <div style="text-align:center;grid-column:span 2;">
+                        <p style="margin-bottom:5px;font-weight:bold;color:#555;">Annualized Return</p>
+                        <p style="margin-top:0;font-size:1.3rem;font-weight:bold;color:#2a7f3f;" id="annual-return">0%</p>
+                    </div>
+                </div>
+                <div style="margin-top:25px;padding-top:20px;border-top:1px dashed #ccc;">
+                    <h4 style="margin-top:0;color:#2a7f3f;">Investment Analysis</h4>
+                    <p id="investment-analysis">Enter your details above to see a personalized investment analysis.</p>
+                    <div style="display:flex;justify-content:center;margin-top:20px;">
+                        <button type="button" onclick="saveCalculation()" style="background:#2a7f3f;color:#fff;border:none;padding:10px 20px;border-radius:5px;font-weight:bold;cursor:pointer;margin-right:15px;font-size:0.9rem;">Save Calculation</button>
+                        <button type="button" onclick="printCalculation()" style="background:#fff;color:#2a7f3f;border:1px solid #2a7f3f;padding:10px 20px;border-radius:5px;font-weight:bold;cursor:pointer;font-size:0.9rem;">Print Results</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function calculateInvestment() {
+        // Get input values
+        const landArea = parseFloat(document.getElementById('land-area').value) || 0;
+        const pricePerAcre = parseFloat(document.getElementById('price-per-acre').value) || 0;
+        const holdYears = parseFloat(document.getElementById('hold-period').value) || 0;
+        const appreciation = (parseFloat(document.getElementById('appreciation-rate').value) || 0) / 100;
+        const carryingCosts = parseFloat(document.getElementById('carrying-costs').value) || 0;
+        
+        // Calculate results
+        const totalPrice = landArea * pricePerAcre;
+        const futureValue = totalPrice * Math.pow(1 + appreciation, holdYears);
+        const totalCosts = carryingCosts * holdYears;
+        const netProfit = futureValue - totalPrice - totalCosts;
+        const annualReturn = (Math.pow((futureValue - totalCosts) / totalPrice, 1 / holdYears) - 1) * 100;
+        
+        // Display results
+        document.getElementById('total-price').textContent = '$' + totalPrice.toLocaleString();
+        document.getElementById('future-value').textContent = '$' + Math.round(futureValue).toLocaleString();
+        document.getElementById('total-costs').textContent = '$' + (totalCosts).toLocaleString();
+        document.getElementById('net-profit').textContent = '$' + Math.round(netProfit).toLocaleString();
+        document.getElementById('annual-return').textContent = annualReturn.toFixed(1) + '%';
+        
+        // Generate analysis text
+        let analysisText = `Based on your inputs:<br><br>`;
+        analysisText += `• Your ${landArea} acre purchase at $${pricePerAcre.toLocaleString()} per acre totals <strong>$${totalPrice.toLocaleString()}</strong><br>`;
+        analysisText += `• With ${(appreciation*100).toFixed(1)}% annual appreciation over ${holdYears} years, your land will be worth <strong>$${Math.round(futureValue).toLocaleString()}</strong><br>`;
+        analysisText += `• After accounting for $${totalCosts.toLocaleString()} in carrying costs, your net profit would be <strong>$${Math.round(netProfit).toLocaleString()}</strong><br>`;
+        analysisText += `• This represents an annualized return of <strong>${annualReturn.toFixed(1)}%</strong> on your investment`;
+        
+        document.getElementById('investment-analysis').innerHTML = analysisText;
+        document.getElementById('land-results').style.display = 'block';
+        
+        // Scroll to results
+        document.getElementById('land-results').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    function saveCalculation() {
+        alert('Calculation saved! (This would connect to your database in a live implementation)');
+    }
+    
+    function printCalculation() {
+        window.print();
+    }
+</script>
+
+<!-- Market Trends -->
+<div style="padding:60px 20px;max-width:1200px;margin:0 auto;">
+    <h2 class="section-title">Land Development Market Trends</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;">
+        <div style="text-align:center;background:#fff;border-radius:8px;padding:30px;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <div style="font-size:2.5rem;font-weight:bold;color:#4CAF50;margin-bottom:15px;">12.4%</div>
+            <p style="margin-top:0;">Annual price growth for infill development sites</p>
+        </div>
+        <div style="text-align:center;background:#fff;border-radius:8px;padding:30px;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <div style="font-size:2.5rem;font-weight:bold;color:#4CAF50;margin-bottom:15px;">18-24</div>
+            <p style="margin-top:0;">Months typical entitlement timeline</p>
+        </div>
+        <div style="text-align:center;background:#fff;border-radius:8px;padding:30px;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <div style="font-size:2.5rem;font-weight:bold;color:#4CAF50;margin-bottom:15px;">3.5x</div>
+            <p style="margin-top:0;">Value increase from raw land to entitled</p>
+        </div>
+        <div style="text-align:center;background:#fff;border-radius:8px;padding:30px;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <div style="font-size:2.5rem;font-weight:bold;color:#4CAF50;margin-bottom:15px;">$1.2M</div>
+            <p style="margin-top:0;">Average price per acre in suburban growth corridors</p>
+        </div>
+    </div>
+    <div style="margin-top:40px;background:#f8f9fa;padding:25px;border-radius:8px;">
+        <h3 style="margin-top:0;color:#4CAF50;font-size:1.5rem;">Emerging Land Development Trends</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;">
+            <div style="display:flex;gap:15px;align-items:flex-start;">
+                <div style="background:#4CAF50;color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+                <p style="margin-top:0;">Increased demand for infill development sites</p>
+            </div>
+            <div style="display:flex;gap:15px;align-items:flex-start;">
+                <div style="background:#4CAF50;color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+                <p style="margin-top:0;">Transit-oriented development opportunities</p>
+            </div>
+            <div style="display:flex;gap:15px;align-items:flex-start;">
+                <div style="background:#4CAF50;color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+                <p style="margin-top:0;">Mixed-use zoning becoming more prevalent</p>
+            </div>
+            <div style="display:flex;gap:15px;align-items:flex-start;">
+                <div style="background:#4CAF50;color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+                <p style="margin-top:0;">Focus on walkable, sustainable communities</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Case Studies -->
+<div style="padding:60px 20px;max-width:1200px;margin:0 auto;">
+    <h2 class="section-title">Land Development Success Stories</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:30px;">
+        <div style="border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <img src="images/urban_fill.jpg" alt="Urban Infill Project" style="width:100%;height:200px;object-fit:cover;">
+            <div style="padding:25px;background:#fff;">
+                <h3 style="margin-top:0;color:#4CAF50;">Downtown Infill Redevelopment</h3>
+                <p style="color:#666;margin-bottom:20px;"><strong>Challenge:</strong> Assembling multiple parcels in tight urban core with complex zoning</p>
+                <p style="margin-bottom:25px;"><strong>Solution:</strong> Strategic acquisition over 18 months followed by successful rezoning for mixed-use</p>
+                <div style="background:#f8f9fa;padding:15px;border-radius:5px;">
+                    <p style="margin:0;font-weight:bold;color:#4CAF50;">Results: 300% land value increase • Approved for 250 units + retail • Sold to national developer</p>
+                </div>
+            </div>
+        </div>
+        <div style="border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <img src="images/suburban masterplan.jpg" alt="Suburban Master Plan" style="width:100%;height:200px;object-fit:cover;">
+            <div style="padding:25px;background:#fff;">
+                <h3 style="margin-top:0;color:#4CAF50;">Suburban Master-Planned Community</h3>
+                <p style="color:#666;margin-bottom:20px;"><strong>Challenge:</strong> Entitling 120 acres in growing suburb with community opposition</p>
+                <p style="margin-bottom:25px;"><strong>Solution:</strong> Comprehensive outreach program with enhanced community benefits package</p>
+                <div style="background:#f8f9fa;padding:15px;border-radius:5px;">
+                    <p style="margin:0;font-weight:bold;color:#4CAF50;">Results: Approved for 450 homes • 20% open space • $85M construction financing secured</p>
+                </div>
+            </div>
+        </div>
+        <div style="border-radius:8px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+            <img src="images/transit oriented.jpg" alt="Transit-Oriented Development" style="width:100%;height:200px;object-fit:cover;">
+            <div style="padding:25px;background:#fff;">
+                <h3 style="margin-top:0;color:#4CAF50;">Transit-Oriented Development Site</h3>
+                <p style="color:#666;margin-bottom:20px;"><strong>Challenge:</strong> Identifying land near future light rail station before public announcement</p>
+                <p style="margin-bottom:25px;"><strong>Solution:</strong> Early acquisition based on transportation planning insights and rezoning strategy</p>
+                <div style="background:#f8f9fa;padding:15px;border-radius:5px;">
+                    <p style="margin:0;font-weight:bold;color:#4CAF50;">Results: 5x value increase in 3 years • Joint venture with transit authority • LEED-ND certified</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Resources -->
+<div style="padding:60px 20px;max-width:1200px;margin:0 auto;">
+    <h2 class="section-title">Land Development Resources</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+        <div style="border:1px solid #ddd;border-radius:8px;overflow:hidden;">
+            <div style="background:#4CAF50;color:#fff;padding:15px;font-weight:bold;">Guide: Land Acquisition Strategies</div>
+            <div style="padding:20px;">
+                <p style="margin-top:0;">Comprehensive 60-page guide covering sourcing off-market deals, due diligence checklists, and negotiation tactics</p>
+                <a href="#" style="background:#4CAF50;color:#fff;padding:10px 20px;border-radius:5px;text-decoration:none;font-weight:bold;display:inline-block;">Download PDF</a>
+            </div>
+        </div>
+        <div style="border:1px solid #ddd;border-radius:8px;overflow:hidden;">
+            <div style="background:#4CAF50;color:#fff;padding:15px;font-weight:bold;">Webinar: Entitlement Process</div>
+            <div style="padding:20px;">
+                <p style="margin-top:0;">90-minute deep dive into navigating zoning changes, community approvals, and development agreements</p>
+                <a href="#" style="background:#4CAF50;color:#fff;padding:10px 20px;border-radius:5px;text-decoration:none;font-weight:bold;display:inline-block;">Watch Now</a>
+            </div>
+        </div>
+        <div style="border:1px solid #ddd;border-radius:8px;overflow:hidden;">
+            <div style="background:#4CAF50;color:#fff;padding:15px;font-weight:bold;">Toolkit: Land Valuation</div>
+            <div style="padding:20px;">
+                <p style="margin-top:0;">Spreadsheet models and comparables database for accurately valuing development sites</p>
+                <a href="#" style="background:#4CAF50;color:#fff;padding:10px 20px;border-radius:5px;text-decoration:none;font-weight:bold;display:inline-block;">Download Toolkit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ with Toggle Functionality -->
+<div style="background:#f8f9fa;padding:60px 20px;">
+    <div style="max-width:800px;margin:0 auto;">
+        <h2 class="section-title">Land Development FAQs</h2>
+        
+        <div style="margin-bottom:10px;border-bottom:1px solid #ddd;">
+            <h3 style="margin:0;padding:15px 0;color:#4CAF50;font-size:1.2rem;cursor:pointer;position:relative;" onclick="toggleFAQ(this)">
+                What's the difference between raw land and entitled land?
+                <span style="position:absolute;right:0;font-size:1.5rem;">+</span>
+            </h3>
+            <div style="display:none;padding-bottom:20px;">
+                <p>Raw land has no approvals for development, while entitled land has gone through the zoning and approval process to allow specific uses and densities. Entitled land typically commands a significant premium (2-5x) over raw land prices due to reduced risk and shorter development timelines.</p>
+            </div>
+        </div>
+        
+        <div style="margin-bottom:10px;border-bottom:1px solid #ddd;">
+            <h3 style="margin:0;padding:15px 0;color:#4CAF50;font-size:1.2rem;cursor:pointer;position:relative;" onclick="toggleFAQ(this)">
+                How long does the land entitlement process typically take?
+                <span style="position:absolute;right:0;font-size:1.5rem;">+</span>
+            </h3>
+            <div style="display:none;padding-bottom:20px;">
+                <p>The entitlement process can range from 6 months for simple zoning verifications to 3+ years for complex master-planned communities. Most suburban projects take 12-24 months from initial application to final approval, depending on jurisdiction and project complexity.</p>
+            </div>
+        </div>
+        
+        <div style="margin-bottom:10px;border-bottom:1px solid #ddd;">
+            <h3 style="margin:0;padding:15px 0;color:#4CAF50;font-size:1.2rem;cursor:pointer;position:relative;" onclick="toggleFAQ(this)">
+                What are the key factors that determine land value?
+                <span style="position:absolute;right:0;font-size:1.5rem;">+</span>
+            </h3>
+            <div style="display:none;padding-bottom:20px;">
+                <p>Key valuation factors include: location and proximity to amenities, zoning and development potential, availability of utilities, topography and buildability, market demand for proposed uses, and comparable land sales in the area. Future growth projections also significantly impact value.</p>
+            </div>
+        </div>
+        
+        <div style="margin-bottom:10px;border-bottom:1px solid #ddd;">
+            <h3 style="margin:0;padding:15px 0;color:#4CAF50;font-size:1.2rem;cursor:pointer;position:relative;" onclick="toggleFAQ(this)">
+                What are the advantages of investing in land versus developed properties?
+                <span style="position:absolute;right:0;font-size:1.5rem;">+</span>
+            </h3>
+            <div style="display:none;padding-bottom:20px;">
+                <p>Land investments offer higher appreciation potential, lower maintenance costs, and flexibility in development timing. They can also provide tax advantages through 1031 exchanges and often have lower property taxes. However, they typically don't generate income until developed.</p>
+            </div>
+        </div>
+        
+        <div style="margin-bottom:10px;border-bottom:1px solid #ddd;">
+            <h3 style="margin:0;padding:15px 0;color:#4CAF50;font-size:1.2rem;cursor:pointer;position:relative;" onclick="toggleFAQ(this)">
+                How do you identify land with strong appreciation potential?
+                <span style="position:absolute;right:0;font-size:1.5rem;">+</span>
+            </h3>
+            <div style="display:none;padding-bottom:20px;">
+                <p>We look for parcels in the path of growth, near planned infrastructure improvements, with zoning flexibility, and in markets with strong demographic trends. Other indicators include increasing land prices in adjacent areas, new employer announcements, and transportation corridor expansions.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleFAQ(element) {
+        // Get the answer div that's next sibling to the h3
+        const answer = element.nextElementSibling;
+        const plusMinus = element.querySelector('span');
+        
+        // Toggle display of answer
+        if (answer.style.display === 'none' || answer.style.display === '') {
+            answer.style.display = 'block';
+            plusMinus.textContent = '-';
+            element.style.paddingBottom = '10px';
+        } else {
+            answer.style.display = 'none';
+            plusMinus.textContent = '+';
+            element.style.paddingBottom = '15px';
+        }
+        
+        // Close other open FAQs when opening a new one
+        if (answer.style.display === 'block') {
+            const allFAQs = document.querySelectorAll('[onclick="toggleFAQ(this)"]');
+            allFAQs.forEach(faq => {
+                if (faq !== element) {
+                    faq.nextElementSibling.style.display = 'none';
+                    faq.querySelector('span').textContent = '+';
+                    faq.style.paddingBottom = '15px';
+                }
+            });
+        }
+    }
+</script>
+
+<!-- Team Section -->
+<div style="padding:60px 20px;max-width:1200px;margin:0 auto;">
+    <h2 class="section-title">Our Land Development Specialists</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;">
+        <div style="text-align:center;background:#fff;border-radius:8px;padding:30px 20px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+            <img src="images/james wison.jpg" alt="James Wilson" style="width:150px;height:150px;border-radius:50%;object-fit:cover;margin-bottom:20px;border:3px solid #4CAF50;">
+            <h3 style="margin-bottom:5px;color:#4CAF50;">James Wilson</h3>
+            <p style="margin-top:0;color:#666;font-weight:bold;">Land Acquisition Director</p>
+            <p>15 years experience identifying off-market land opportunities and negotiating acquisitions</p>
+            <a href="mailto:jwilson@hitashi.com" style="color:#4CAF50;font-weight:bold;text-decoration:none;">Contact James</a>
+        </div>
+        <div style="text-align:center;background:#fff;border-radius:8px;padding:30px 20px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+            <img src="images/sarah johnson.jpg" alt="Sarah Johnson" style="width:150px;height:150px;border-radius:50%;object-fit:cover;margin-bottom:20px;border:3px solid #4CAF50;">
+            <h3 style="margin-bottom:5px;color:#4CAF50;">Sarah Johnson</h3>
+            <p style="margin-top:0;color:#666;font-weight:bold;">Entitlements Manager</p>
+            <p>Expert in navigating zoning codes and approval processes across multiple jurisdictions</p>
+            <a href="mailto:sjohnson@hitashi.com" style="color:#4CAF50;font-weight:bold;text-decoration:none;">Contact Sarah</a>
+        </div>
+        <div style="text-align:center;background:#fff;border-radius:8px;padding:30px 20px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+            <img src="images/michael chen.jpg" alt="Michael Chen" style="width:150px;height:150px;border-radius:50%;object-fit:cover;margin-bottom:20px;border:3px solid #4CAF50;">
+            <h3 style="margin-bottom:5px;color:#4CAF50;">Michael Chen</h3>
+            <p style="margin-top:0;color:#666;font-weight:bold;">Market Analyst</p>
+            <p>Specializes in demographic trends, absorption rates, and land valuation modeling</p>
+            <a href="mailto:mchen@hitashi.com" style="color:#4CAF50;font-weight:bold;text-decoration:none;">Contact Michael</a>
+        </div>
+        <div style="text-align:center;background:#fff;border-radius:8px;padding:30px 20px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+            <img src="images/emilia rodrenguiez.jpg" alt="Emily Rodriguez" style="width:150px;height:150px;border-radius:50%;object-fit:cover;margin-bottom:20px;border:3px solid #4CAF50;">
+            <h3 style="margin-bottom:5px;color:#4CAF50;">Emily Rodriguez</h3>
+            <p style="margin-top:0;color:#666;font-weight:bold;">Development Strategist</p>
+            <p>Creates highest-and-best-use analyses and phased development plans</p>
+            <a href="mailto:erodriguez@hitashi.com" style="color:#4CAF50;font-weight:bold;text-decoration:none;">Contact Emily</a>
+        </div>
+    </div>
+</div>
+<!-- Testimonials -->
+<div style="background:#4CAF50;color:#fff;padding:60px 20px;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <h2 style="text-align:center;font-size:2.2rem;margin-bottom:40px;">What Our Land Development Clients Say</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+            <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:30px;backdrop-filter:blur(5px);">
+                <div style="color:#fff;font-size:2rem;margin-bottom:15px;">❝</div>
+                <p style="font-style:italic;margin-bottom:20px;">Hitashi identified an off-market parcel that was perfect for our townhome project. Their relationships with local officials helped streamline the approval process.</p>
+                <div style="display:flex;align-items:center;gap:15px;">
+                    <img src="images/robert johnson.jpg" alt="Robert Johnson" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid #fff;">
+                    <div>
+                        <p style="font-weight:bold;margin-bottom:5px;">Robert Johnson</p>
+                        <p style="margin-top:0;opacity:0.8;">CEO, Urban Living Developers</p>
+                    </div>
+                </div>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:30px;backdrop-filter:blur(5px);">
+                <div style="color:#fff;font-size:2rem;margin-bottom:15px;">❝</div>
+                <p style="font-style:italic;margin-bottom:20px;">Their land acquisition team found us a 50-acre site with excellent freeway visibility that we would have never discovered on our own. The due diligence was impeccable.</p>
+                <div style="display:flex;align-items:center;gap:15px;">
+                    <img src="images/lisachen.jpg" alt="Lisa Chen" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid #fff;">
+                    <div>
+                        <p style="font-weight:bold;margin-bottom:5px;">Lisa Chen</p>
+                        <p style="margin-top:0;opacity:0.8;">VP Development, Retail Centers Inc.</p>
+                    </div>
+                </div>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:30px;backdrop-filter:blur(5px);">
+                <div style="color:#fff;font-size:2rem;margin-bottom:15px;">❝</div>
+                <p style="font-style:italic;margin-bottom:20px;">As an investor, I rely on Hitashi's expertise in identifying land parcels with the highest appreciation potential. Their market forecasts have been consistently accurate.</p>
+                <div style="display:flex;align-items:center;gap:15px;">
+                    <img src="images/michael williams.jpg"Michael Williams" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid #fff;">
+                    <div>
+                        <p style="font-weight:bold;margin-bottom:5px;">Michael Williams</p>
+                        <p style="margin-top:0;opacity:0.8;">Principal, Landmark Capital</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Contact Form -->
+<div id="contact" style="padding:60px 20px;background:#4CAF50;color:#fff;">
+    <div style="max-width:800px;margin:0 auto;">
+        <h2 style="text-align:center;font-size:2.2rem;margin-bottom:40px;">Contact Our Land Development Team</h2>
+        <form style="background:#fff;padding:40px;border-radius:8px;color:#333;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;margin-left: 5px;">
+                <div>
+                    <label style="display:block;margin-bottom:8px;font-weight:bold;">First Name</label>
+                    <input type="text" style="width:90%;padding:10px;border:1px solid #ddd;border-radius:4px;">
+                </div>
+                <div>
+                    <label style="display:block;margin-bottom:8px;font-weight:bold;">Last Name</label>
+                    <input type="text" style="width:90%;padding:10px;border:1px solid #ddd;border-radius:4px;">
+                </div>
+            </div>
+            <div style="margin-bottom:20px;margin-left: 5px;">
+                <label style="display:block;margin-bottom:8px;font-weight:bold;">Email</label>
+                <input type="email" style="width:95%;padding:10px;border:1px solid #ddd;border-radius:4px;">
+            </div>
+            <div style="margin-bottom:20px;margin-left: 5px;">
+                <label style="display:block;margin-bottom:8px;font-weight:bold;">Phone</label>
+                <input type="tel" style="width:95%;padding:10px;border:1px solid #ddd;border-radius:4px;">
+            </div>
+            <div style="margin-bottom:20px;margin-left: 5px;">
+                <label style="display:block;margin-bottom:8px;font-weight:bold;">Organization</label>
+                <input type="text" style="width:95%;padding:10px;border:1px solid #ddd;border-radius:4px;">
+            </div>
+            <div style="margin-bottom:20px;margin-left: 5px;">
+                <label style="display:block;margin-bottom:8px;font-weight:bold;">Interest</label>
+                <select style="width:98%;padding:10px;border:1px solid #ddd;border-radius:4px;">
+                    <option>Residential Development Land</option>
+                    <option>Commercial Development Sites</option>
+                    <option>Land Acquisition Consultation</option>
+                    <option>Entitlement Services</option>
+                    <option>Investment Opportunity</option>
+                </select>
+            </div>
+            <div style="margin-bottom:20px;margin-left: 5px;">
+                <label style="display:block;margin-bottom:8px;font-weight:bold;margin-left: 5px;">Message</label>
+                <textarea style="width:95%;padding:10px;border:1px solid #ddd;border-radius:4px;min-height:120px;"></textarea>
+            </div>
+            <button type="submit" style="margin-left: 5px;background:#4CAF50;color:#fff;border:none;padding:12px 30px;border-radius:5px;font-weight:bold;cursor:pointer;width:97%;">Submit Inquiry</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Simple interactive elements would go here
+    document.querySelectorAll('select').forEach(select => {
+        select.addEventListener('focus', function() {
+            this.style.borderColor = '#4CAF50';
+            this.style.boxShadow = '0 0 0 2px rgba(76,175,80,0.2)';
+        });
+        select.addEventListener('blur', function() {
+            this.style.borderColor = '#ddd';
+            this.style.boxShadow = 'none';
+        });
+    });
+</script>
+
+
+<div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+
+</body>
+</html>

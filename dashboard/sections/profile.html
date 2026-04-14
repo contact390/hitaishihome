@@ -1,0 +1,228 @@
+<div id="sectionProfile" style="padding:20px;font-family:Arial;">
+
+  <h2 style="margin-bottom:20px;font-size:22px;color:#222;">Your Profile</h2>
+
+  <!-- Profile Header -->
+  <div class="profile-header" 
+       style="display:flex;align-items:center;background:#f8f9fa;padding:15px;border-radius:10px;
+              margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,0.06);">
+
+    <div id="profileAvatar"
+         style="width:70px;height:70px;background:#10b981;color:#fff;font-size:28px;
+                display:flex;align-items:center;justify-content:center;
+                border-radius:50%;font-weight:bold;margin-right:15px;">
+      U
+    </div>
+
+    <div class="profile-info" style="line-height:1.4;">
+      <h3 id="profileName" style="margin:0;font-size:20px;color:#333;">Loading...</h3>
+      <p id="profileEmail" style="margin:3px 0 0;color:#555;font-size:14px;">Loading...</p>
+    </div>
+  </div>
+
+  <!-- Profile Form -->
+  <form id="profileForm" style="font-family:Arial;">
+
+    <!-- Row 1 -->
+    <div class="row" style="display:flex;gap:15px;margin-bottom:15px;">
+      <div class="col" style="flex:1;">
+        <label class="required" style="font-size:14px;font-weight:bold;">Full Name</label>
+        <input id="pFullName" type="text" required
+               style="width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:5px;">
+      </div>
+
+      <div class="col" style="flex:1;">
+        <label class="required" style="font-size:14px;font-weight:bold;">Username</label>
+        <input id="pUsername" type="text" required
+               style="width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:5px;">
+      </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="row" style="display:flex;gap:15px;margin-bottom:15px;">
+      <div class="col" style="flex:1;">
+        <label class="required" style="font-size:14px;font-weight:bold;">Email</label>
+        <input id="pEmail" type="email" required
+               style="width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:5px;">
+      </div>
+
+      <div class="col" style="flex:1;">
+        <label style="font-size:14px;font-weight:bold;">Mobile</label>
+        <input id="pMobile" type="tel" pattern="[0-9]{10}"
+               style="width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:5px;">
+        <div class="form-hint" style="font-size:12px;color:#777;margin-top:3px;">10-digit mobile number</div>
+      </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="row" style="display:flex;gap:15px;margin-bottom:15px;">
+      <div class="col" style="flex:1;">
+        <label style="font-size:14px;font-weight:bold;">Date of Birth</label>
+        <input id="pDob" type="date"
+               style="width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:5px;">
+      </div>
+
+      <div class="col" style="flex:1;">
+        <label style="font-size:14px;font-weight:bold;">Gender</label>
+        <select id="pGender"
+                style="width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:5px;">
+          <option value="">Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Address -->
+    <div style="margin-bottom:15px;">
+      <label style="font-size:14px;font-weight:bold;">Address</label>
+      <textarea id="pAddress" rows="2" placeholder="Your current address"
+                style="width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:5px;"></textarea>
+    </div>
+
+    <!-- Row City/Pincode -->
+    <div class="row" style="display:flex;gap:15px;margin-bottom:15px;">
+      <div class="col" style="flex:1;">
+        <label style="font-size:14px;font-weight:bold;">City</label>
+        <input id="pCity" type="text"
+               style="width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:5px;">
+      </div>
+
+      <div class="col" style="flex:1;">
+        <label style="font-size:14px;font-weight:bold;">Pincode</label>
+        <input id="pPincode" type="text" pattern="[0-9]{6}" maxlength="6"
+               style="width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:5px;">
+      </div>
+    </div>
+
+    <!-- About Me -->
+    <div style="margin-bottom:15px;">
+      <label style="font-size:14px;font-weight:bold;">About Me</label>
+      <textarea id="pAbout" rows="3" placeholder="Tell us about yourself"
+                style="width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:5px;"></textarea>
+    </div>
+
+    <!-- Button -->
+    <div class="form-group" style="margin-bottom:15px;">
+      <button id="saveProfile" type="button"
+              style="background:#10b981;color:#fff;border:none;padding:12px 18px;font-size:15px;
+                     border-radius:8px;cursor:pointer;width:180px;">
+        Save Profile
+      </button>
+    </div>
+
+    <div id="profileMsg" style="font-size:14px;margin-top:10px;"></div>
+
+  </form>
+</div>
+<script>
+  async function init_profile() {
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    const profileName = document.getElementById('profileName');
+    const profileEmail = document.getElementById('profileEmail');
+    const profileAvatar = document.getElementById('profileAvatar');
+
+    const API_BASE = "http://localhost:5001";
+    try {
+      const res = await fetch(`${API_BASE}/api/profile?userId=${user.id}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const json = await res.json();
+
+      if (json.success) {
+        const profile = json.user;
+
+        document.getElementById('pFullName').value = profile.fullName || '';
+        document.getElementById('pUsername').value = profile.username || '';
+        document.getElementById('pEmail').value = profile.email || '';
+        document.getElementById('pMobile').value = profile.mobile || '';
+        document.getElementById('pDob').value = profile.dob || '';
+        document.getElementById('pGender').value = profile.gender || '';
+        document.getElementById('pAddress').value = profile.address || '';
+        document.getElementById('pCity').value = profile.city || '';
+        document.getElementById('pPincode').value = profile.pincode || '';
+        document.getElementById('pAbout').value = profile.about || '';
+
+        profileName.innerText = profile.fullName || profile.username || 'User';
+        profileEmail.innerText = profile.email || '';
+
+        profileAvatar.innerText = profileName.innerText.charAt(0).toUpperCase();
+      }
+    } catch (e) {}
+
+    document.getElementById('saveProfile').addEventListener('click', async () => {
+
+      const saveBtn = document.getElementById('saveProfile');
+      const original = saveBtn.innerHTML;
+
+      const msg = document.getElementById('profileMsg');
+      msg.innerText = '';
+
+      const required = ['pFullName', 'pUsername', 'pEmail'];
+      let ok = true;
+
+      required.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) {
+          el.style.borderColor = 'red';
+          ok = false;
+        } else {
+          el.style.borderColor = '#ccc';
+        }
+      });
+
+      if (!ok) {
+        msg.innerText = 'Please fill required fields';
+        return;
+      }
+
+      const payload = {
+        userId: user.id,
+        fullName: document.getElementById('pFullName').value.trim(),
+        username: document.getElementById('pUsername').value.trim(),
+        email: document.getElementById('pEmail').value.trim(),
+        mobile: document.getElementById('pMobile').value.trim() || null,
+        dob: document.getElementById('pDob').value || null,
+        gender: document.getElementById('pGender').value || null,
+        address: document.getElementById('pAddress').value.trim() || null,
+        city: document.getElementById('pCity').value.trim() || null,
+        pincode: document.getElementById('pPincode').value.trim() || null,
+        about: document.getElementById('pAbout').value.trim() || null
+      };
+
+      try {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+        const res = await fetch(`${API_BASE}/api/profile`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          msg.innerText = 'Saved';
+          user.fullName = payload.fullName;
+          user.email = payload.email;
+          localStorage.setItem('user', JSON.stringify(user));
+          document.getElementById('profileName').innerText = payload.fullName;
+        } else {
+          msg.innerText = data.message || 'Error';
+        }
+
+      } catch (e) {
+        msg.innerText = 'Connection error';
+      }
+
+      saveBtn.disabled = false;
+      saveBtn.innerHTML = original;
+    });
+  }
+</script>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+
+   <div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("../navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+    <div>
+      <section style="position: relative; width: 100%; height: 500px; overflow: hidden; margin: 0; padding: 0;">
+        <img src="https://paramountresidences.net/wp-content/uploads/2023/01/luxury-apartment-amenities-scaled.jpg"
+             style="width: 100%; height: 100%; object-fit: cover; display: block; animation: zoomBg 20s ease-in-out infinite;">
+      
+        <div style="
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          backdrop-filter: blur(10px);
+          background: rgba(255, 255, 255, 0.1);
+          padding: 30px 50px;
+          border-radius: 15px;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+          text-align: center;
+          color: rgba(11, 100, 3, 0.727);
+          animation: fadeIn 2s ease-out forwards;
+          opacity: 0;
+        ">
+          <h1 style="font-size: 36px; margin: 0 0 10px;">Welcome to Hitaishi Homes</h1>
+          <p style="font-size: 18px; margin: 0;">Luxury high-rise living like never before</p>
+        </div>
+      
+        <style>
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+          }
+      
+          @keyframes zoomBg {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+          }
+        </style>
+      </section>
+      
+      
+      <section style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; padding: 40px; align-items: center; background-color: #f9f9f9;">
+    
+      <div style="flex: 1; min-width: 300px; padding-right: 20px;">
+        <h1 class="section-title">EXPLORE A TRUE FORM OF MODERN ART</h1>
+        <p style="font-size: 18px; line-height: 1.6; margin-bottom: 20px;">
+          Welcome to THE TRILIGHT, a whole new culture in concept living where you will re-write your lifestyle, re-imagine how you would like to live, rejuvenate and make meaningful memories with a precisely curated and exclusive experience.
+        </p>
+        <p style="font-size: 18px; line-height: 1.6; margin-bottom: 20px;">
+          THE TRILIGHT project will be a timeless modern 3 highrise towers namely Canopus 56 floors, Vega 46 floors and Rigel 49 floors offering 462 high quality built luxury residences spread across 4.23 acres with generous open light-filled spaces and grand outdoor living areas that create a lavish yet relaxed lifestyle for the owners. The construction of this project is being managed by the ever trusted TATA projects and the residences are built as per 100% vastu.
+        </p>
+        <p style="font-size: 18px; line-height: 1.6;">
+          There are many apartments that you might have seen, yet, at THE TRILIGHT, you can reward yourself with opulence, opportunity, listen to the blue sky calling and enjoy endless possibilities of a lifestyle…beyond experience.
+        </p>
+      </div>
+      <div style="flex: 1; min-width: 400px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+          <img src="https://s0.geograph.org.uk/geophotos/03/90/97/3909751_60312973.jpg" 
+               style="width: 100%; height: 200px; object-fit: cover;">
+        </div>
+        <div style="width: 100%; overflow: hidden; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+          <img src="https://freerangestock.com/sample/67307/city-view-at-sunset-from-high-rise.jpg" 
+               style="width: 100%; height: 200px; object-fit: cover;">
+        </div>
+      </div>
+      </section>
+      <section style="display: flex; align-items: center; padding: 40px; gap: 40px;">
+      <div style="flex: 1; max-width: 50%; border-radius: 0; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); background-color: #eff1f3;">
+        <img src="https://images.pexels.com/photos/3875141/pexels-photo-3875141.jpeg" 
+             style="width: 100%; height: 600px; object-fit: cover;">
+      </div>
+      <div style="flex: 1; min-width: 300px; background-color: #f5faf9;">
+        <h1 style="font-size: 40px; margin-bottom: 50px;">A Thoughtfully Designed, High-Rise Community</h1>
+        <p style="font-size: 24px; line-height: 1.8; margin-bottom: 20px;">
+          Welcome to a community where modern living meets intentional design. Every element of this high-rise development has been carefully considered—from sleek architectural lines to functional floor plans that maximize light, space, and comfort. With elevated amenities, curated green spaces, and seamless access to urban conveniences, this is more than just a residence—it’s a lifestyle.
+        </p>
+        <p style="font-size: 24px; line-height: 1.8; margin-bottom: 20px;">
+          Whether you're enjoying panoramic views from your private balcony or relaxing in a wellness-focused shared space, you’ll experience a unique blend of sophistication and comfort designed to elevate everyday living.
+        </p>
+      </div>
+      
+      </section>
+    
+      <section style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; padding: 40px; background-color: #f9f9f9;">
+      
+      <div style="width: 250px; text-align: center; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        <img src="https://img.icons8.com/color/96/000000/playground.png" alt="Children Play Area" style="margin-bottom: 10px;">
+        <h3 style="font-size: 18px;">Children Play Area</h3>
+      </div>
+      <div style="width: 250px; text-align: center; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        <img src="https://img.icons8.com/color/96/000000/walking.png" alt="Walking Area" style="margin-bottom: 10px;">
+        <h3 style="font-size: 18px;">Walking Area</h3>
+      </div>
+      <div style="width: 250px; text-align: center; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        <img src="https://img.icons8.com/color/96/000000/swimming.png" alt="Swimming Pool" style="margin-bottom: 10px;">
+        <h3 style="font-size: 18px;">Swimming Pool</h3>
+      </div>
+    
+     
+      <div style="width: 250px; text-align: center; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        <img src="https://img.icons8.com/color/96/000000/theatre-mask.png" alt="Amphitheatre" style="margin-bottom: 10px;">
+        <h3 style="font-size: 18px;">Amphitheatre</h3>
+      </div>
+    
+      </section>
+      <section style="display: flex; align-items: center; padding: 40px; gap: 40px; background-color: #cdd1d4;">
+    
+      <div style="flex: 1; max-width: 45%; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+        <img src="https://images.pexels.com/photos/271743/pexels-photo-271743.jpeg" 
+             alt="Furnished Apartment Interior"
+             style="width: 100%; height: 400px; object-fit: cover;">
+      </div>
+    
+    
+      <div style="flex: 1; min-width: 300px;">
+        <h2 style="font-size: 30px; margin-bottom: 20px;">Furnished Comfort in Elevated Living</h2>
+        <p style="font-size: 18px; line-height: 1.6; margin-bottom: 20px;">
+          Experience the convenience and style of fully furnished high-rise apartments. Thoughtfully curated interiors blend form and function, providing everything you need to feel at home from day one—modern furniture, sleek appliances, and sophisticated finishes.
+        </p>
+        <p style="font-size: 18px; line-height: 1.6; margin-bottom: 20px;">
+          Whether you're a professional seeking a turn-key home or someone transitioning into a new city, these residences offer effortless move-in and upscale urban living. Simply bring your suitcase—everything else is already in place.
+        </p>
+        <p style="font-size: 18px; line-height: 1.6;">
+          Discover a lifestyle that balances design, comfort, and city convenience—all from the heights of a vibrant skyline.
+        </p>
+      </div>
+      </section>
+    
+      <section style="padding: 60px 40px; background-color: #f7f9fc;">
+     
+      <div style="max-width: 1200px; margin: 0 auto; text-align: center; margin-bottom: 50px;">
+        <h2 class="section-title">Stylish Duplex Apartments</h2>
+        <p style="font-size: 18px; line-height: 1.6; color: #444;">
+          Discover a new dimension of urban living with our contemporary duplex apartments. These split-level residences offer the perfect blend of open-concept design and private retreat. Featuring high ceilings, expansive windows, and premium finishes, duplex living brings both space and sophistication to city life.
+        </p>
+        <p style="font-size: 18px; line-height: 1.6; color: #444;">
+          Ideal for families, professionals, and design enthusiasts, our duplex units combine the comforts of a home with the vibrancy of high-rise convenience. Elevate your lifestyle in a space that feels uniquely yours.
+        </p>
+      </div>
+    
+      <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 40px;">
+        <img src="https://media.rightmove.co.uk/dir/crop/10:9-16:9/38k/37916/156172148/37916_a1nQ500000GuHctIAF_IMG_00_0000_max_476x317.jpeg" 
+             alt="Developer 1" style="height: 180px; width: 300px; object-fit: cover;">
+             
+        <img src="https://directlifts.com.au/wp-content/uploads/2023/12/Duraporte-Homelift-banner.jpg" 
+             alt="Developer 2" style="height: 180px; width: 300px; object-fit: cover;">
+             
+        <img src="https://images.rawpixel.com/image_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvcHg1OTk4MzYtaW1hZ2Uta3d2dmI2em4uanBn.jpg" 
+             alt="Developer 3" style="height: 180px; width: 300px; object-fit: cover;">
+             
+        <img src="https://property-images-uk.s3.eu-west-2.amazonaws.com/i/0a53ce7cd54e14af1838c6000c17c11d.jpg" 
+             alt="Developer 4" style="height: 180px; width: 300px; object-fit: cover;">
+      </div>
+      
+      
+      </section>
+      <section style="padding: 60px 20px; background-color: #d4d8dc; font-family: 'Segoe UI', sans-serif;">
+        <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+          <h2 style="font-size: 32px; color: #004aad; margin-bottom: 10px;">Urbanrise Opulence</h2>
+          <p style="font-size: 18px; color: #555; margin-bottom: 40px;">A Haven of Crowd-Free Living</p>
+      
+          <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px;">
+            <div style="flex: 1 1 200px; background-color: #ffffff; padding: 30px 20px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);">
+              <div style="font-size: 36px; color: #004aad; font-weight: bold;">3.4</div>
+              <div style="font-size: 16px; color: #444;">Acres</div>
+            </div>
+            <div style="flex: 1 1 200px; background-color: #ffffff; padding: 30px 20px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);">
+              <div style="font-size: 36px; color: #004aad; font-weight: bold;">2</div>
+              <div style="font-size: 16px; color: #444;">Towers</div>
+            </div>
+            <div style="flex: 1 1 200px; background-color: #ffffff; padding: 30px 20px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);">
+              <div style="font-size: 36px; color: #004aad; font-weight: bold;">382</div>
+              <div style="font-size: 16px; color: #444;">Apartments</div>
+            </div>
+            <div style="flex: 1 1 200px; background-color: #ffffff; padding: 30px 20px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);">
+              <div style="font-size: 28px; color: #004aad; font-weight: bold;">G + 12</div>
+              <div style="font-size: 16px; color: #444;">Floors</div>
+            </div>
+            <div style="flex: 1 1 500px;">
+              <p style="font-size: 16px; color: #444; line-height: 1.8;">
+                Urbanrise Opulence redefines luxury living with its thoughtfully designed residences and spacious environments.
+                Nestled within 3.4 acres, this exclusive development offers just two towers—ensuring privacy, peace, and a life free from overcrowding.
+              </p>
+              <p style="font-size: 16px; color: #555; margin-top: 20px;">
+                Whether you seek tranquility or vibrant community spaces, every element here reflects serenity, smart design, and convenience—all just minutes away from the heart of the city.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <section style="padding: 80px 0; background: linear-gradient(135deg, #f0f4f8 50%, #ffffff 50%); font-family: 'Segoe UI', sans-serif;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 60px; padding: 0 20px;">
+          <div style="flex: 1; min-width: 300px;">
+            <h2 style="font-size: 34px; color: #004aad; margin-bottom: 20px;">Live Above It All</h2>
+            <p style="font-size: 16px; color: #444; line-height: 1.8;">
+              Discover the ultimate in urban sophistication with our high-rise apartments. From breathtaking skyline views to smart home features and 24/7 security, every detail is crafted for comfort and elegance.
+            </p>
+            <p style="font-size: 15px; color: #666; margin-top: 16px;">
+              Designed for modern living, our towers combine premium materials, energy-efficient systems, and resort-style amenities to elevate your everyday life.
+            </p>
+          </div>
+          <div style="flex: 1; min-width: 300px; display: flex; justify-content: center;">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_5Xi1hfOLcviRhgaVQE4VNjvQfa_v3Huo3g&s" 
+                 alt="High Rise Apartment" 
+                 style="width: 320px; height: 320px; border-radius: 50%; object-fit: cover; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+          </div>
+      
+        </div>
+      </section>
+      <section style="padding: 80px 20px; background-color: #d9dbdb; font-family: 'Segoe UI', sans-serif;">
+        <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+          <h2 style="font-size: 36px; color: #004aad; margin-bottom: 40px;">📐 Apartment Plans</h2>
+          
+          <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;">
+            <div style="background: white; border-radius: 20px; box-shadow: 0 6px 16px rgba(0,0,0,0.08); width: 280px; padding: 30px;">
+              <img src="https://img.icons8.com/ios-filled/50/004aad/floor-plan.png" alt="1BHK Plan" style="width: 50px; margin-bottom: 20px;">
+              <h3 style="font-size: 20px; color: #004aad;">1 BHK</h3>
+              <p style="color: #555; font-size: 14px; margin: 10px 0 15px;">
+                Perfect for individuals or couples. Compact, stylish, and efficient design with balcony.
+              </p>
+              <p style="font-size: 13px; color: #888;">Area: 650 - 750 sq.ft.</p>
+            </div>
+            <div style="background: white; border-radius: 20px; box-shadow: 0 6px 16px rgba(0,0,0,0.08); width: 280px; padding: 30px;">
+              <img src="https://img.icons8.com/ios-filled/50/004aad/blueprint.png" alt="2BHK Plan" style="width: 50px; margin-bottom: 20px;">
+              <h3 style="font-size: 20px; color: #004aad;">2 BHK</h3>
+              <p style="color: #555; font-size: 14px; margin: 10px 0 15px;">
+                Ideal for small families. Spacious layout with living area, kitchen, and 2 bathrooms.
+              </p>
+              <p style="font-size: 13px; color: #888;">Area: 950 - 1100 sq.ft.</p>
+            </div>
+            <div style="background: white; border-radius: 20px; box-shadow: 0 6px 16px rgba(0,0,0,0.08); width: 280px; padding: 30px; text-align: center;">
+              <img src="https://img.icons8.com/ios-filled/50/004aad/blueprint.png" alt="Penthouse Plan" style="width: 50px; margin-bottom: 20px;">
+              <h3 style="font-size: 20px; color: #004aad;">Penthouse</h3>
+              <p style="color: #555; font-size: 14px; margin: 10px 0 15px;">
+                Ultimate luxury on the top floor with terrace, extra living space, and exclusive access.
+              </p>
+              <p style="font-size: 13px; color: #888;">Area: 2000+ sq.ft.</p>
+            </div>
+      
+          </div>
+        </div>
+      </section>
+      <section style="padding: 90px 20px; background-color:white ; font-family: 'Segoe UI', sans-serif;">
+        <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+          <h2 style="font-size: 36px; color: #003366; margin-bottom: 15px;">Wellness. Fitness. Leisure.</h2>
+          <p style="font-size: 18px; color: #555; margin-bottom: 60px;">Elevated lifestyle experiences crafted for your wellbeing</p>
+      
+          <div style="display: flex; flex-direction: column; gap: 40px; align-items: center;">
+            <div style="display: flex; flex-direction: row; gap: 30px; align-items: center; max-width: 1000px; background:         #ffffff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); overflow: hidden;">
+              <img src="https://freerangestock.com/sample/170706/mother-meditating-in-a-bedroom-while-child-plays.jpg" alt="Yoga & Meditation" style="width: 45%; height: 280px; object-fit: cover;">
+              <div style="padding: 30px; text-align: left;">
+                <h3 style="font-size: 24px; color: #004aad;">Yoga & Meditation Zone</h3>
+                <p style="font-size: 16px; color: #666; margin-top: 10px;">
+                  Discover inner peace in a beautifully designed space where you can practice yoga, meditation, and mindfulness in complete tranquility.
+                </p>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: row-reverse; gap: 30px; align-items: center; max-width: 1000px; background: #ffffff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); overflow: hidden;">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHWh_dEtW0_yVduBRcbdUxwg6qdEu0tDzPTA&s" alt="Gym" style="width: 45%; height: 280px; object-fit: cover;">
+              <div style="padding: 30px; text-align: left;">
+                <h3 style="font-size: 24px; color: #004aad;">Fully Equipped Gym</h3>
+                <p style="font-size: 16px; color: #666; margin-top: 10px;">
+                  Stay motivated and healthy with our modern fitness center offering cutting-edge equipment and dedicated zones for every workout style.
+                </p>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: row; gap: 30px; align-items: center; max-width: 1000px; background: #ffffff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); overflow: hidden;">
+              <img src="https://cdn12.picryl.com/photo/2016/12/31/swimming-pool-villa-holiday-c3a27e-1024.jpg" alt="Swimming Pool" style="width: 45%; height: 280px; object-fit: cover;">
+              <div style="padding: 30px; text-align: left;">
+                <h3 style="font-size: 24px; color: #004aad;">Infinity Swimming Pool</h3>
+                <p style="font-size: 16px; color: #666; margin-top: 10px;">
+                  Refresh and unwind in a stunning pool environment—perfect for morning laps or evening leisure under the stars.
+                </p>
+              </div>
+            </div>
+          </div>
+      </section>
+      
+      <section style="padding: 80px 20px; background-color: #f4f4f2; font-family: 'Segoe UI', sans-serif;">
+        <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+          <h2 style="font-size: 34px; color: #003366; margin-bottom: 10px;">Harmony of Comfort & Connectivity</h2>
+          <p style="font-size: 18px; color: #555; margin-bottom: 50px;">
+            Live in perfect balance with proximity to key destinations for education, commute, and lifestyle.
+          </p>
+      
+          <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;">
+            <div style="flex: 1 1 250px; background: #ffffff; border-radius: 16px; padding: 30px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); text-align: center;">
+              <i class="fas fa-subway" style="font-size: 32px; color: #004aad; margin-bottom: 15px;"></i>
+              <h3 style="font-size: 20px; color: #004aad;">Metro</h3>
+              <p style="font-size: 15px; color: #555;">5.8 KM from Miyapur Metro Station</p>
+            </div>
+            <div style="flex: 1 1 250px; background: #ffffff; border-radius: 16px; padding: 30px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); text-align: center;">
+              <i class="fas fa-road" style="font-size: 32px; color: #004aad; margin-bottom: 15px;"></i>
+              <h3 style="font-size: 20px; color: #004aad;">Highway Access</h3>
+              <p style="font-size: 15px; color: #555;">4.3 KM from ORR Exit 4A</p>
+            </div>
+            <div style="flex: 1 1 250px; background: #ffffff; border-radius: 16px; padding: 30px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); text-align: center;">
+              <i class="fas fa-university" style="font-size: 32px; color: #004aad; margin-bottom: 15px;"></i>
+              <h3 style="font-size: 20px; color: #004aad;">University</h3>
+              <p style="font-size: 15px; color: #555;">6.7 KM from JNTU</p>
+            </div>
+            <div style="flex: 1 1 250px; background: #ffffff; border-radius: 16px; padding: 30px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); text-align: center;">
+              <i class="fas fa-train" style="font-size: 32px; color: #004aad; margin-bottom: 15px;"></i>
+              <h3 style="font-size: 20px; color: #004aad;">Railway Station</h3>
+              <p style="font-size: 15px; color: #555;">11 KM from Lingampally Station</p>
+            </div>
+            <div style="flex: 1 1 250px; background: #ffffff; border-radius: 16px; padding: 30px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); text-align: center;">
+              <i class="fas fa-school" style="font-size: 32px; color: #004aad; margin-bottom: 15px;"></i>
+              <h3 style="font-size: 20px; color: #004aad;">Schools</h3>
+              <p style="font-size: 15px; color: #555;">Top schools within 5 KM radius</p>
+            </div>
+            <div style="flex: 1 1 250px; background: #ffffff; border-radius: 16px; padding: 30px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); text-align: center;">
+              <i class="fas fa-graduation-cap" style="font-size: 32px; color: #004aad; margin-bottom: 15px;"></i>
+              <h3 style="font-size: 20px; color: #004aad;">Colleges</h3>
+              <p style="font-size: 15px; color: #555;">JNTU, VNR & other top colleges nearby</p>
+            </div>
+            <div style="flex: 1 1 250px; background: #ffffff; border-radius: 16px; padding: 30px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); text-align: center;">
+              <i class="fas fa-hospital" style="font-size: 32px; color: #004aad; margin-bottom: 15px;"></i>
+              <h3 style="font-size: 20px; color: #004aad;">Hospitals</h3>
+              <p style="font-size: 15px; color: #555;">Access to major multispeciality hospitals</p>
+            </div>
+            <div style="flex: 1 1 250px; background: #ffffff; border-radius: 16px; padding: 30px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); text-align: center;">
+              <i class="fas fa-shopping-cart" style="font-size: 32px; color: #004aad; margin-bottom: 15px;"></i>
+              <h3 style="font-size: 20px; color: #004aad;">Shopping Malls</h3>
+              <p style="font-size: 15px; color: #555;">Close to Forum Sujana & GSM Mall</p>
+            </div>
+            <div style="flex: 1 1 250px; background: #ffffff; border-radius: 16px; padding: 30px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); text-align: center;">
+              <i class="fas fa-laptop-code" style="font-size: 32px; color: #004aad; margin-bottom: 15px;"></i>
+              <h3 style="font-size: 20px; color: #004aad;">IT Hubs</h3>
+              <p style="font-size: 15px; color: #555;">Hitech City, Gachibowli & Financial District nearby</p>
+            </div>
+      
+          </div>
+        </div>
+      </section>
+     <section style="padding: 50px 20px; background-color: #dddddd; font-family: 'Segoe UI', sans-serif;">
+      <div style="max-width: 800px; margin: auto;">
+        <h2 style="text-align: center; font-size: 32px; margin-bottom: 30px;">Frequently Asked Questions</h2>
+    
+        <div class="faq-item" style="cursor: pointer; margin-bottom: 15px; border-left: 4px solid #3b82f6; background: #fff; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+          <h3 style="margin-bottom: 10px;">What amenities are included in the apartments? <span class="arrow" style="float: right;">▼</span></h3>
+          <p style="display: none; font-size: 18px;">Our high-rise residences feature pools, fitness centers, smart home systems, concierge services, and rooftop lounges.</p>
+        </div>
+    
+        <div class="faq-item" style="cursor: pointer; margin-bottom: 15px; border-left: 4px solid #36ca56; background: #fff; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+          <h3 style="margin-bottom: 10px;">Are pets allowed? <span class="arrow" style="float: right;">▼</span></h3>
+          <p style="display: none; font-size: 18px;">Yes! We are a pet-friendly community with dedicated dog parks and grooming stations.</p>
+        </div>
+    
+        <div class="faq-item" style="cursor: pointer; margin-bottom: 15px; border-left: 4px solid #f81616; background: #fff; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+          <h3 style="margin-bottom: 10px;">Is parking available? <span class="arrow" style="float: right;">▼</span></h3>
+          <p style="display: none; font-size: 18px;">Absolutely — we offer secure covered parking with EV charging stations.</p>
+        </div>
+    
+        <div class="faq-item" style="cursor: pointer; margin-bottom: 15px; border-left: 4px solid #3b82f6; background: #fff; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+          <h3 style="margin-bottom: 10px;">Do you offer furnished apartments? <span class="arrow" style="float: right;">▼</span></h3>
+          <p style="display: none; font-size: 18px;">Yes, fully furnished options are available upon request for short or long-term leases.</p>
+        </div>
+      </div>
+    
+      <script>
+        document.querySelectorAll('.faq-item').forEach(function(item) {
+          item.addEventListener('click', function() {
+            const para = this.querySelector('p');
+            const arrow = this.querySelector('.arrow');
+            const isOpen = para.style.display === 'block';
+            para.style.display = isOpen ? 'none' : 'block';
+            arrow.textContent = isOpen ? '▼' : '▲';
+          });
+        });
+      </script>
+    </section>
+    
+      
+    </div>
+
+
+  <div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+  
+</body>
+</html>

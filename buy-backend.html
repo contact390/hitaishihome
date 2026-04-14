@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<style>
+  /* Mobile hamburger & menu styles (scoped, minimal) */
+  .mobile-hamburger{display:none;flex-direction:column;justify-content:space-between;width:30px;height:22px;padding:6px;border:none;background:transparent;cursor:pointer}
+  .mobile-hamburger span{display:block;height:3px;background:#fff;border-radius:2px;transition:transform .25s,opacity .25s}
+  .mobile-hamburger.active span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+  .mobile-hamburger.active span:nth-child(2){opacity:0}
+  .mobile-hamburger.active span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+  /* mobile menu container */
+  .mobile-menu{display:none;background:#000;color:#fff;padding:8px 12px;box-shadow:0 6px 18px rgba(0,0,0,0.12);position:absolute;left:8px;right:8px;top:64px;z-index:1200;border-radius:6px;max-height:70vh;overflow:auto}
+  .mobile-menu.expanded{display:block}
+  .mobile-menu .clone-wrap a{color:#fff;text-decoration:none}
+  .mobile-menu .clone-wrap a + a{border-top:1px solid rgba(255,255,255,0.06)}
+  /* ensure hamburger shown on small screens */
+  @media (max-width: 767px){
+    nav > div { align-items: center; }
+    .mobile-hamburger{display:flex}
+    /* hide all non-logo elements inside the nav container so only logo + hamburger show */
+    nav > div > *:not(a):not(.mobile-hamburger){ display: none !important }
+    /* also hide any remaining nav ULs */
+    nav ul { display: none !important }
+  }
+</style>
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+
+<h2>Buy Properties</h2>
+
+<select id="filter">
+  <option value="">All</option>
+  <option value="apartment">Apartment</option>
+  <option value="house">House</option>
+</select>
+
+<button onclick="load()">Filter</button>
+
+<div id="list"></div>
+
+<script>
+async function load() {
+  let type = document.getElementById("filter").value;
+  let url = "http://localhost:5001/api/newproperties/buy";
+
+  if (type) url += "?propertyType=" + type;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    console.log(data); // DEBUG
+
+    const list = document.getElementById("list");
+    list.innerHTML = "";
+
+    if (!data.properties || data.properties.length === 0) {
+      list.innerHTML = "<p>No properties found</p>";
+      return;
+    }
+
+    data.properties.forEach(p => {
+      list.innerHTML += `
+        <div style="border:1px solid #ccc;margin:10px;padding:10px">
+          <img src="http://localhost:5001${p.imageUrl || ''}" width="200">
+          <h3>${p.title || 'No Title'}</h3>
+          <p>₹ ${p.price || 0}</p>
+          <p>${p.propertyType}</p>
+        </div>
+      `;
+    });
+
+  } catch (err) {
+    console.error(err);
+    alert("Error loading data");
+  }
+}
+
+load();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Properties</title>
+  <style>
+    body { font-family: Arial; background:#f3f4f6; padding:20px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; }
+    .card { background:#fff; padding:15px; border-radius:10px; }
+    img { width:100%; height:150px; object-fit:cover; border-radius:8px; }
+    .btns { display:flex; gap:10px; margin-top:10px; }
+    button { flex:1; padding:8px; border:none; color:#fff; cursor:pointer; }
+    .edit { background:#0b63e5; }
+    .delete { background:#ef4444; }
+
+    #popup {
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.5);
+      justify-content:center;
+      align-items:center;
+    }
+    .box { background:#fff; padding:20px; width:300px; }
+    input,textarea,select { width:100%; margin:5px 0; padding:8px; }
+    label { display:block; margin-top:10px; font-weight:bold; }
+    input,textarea { width:100%; margin:5px 0; padding:8px; }
+  </style>
+</head>
+
+<body>
+
+<h2>Admin Properties</h2>
+
+<div id="list" class="grid"></div>
+
+<!-- EDIT POPUP -->
+<div id="popup">
+  <div class="box" style="width: 600px; max-height: 80vh; overflow-y: auto;">
+    <h3>Edit Property</h3>
+    <form id="editForm">
+      <label>Type:</label>
+      <select id="type">
+        <option value="sell">Sell</option>
+        <option value="rent">Rent</option>
+      </select>
+
+      <label>Property Type:</label>
+      <input id="propertyType" placeholder="e.g., Apartment, House">
+
+      <label>Bedrooms:</label>
+      <input id="bedrooms" type="number">
+
+      <label>Title:</label>
+      <input id="title">
+
+      <label>Description:</label>
+      <textarea id="desc"></textarea>
+
+      <label>Price:</label>
+      <input id="price">
+
+      <label>City:</label>
+      <input id="city">
+
+      <label>Locality:</label>
+      <input id="locality">
+
+      <label>Address:</label>
+      <textarea id="address"></textarea>
+
+      <label>Pincode:</label>
+      <input id="pincode">
+
+      <label>Nearby Landmarks:</label>
+      <input id="nearbyLandmarks">
+
+      <label>Built-up Area:</label>
+      <input id="builtUpArea">
+
+      <label>Carpet Area:</label>
+      <input id="carpetArea">
+
+      <label>Plot Area:</label>
+      <input id="plotArea">
+
+      <label>Bathrooms:</label>
+      <input id="bathrooms" type="number">
+
+      <label>Balcony Count:</label>
+      <input id="balconyCount" type="number">
+
+      <label>Floor Number:</label>
+      <input id="floorNumber">
+
+      <label>Total Floors:</label>
+      <input id="totalFloors">
+
+      <label>Maintenance Charges:</label>
+      <input id="maintenanceCharges">
+
+      <label>Deposit:</label>
+      <input id="deposit">
+
+      <label>Negotiable:</label>
+      <input id="negotiable" type="checkbox">
+
+      <label>Video URL:</label>
+      <input id="videoUrl">
+
+      <label>Furnishing Status:</label>
+      <input id="furnishingStatus">
+
+      <label>Age of Property:</label>
+      <input id="ageOfProperty">
+
+      <label>Facing:</label>
+      <input id="facing">
+
+      <label>Parking Availability:</label>
+      <input id="parkingAvailability">
+
+      <label>Water Source:</label>
+      <input id="waterSource">
+
+      <label>Power Backup:</label>
+      <input id="powerBackup">
+
+      <label>Flooring Type:</label>
+      <input id="flooringType">
+
+      <label>Amenities:</label>
+      <input id="amenities" placeholder="Comma separated">
+
+      <label>Ownership Type:</label>
+      <input id="ownershipType">
+
+      <label>Documents Available:</label>
+      <input id="documentsAvailable">
+
+      <label>Loan Available:</label>
+      <input id="loanAvailable" type="checkbox">
+
+      <label>Owner Name:</label>
+      <input id="ownerName">
+
+      <label>Contact Mobile:</label>
+      <input id="contactMobile">
+
+      <label>Contact Alt:</label>
+      <input id="contactAlt">
+
+      <label>Contact Email:</label>
+      <input id="contactEmail">
+
+      <label>Ready to Move:</label>
+      <input id="readyToMove" type="checkbox">
+
+      <label>Pets Allowed:</label>
+      <input id="petsAllowed">
+
+      <label>Ideal For:</label>
+      <input id="idealFor">
+
+      <label>Special Features:</label>
+      <input id="specialFeatures">
+
+      <label>Features:</label>
+      <input id="features">
+
+      <label>Rent For:</label>
+      <input id="rentFor">
+
+      <label>Image:</label>
+      <input type="file" id="image">
+
+      <br><br>   
+      <button type="button" onclick="update()">Update</button>
+      <button type="button" onclick="closePopup()">Cancel</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const API = "http://localhost:5001/api/newproperties";
+
+let editId = null;
+
+// 🔹 LOAD
+async function load() {
+  const res = await fetch(API);
+  const data = await res.json();
+
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  data.properties.forEach(p => {
+    list.innerHTML += `
+      <div class="card">
+        <img src="http://localhost:5001${p.imageUrl || ''}">
+        <h4>${p.title || 'No title'}</h4>
+        <p>₹ ${p.price || '0'}</p>
+
+        <div class="btns">
+          <button class="edit" onclick="openEdit(${JSON.stringify(p).replace(/"/g, '&quot;')})">Edit</button>
+          <button class="delete" onclick="remove(${p.id})">Delete</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+// 🔴 DELETE
+async function remove(id) {
+  if (!confirm("Delete this property?")) return;
+
+  const res = await fetch(`${API}/${id}`, { method: "DELETE" });
+  const data = await res.json();
+
+  if (data.success) {
+    alert("Deleted");
+    load();
+  } else {
+    alert("Failed");
+  }
+}
+
+// 🟡 OPEN EDIT
+function openEdit(property) {
+  editId = property.id;
+  document.getElementById("type").value = property.type || '';
+  document.getElementById("propertyType").value = property.propertyType || '';
+  document.getElementById("bedrooms").value = property.bedrooms || '';
+  document.getElementById("title").value = property.title || '';
+  document.getElementById("desc").value = property.description || '';
+  document.getElementById("price").value = property.price || '';
+  document.getElementById("city").value = property.city || '';
+  document.getElementById("locality").value = property.locality || '';
+  document.getElementById("address").value = property.address || '';
+  document.getElementById("pincode").value = property.pincode || '';
+  document.getElementById("nearbyLandmarks").value = property.nearbyLandmarks || '';
+  document.getElementById("builtUpArea").value = property.builtUpArea || '';
+  document.getElementById("carpetArea").value = property.carpetArea || '';
+  document.getElementById("plotArea").value = property.plotArea || '';
+  document.getElementById("bathrooms").value = property.bathrooms || '';
+  document.getElementById("balconyCount").value = property.balconyCount || '';
+  document.getElementById("floorNumber").value = property.floorNumber || '';
+  document.getElementById("totalFloors").value = property.totalFloors || '';
+  document.getElementById("maintenanceCharges").value = property.maintenanceCharges || '';
+  document.getElementById("deposit").value = property.deposit || '';
+  document.getElementById("negotiable").checked = property.negotiable == 1;
+  document.getElementById("videoUrl").value = property.videoUrl || '';
+  document.getElementById("furnishingStatus").value = property.furnishingStatus || '';
+  document.getElementById("ageOfProperty").value = property.ageOfProperty || '';
+  document.getElementById("facing").value = property.facing || '';
+  document.getElementById("parkingAvailability").value = property.parkingAvailability || '';
+  document.getElementById("waterSource").value = property.waterSource || '';
+  document.getElementById("powerBackup").value = property.powerBackup || '';
+  document.getElementById("flooringType").value = property.flooringType || '';
+  document.getElementById("amenities").value = property.amenities || '';
+  document.getElementById("ownershipType").value = property.ownershipType || '';
+  document.getElementById("documentsAvailable").value = property.documentsAvailable || '';
+  document.getElementById("loanAvailable").checked = property.loanAvailable == 1;
+  document.getElementById("ownerName").value = property.ownerName || '';
+  document.getElementById("contactMobile").value = property.contactMobile || '';
+  document.getElementById("contactAlt").value = property.contactAlt || '';
+  document.getElementById("contactEmail").value = property.contactEmail || '';
+  document.getElementById("readyToMove").checked = property.readyToMove == 1;
+  document.getElementById("petsAllowed").value = property.petsAllowed || '';
+  document.getElementById("idealFor").value = property.idealFor || '';
+  document.getElementById("specialFeatures").value = property.specialFeatures || '';
+  document.getElementById("features").value = property.features || '';
+  document.getElementById("rentFor").value = property.rentFor || '';
+  document.getElementById("popup").style.display = "flex";
+}
+
+// ❌ CLOSE
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
+
+// 🟢 UPDATE
+async function update() {
+  const formData = new FormData();
+
+  // Collect all form fields
+  const fields = {
+    type: document.getElementById("type").value,
+    propertyType: document.getElementById("propertyType").value,
+    bedrooms: document.getElementById("bedrooms").value,
+    title: document.getElementById("title").value,
+    description: document.getElementById("desc").value,
+    price: document.getElementById("price").value,
+    city: document.getElementById("city").value,
+    locality: document.getElementById("locality").value,
+    address: document.getElementById("address").value,
+    pincode: document.getElementById("pincode").value,
+    nearbyLandmarks: document.getElementById("nearbyLandmarks").value,
+    builtUpArea: document.getElementById("builtUpArea").value,
+    carpetArea: document.getElementById("carpetArea").value,
+    plotArea: document.getElementById("plotArea").value,
+    bathrooms: document.getElementById("bathrooms").value,
+    balconyCount: document.getElementById("balconyCount").value,
+    floorNumber: document.getElementById("floorNumber").value,
+    totalFloors: document.getElementById("totalFloors").value,
+    maintenanceCharges: document.getElementById("maintenanceCharges").value,
+    deposit: document.getElementById("deposit").value,
+    negotiable: document.getElementById("negotiable").checked ? 1 : 0,
+    videoUrl: document.getElementById("videoUrl").value,
+    furnishingStatus: document.getElementById("furnishingStatus").value,
+    ageOfProperty: document.getElementById("ageOfProperty").value,
+    facing: document.getElementById("facing").value,
+    parkingAvailability: document.getElementById("parkingAvailability").value,
+    waterSource: document.getElementById("waterSource").value,
+    powerBackup: document.getElementById("powerBackup").value,
+    flooringType: document.getElementById("flooringType").value,
+    amenities: document.getElementById("amenities").value,
+    ownershipType: document.getElementById("ownershipType").value,
+    documentsAvailable: document.getElementById("documentsAvailable").value,
+    loanAvailable: document.getElementById("loanAvailable").checked ? 1 : 0,
+    ownerName: document.getElementById("ownerName").value,
+    contactMobile: document.getElementById("contactMobile").value,
+    contactAlt: document.getElementById("contactAlt").value,
+    contactEmail: document.getElementById("contactEmail").value,
+    readyToMove: document.getElementById("readyToMove").checked ? 1 : 0,
+    petsAllowed: document.getElementById("petsAllowed").value,
+    idealFor: document.getElementById("idealFor").value,
+    specialFeatures: document.getElementById("specialFeatures").value,
+    features: document.getElementById("features").value,
+    rentFor: document.getElementById("rentFor").value
+  };
+
+  // Add to FormData
+  Object.keys(fields).forEach(key => {
+    formData.append(key, fields[key]);
+  });
+
+  const file = document.getElementById("image").files[0];
+  if (file) formData.append("propImage", file);
+
+  const res = await fetch(`${API}/${editId}`, {
+    method: "PUT",
+    body: formData
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    alert("Updated");
+    closePopup();
+    load();
+  } else {
+    alert("Update failed");
+  }
+}
+
+load();
+</script>
+
+</body>
+</html>

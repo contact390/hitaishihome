@@ -1,0 +1,90 @@
+.mobile-menu {
+  position: absolute;
+  display: none;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+  max-height: 80vh;
+  overflow: auto;
+  z-index: 1250;
+}
+
+.mobile-menu.expanded {
+  display: block;
+}
+
+.mobile-hamburger {
+  width: 38px;
+  height: 34px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.mobile-hamburger span {
+  display: block;
+  height: 4px;
+  width: 100%;
+  border-radius: 999px;
+  background: currentColor;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.mobile-hamburger.active span:nth-child(1) {
+  transform: translateY(10px) rotate(45deg);
+}
+
+.mobile-hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-hamburger.active span:nth-child(3) {
+  transform: translateY(-10px) rotate(-45deg);
+}
+
+.clone-wrap a,
+.clone-wrap a:hover {
+  color: #111;
+  text-decoration: none;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li {
+  position: relative;
+}
+
+nav ul li > ul {
+  display: none;
+  min-width: 180px;
+}
+
+nav ul li:hover > ul {
+  display: block;
+}
+
+nav ul li a {
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+nav ul li a:hover {
+  color: #252525;
+}
+
+@media (max-width: 900px) {
+  nav > div,
+  nav > div > div,
+  nav > div > ul {
+    flex-wrap: wrap;
+  }
+}

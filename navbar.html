@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Hitaishi Homes - Premium Real Estate</title>
+    <!-- Font Awesome 6 (free CDN) for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* GLOBAL RESET - ZERO SPACING BETWEEN ROWS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #faf9fc;
+            margin: 0;
+            padding-top: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* ========== DROPDOWN STYLES - WORKING CORRECTLY ON HOVER ========== */
+        nav ul li {
+            position: relative;
+        }
+        
+        /* Hide dropdown menus by default */
+        nav ul li ul {
+            position: absolute;
+            background-color: #ffffff;
+            list-style: none;
+            padding: 12px 0;
+            margin: 0;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            min-width: 210px;
+            top: 100%;
+            left: 0;
+            z-index: 2000;
+            border-radius: 16px;
+            display: none;
+            border: 1px solid rgba(166, 33, 219, 0.1);
+        }
+        
+        /* Show dropdown on hover for desktop */
+        @media (min-width: 768px) {
+            nav ul li:hover > ul {
+                display: block !important;
+            }
+        }
+        
+        /* Dropdown menu styling */
+        nav ul li ul li {
+            display: block;
+            width: 100%;
+        }
+        
+        nav ul li ul li a {
+            text-decoration: none;
+            color: #1e1a2f;
+            display: block;
+            padding: 10px 24px;
+            transition: all 0.25s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        
+        nav ul li ul li a:hover {
+            background-color: #f3e8ff;
+            padding-left: 28px;
+            color: #a621db;
+        }
+        
+        .dropdown-arrow {
+            margin-left: 6px;
+            font-size: 0.8rem;
+        }
+        
+        /* Bottom nav styling - desktop */
+        @media (min-width: 768px) {
+            nav:last-of-type > div > ul {
+                display: flex !important;
+                flex-wrap: wrap;
+                list-style: none;
+                justify-content: center;
+            }
+            nav:last-of-type li {
+                display: inline-block;
+                position: relative;
+            }
+            nav:last-of-type a {
+                white-space: nowrap;
+            }
+        }
+        
+        /* TOP NAVBAR - ALL ITEMS CENTERED ON ALL DEVICES */
+        .top-nav-flex {
+            display: flex;
+            justify-content: center !important;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 100%;
+            gap: 25px;
+        }
+        
+        /* Make sure dropdown appears above everything */
+        .dropdown-menu, .sub-dropdown {
+            z-index: 9999 !important;
+        }
+        
+        /* Mobile hamburger button styles */
+        .mobile-nav-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 1250;
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .mobile-nav-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #1e1a2f;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+        
+        .mobile-nav-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 6px);
+        }
+        
+        .mobile-nav-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .mobile-nav-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -6px);
+        }
+        
+        /* Mobile bottom nav wrapper */
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            top: auto;
+            left: 0;
+            right: 0;
+            background: #ebefa0;
+            z-index: 1090;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .mobile-bottom-nav.open {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .mobile-bottom-nav ul {
+            list-style: none;
+            padding: 12px 16px;
+            margin: 0;
+        }
+        
+        .mobile-bottom-nav li {
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+        
+        .mobile-bottom-nav li:last-child {
+            border-bottom: none;
+        }
+        
+        .mobile-bottom-nav a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 12px;
+            text-decoration: none;
+            color: #1e1a2f;
+            font-weight: 500;
+            font-size: 16px;
+        }
+        
+        .mobile-bottom-nav .dropdown-icon {
+            transition: transform 0.2s;
+        }
+        
+        .mobile-bottom-nav .dropdown-icon.rotated {
+            transform: rotate(180deg);
+        }
+        
+        .mobile-submenu {
+            display: none;
+            background: #f5f0e8;
+            border-radius: 12px;
+            margin: 4px 0 8px 16px;
+            padding: 4px 0;
+        }
+        
+        .mobile-submenu.show {
+            display: block;
+        }
+        
+        .mobile-submenu a {
+            padding: 10px 12px 10px 28px;
+            font-size: 14px;
+            justify-content: flex-start;
+            gap: 10px;
+        }
+    </style>
+    <!-- INLINE STYLES FOR NAVBAR + MOBILE -->
+    <style>
+        /* Desktop styles */
+        @media (min-width: 768px) {
+            .mobile-nav-toggle { display: none !important; }
+            .mobile-bottom-nav { display: none !important; }
+            .mobile-search-inline { display: none !important; }
+            .top-nav-flex { justify-content: center !important; gap: 30px !important; }
+            nav:last-of-type { position: fixed; top: 58px; display: block !important; }
+            nav:last-of-type > div > ul { display: flex !important; }
+        }
+        
+        /* Tablet adjustments */
+        @media (max-width: 1100px) and (min-width: 768px) {
+            .desktop-right-links { gap: 12px !important; }
+            .desktop-right-links a { font-size: 0.85rem !important; }
+            .social-links-group { gap: 10px !important; }
+            .social-links-group a { font-size: 1.1rem !important; }
+            nav:last-of-type ul { gap: 6px 12px !important; }
+            nav:last-of-type a { font-size: 0.85rem !important; padding: 6px 4px !important; }
+            .top-nav-flex { gap: 15px !important; }
+        }
+        
+        /* Mobile responsive - BOTH NAVBARS WITH HAMBURGER FOR SECOND NAV */
+        @media (max-width: 767px) {
+            /* Hide desktop elements on mobile */
+            nav:first-of-type > div > .desktop-right-links,
+            nav:first-of-type > div > .desktop-social,
+            nav:first-of-type > div > .search-wrapper-desktop {
+                display: none !important;
+            }
+            
+            /* Hide the original bottom nav on mobile (replaced by hamburger menu) */
+            nav:last-of-type {
+                display: none !important;
+            }
+            
+            /* Top nav mobile styling - CENTER EVERYTHING */
+            nav:first-of-type {
+                min-height: 60px;
+                position: fixed;
+                top: 0;
+                width: 100%;
+            }
+            
+            nav:first-of-type > div {
+                justify-content: center !important;
+                align-items: center !important;
+                padding: 10px 50px 10px 16px !important;
+                width: 100%;
+                min-height: 60px;
+                gap: 12px !important;
+                flex-direction: row !important;
+                flex-wrap: wrap !important;
+                position: relative;
+            }
+            
+            /* Logo styling for mobile */
+            .logo-link {
+                font-size: 1.2rem !important;
+                margin: 0 !important;
+            }
+            .logo-link span {
+                font-size: 1rem;
+                display: inline !important;
+            }
+            .logo-link i {
+                font-size: 1.1rem;
+            }
+            
+            /* Mobile search styling - centered */
+            .mobile-search-inline {
+                display: flex !important;
+                margin: 0 auto;
+                flex: 0 1 auto;
+                max-width: 200px;
+                background: rgba(255,255,255,0.25);
+                border-radius: 40px;
+                padding: 2px 2px 2px 12px;
+            }
+            .mobile-search-inline input {
+                width: 100%;
+                font-size: 12px;
+                padding: 7px 10px;
+                border-radius: 30px;
+                border: none;
+                outline: none;
+            }
+            .mobile-search-inline button {
+                padding: 7px 12px;
+                border-radius: 30px;
+                background: white;
+                border: none;
+                cursor: pointer;
+            }
+            
+            /* Hamburger toggle button for second navbar */
+            .mobile-nav-toggle {
+                display: block;
+            }
+            
+            /* Mobile bottom nav menu */
+            .mobile-bottom-nav {
+                display: block;
+                position: fixed;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: #ebefa0;
+                z-index: 1090;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+            
+            .mobile-bottom-nav.open {
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+            
+            /* Body padding adjustment */
+            body {
+                padding-top: 0;
+            }
+        }
+        
+        /* Small mobile devices */
+        @media (max-width: 480px) {
+            .logo-link { font-size: 1rem !important; }
+            .logo-link span { font-size: 0.85rem; }
+            .logo-link i { font-size: 0.95rem; }
+            .mobile-search-inline { max-width: 150px; }
+            .mobile-search-inline input { font-size: 11px; padding: 6px 8px; }
+            .mobile-search-inline button { padding: 6px 10px; }
+            .mobile-bottom-nav { top: 56px; }
+        }
+        
+        .search-wrapper-desktop {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 40px;
+            padding: 2px 2px 2px 12px;
+        }
+        .search-wrapper-desktop input {
+            background: white;
+            border-radius: 30px 0 0 30px;
+        }
+        
+        .post-property-btn {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .post-property-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3) !important;
+        }
+        .social-icon:hover {
+            transform: scale(1.1);
+            transition: transform 0.2s;
+        }
+        
+        nav:first-of-type {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+    </style>
+</head>
+<body>
+<div id="navbar-container" style="width: 100%; margin: 0; padding: 0;">
+    
+    <!-- TOP NAVIGATION - Sticky (Purple) - ALL ITEMS CENTERED -->
+    <nav style="width: 100%; box-sizing: border-box; margin: 0; padding: 0; position: fixed; top: 0; z-index: 1200; background-color: #a621db; color: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <div class="top-nav-flex" style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; width: 100%; padding: 12px 24px; box-sizing: border-box; gap: 25px; margin: 0; position: relative;">
+            
+            <!-- Logo with Hitaishi Homes name -->
+            <a href="index.html" class="logo-link" style="color: white; font-size: 1.4rem; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap;">
+                <i class="fas fa-building" style="font-size: 1.3rem;"></i> 
+                <span>Hitaishi Homes</span>
+            </a>
+
+            <!-- Desktop Search Box (hidden on mobile) -->
+            <div class="search-wrapper-desktop" style="display: flex; align-items: center; gap: 6px; min-width: 250px; max-width: 320px; background: rgba(255,255,255,0.2); border-radius: 50px; padding-left: 12px;">
+                <input type="search" id="searchInputDesktop" placeholder="Search property, city, villa..." 
+                       style="padding: 9px 14px; border: none; border-radius: 40px 0 0 40px; width: 100%; outline: none; background: white; color: #1f1a2e; font-size: 14px;">
+                <button id="searchButtonDesktop" 
+                        style="padding: 9px 16px; background: white; border: none; border-radius: 0 40px 40px 0; cursor: pointer; color: #a621db; font-weight: bold;">
+                    <i class="fa fa-search" style="color: #a621db;"></i>
+                </button>
+            </div>
+
+            <!-- Desktop Right Links -->
+            <div class="desktop-right-links" style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                <a href="builders.html" style="color: white; text-decoration: none; font-size: 0.95rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
+                    <i class="fas fa-hard-hat"></i> Builders
+                </a>
+                <a href="highriseapartments.html" style="color: white; text-decoration: none; font-size: 0.95rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
+                    <i class="fas fa-city"></i> High Rise
+                </a>
+                <a href="dashboard/sections/post.html" class="post-property-btn"
+                   style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px; background: linear-gradient(135deg, #2563eb, #7c3aed); color: #fff; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                   <i class="fas fa-paper-plane"></i> Post Property
+                </a>
+            </div>
+            
+            <!-- Desktop Social Links -->
+            <div class="desktop-social social-links-group" style="display: flex; gap: 12px; align-items: center;">
+                <a href="#" title="Facebook" class="social-icon" style="color: white; font-size: 1.2rem;"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" title="Twitter" class="social-icon" style="color: white; font-size: 1.2rem;"><i class="fab fa-twitter"></i></a>
+                <a href="#" title="Instagram" class="social-icon" style="color: white; font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
+                <a href="#" title="LinkedIn" class="social-icon" style="color: white; font-size: 1.2rem;"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" title="YouTube" class="social-icon" style="color: white; font-size: 1.2rem;"><i class="fab fa-youtube"></i></a>
+            </div>
+            
+            <!-- Mobile inline search (visible only on small screens) -->
+            <div class="mobile-search-inline" style="display: none; align-items: center; gap: 6px; background: rgba(255,255,255,0.25); border-radius: 40px; padding: 2px 2px 2px 12px;">
+                <input type="search" id="mobileSearchInput" placeholder="Search..." style="padding: 6px 10px; border: none; border-radius: 30px; width: 130px; outline: none; font-size: 13px;">
+                <button id="mobileSearchBtn" style="background: white; border: none; border-radius: 30px; padding: 6px 12px; cursor: pointer;"><i class="fas fa-search" style="color: #a621db;"></i></button>
+            </div>
+            
+            <!-- Hamburger Toggle Button for Second Navbar (Mobile Only) -->
+            <button class="mobile-nav-toggle" id="mobileNavToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ORIGINAL BOTTOM NAVIGATION - Desktop Only (hidden on mobile) -->
+    <nav style="width: 100%; box-sizing: border-box; margin: 0; padding: 0; position: fixed; top: 58px; z-index: 1100; background-color: #ebefa0; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+        <div style="width: 100%; padding: 8px 0; box-sizing: border-box; margin: 0;">
+            <ul style="display: flex; flex-wrap: wrap; list-style: none; padding: 0 24px; margin: 0; justify-content: center; gap: 8px 22px;">
+                <li><a href="index.html" style="text-decoration: none; color: #1e1a2f; padding: 8px 4px; display: block; font-weight: 600; font-size: 0.95rem;">Home</a></li>
+                <li style="position: relative;">
+                    <a href="Buy.html" style="text-decoration: none; color: #1e1a2f; padding: 8px 4px; display: block; font-weight: 500; font-size: 0.95rem;">Buy <i class="fas fa-angle-down dropdown-arrow"></i></a>
+                    <ul>
+                        <li><a href="Buy.html">🏠 Houses</a></li><li><a href="buy.html">📐 Plots</a></li><li><a href="farmhouse.html">🏢 Flats</a></li>
+                        <li><a href="villas.html">🏰 Villas</a></li><li><a href="buy.html">🏪 Shops</a></li><li><a href="find_agent.html">🔑 Ready to move</a></li>
+                        <li><a href="buy.html">🛋️ Furnished</a></li><li><a href="commercial.html">🏭 Commercial</a></li>
+                        <li><a href="lands.html">🌾 Agriculture Lands</a></li><li><a href="commercial.html">🗺️ Layouts</a></li>
+                    </ul>
+                </li>
+                <li style="position: relative;">
+                    <a href="Sell.html" style="text-decoration: none; color: #1e1a2f; padding: 8px 4px; display: block; font-weight: 500; font-size: 0.95rem;">Sell <i class="fas fa-angle-down dropdown-arrow"></i></a>
+                    <ul>
+                        <li><a href="postRent.html">📝 Post Property</a></li><li><a href="postRent.html">📊 Dashboard</a></li><li><a href="villas.html">🏰 Villas</a></li>
+                        <li><a href="Sell.html">🏢 Flats</a></li><li><a href="Sell.html">📐 Plots</a></li><li><a href="Sell.html">🛋️ Furnished</a></li>
+                        <li><a href="find_agent.html">🔑 Ready to move</a></li><li><a href="commercial.html">🏭 Commercial</a></li>
+                        <li><a href="farmhouse.html">🌿 Farm Houses</a></li><li><a href="lands.html">🗺️ Layouts</a></li>
+                    </ul>
+                </li>
+                <li style="position: relative;">
+                    <a href="Rent.html" style="text-decoration: none; color: #1e1a2f; padding: 8px 4px; display: block; font-weight: 500; font-size: 0.95rem;">Rent <i class="fas fa-angle-down dropdown-arrow"></i></a>
+                    <ul>
+                        <li><a href="Rent.html">🏠 Houses</a></li><li><a href="highriseapartments.html">🏢 Flats</a></li><li><a href="Rent.html">🛋️ Furnished</a></li>
+                        <li><a href="Rent.html">🏰 Villas</a></li><li><a href="farmhouse.html">🌿 Farm Houses</a></li><li><a href="lands.html">🗺️ Layouts</a></li>
+                        <li><a href="commercial.html">🏭 Commercial</a></li>
+                    </ul>
+                </li>
+                <li style="position: relative;">
+                    <a href="villas.html" style="text-decoration: none; color: #1e1a2f; padding: 8px 4px; display: block; font-weight: 500; font-size: 0.95rem;">Villas <i class="fas fa-angle-down dropdown-arrow"></i></a>
+                    <ul>
+                        <li><a href="villas.html">🏠 Luxury Houses</a></li><li><a href="villas.html">🏰 Premium Villas</a></li><li><a href="lands.html">📐 Plots</a></li>
+                        <li><a href="commercial.html">🏢 Flats</a></li><li><a href="commercial.html">🏪 Shop</a></li><li><a href="find_agent.html">🔑 Ready to move</a></li>
+                        <li><a href="Buy.html">🛋️ Furnished</a></li>
+                    </ul>
+                </li>
+                <li style="position: relative;">
+                    <a href="commercial.html" style="text-decoration: none; color: #1e1a2f; padding: 8px 4px; display: block; font-weight: 500; font-size: 0.95rem;">Commercial <i class="fas fa-angle-down dropdown-arrow"></i></a>
+                    <ul>
+                        <li><a href="commercial.html">🏢 Offices</a></li><li><a href="malls.html">🛍️ Malls</a></li><li><a href="hospital.html">🏥 Hospitals</a></li>
+                        <li><a href="office.html">💼 Office Space</a></li><li><a href="retails.html">🛒 Retails</a></li><li><a href="functionhall.html">🎉 Function Halls</a></li>
+                        <li><a href="landdevelopment.html">🏗️ Land Developments</a></li>
+                    </ul>
+                </li>
+                <li><a href="farmhouse.html" style="text-decoration: none; color: #1e1a2f; padding: 8px 4px; display: block; font-weight: 500; font-size: 0.95rem;">🌿 Farm Houses</a></li>
+                <li><a href="lands.html" style="text-decoration: none; color: #1e1a2f; padding: 8px 4px; display: block; font-weight: 500; font-size: 0.95rem;">🌾 Agri Lands</a></li>
+                <li><a href="about.html" style="text-decoration: none; color: #1e1a2f; padding: 8px 4px; display: block; font-weight: 500; font-size: 0.95rem;">📖 About Us</a></li>
+                <li><a href="contact.html" style="text-decoration: none; color: #1e1a2f; padding: 8px 4px; display: block; font-weight: 500; font-size: 0.95rem;">📞 Contact Us</a></li>
+                <li style="position: relative;" id="authLi">
+                    <a id="authLink" href="Login.html" style="text-decoration: none; color: #1e1a2f; padding: 8px 4px; display: block; font-weight: 700; font-size: 0.95rem;">🔐 Login <i class="fas fa-angle-down dropdown-arrow"></i></a>
+                    <ul id="authMenu">
+                        <li><a href="Login.html">🔑 Login</a></li><li><a href="register.html">📝 Register</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- MOBILE BOTTOM NAVIGATION - Hamburger Menu (visible only on mobile) -->
+    <div class="mobile-bottom-nav" id="mobileBottomNav">
+        <ul>
+            <li><a href="index.html">🏠 Home</a></li>
+            <li>
+                <a href="#" class="dropdown-trigger" data-target="buySubmenu">Buy <i class="fas fa-angle-down dropdown-icon" id="buyIcon"></i></a>
+                <div class="mobile-submenu" id="buySubmenu">
+                    <a href="Buy.html">🏠 Houses</a><a href="buy.html">📐 Plots</a><a href="farmhouse.html">🏢 Flats</a>
+                    <a href="villas.html">🏰 Villas</a><a href="buy.html">🏪 Shops</a><a href="find_agent.html">🔑 Ready to move</a>
+                    <a href="buy.html">🛋️ Furnished</a><a href="commercial.html">🏭 Commercial</a><a href="lands.html">🌾 Agriculture Lands</a>
+                    <a href="commercial.html">🗺️ Layouts</a>
+                </div>
+            </li>
+            <li>
+                <a href="#" class="dropdown-trigger" data-target="sellSubmenu">Sell <i class="fas fa-angle-down dropdown-icon" id="sellIcon"></i></a>
+                <div class="mobile-submenu" id="sellSubmenu">
+                    <a href="postRent.html">📝 Post Property</a><a href="postRent.html">📊 Dashboard</a><a href="villas.html">🏰 Villas</a>
+                    <a href="Sell.html">🏢 Flats</a><a href="Sell.html">📐 Plots</a><a href="Sell.html">🛋️ Furnished</a>
+                    <a href="find_agent.html">🔑 Ready to move</a><a href="commercial.html">🏭 Commercial</a><a href="farmhouse.html">🌿 Farm Houses</a>
+                    <a href="lands.html">🗺️ Layouts</a>
+                </div>
+            </li>
+            <li>
+                <a href="#" class="dropdown-trigger" data-target="rentSubmenu">Rent <i class="fas fa-angle-down dropdown-icon" id="rentIcon"></i></a>
+                <div class="mobile-submenu" id="rentSubmenu">
+                    <a href="Rent.html">🏠 Houses</a><a href="highriseapartments.html">🏢 Flats</a><a href="Rent.html">🛋️ Furnished</a>
+                    <a href="Rent.html">🏰 Villas</a><a href="farmhouse.html">🌿 Farm Houses</a><a href="lands.html">🗺️ Layouts</a>
+                    <a href="commercial.html">🏭 Commercial</a>
+                </div>
+            </li>
+            <li>
+                <a href="#" class="dropdown-trigger" data-target="villasSubmenu">Villas <i class="fas fa-angle-down dropdown-icon" id="villasIcon"></i></a>
+                <div class="mobile-submenu" id="villasSubmenu">
+                    <a href="villas.html">🏠 Luxury Houses</a><a href="villas.html">🏰 Premium Villas</a><a href="lands.html">📐 Plots</a>
+                    <a href="commercial.html">🏢 Flats</a><a href="commercial.html">🏪 Shop</a><a href="find_agent.html">🔑 Ready to move</a>
+                    <a href="Buy.html">🛋️ Furnished</a>
+                </div>
+            </li>
+            <li>
+                <a href="#" class="dropdown-trigger" data-target="commercialSubmenu">Commercial <i class="fas fa-angle-down dropdown-icon" id="commercialIcon"></i></a>
+                <div class="mobile-submenu" id="commercialSubmenu">
+                    <a href="commercial.html">🏢 Offices</a><a href="malls.html">🛍️ Malls</a><a href="hospital.html">🏥 Hospitals</a>
+                    <a href="office.html">💼 Office Space</a><a href="retails.html">🛒 Retails</a><a href="functionhall.html">🎉 Function Halls</a>
+                    <a href="landdevelopment.html">🏗️ Land Developments</a>
+                </div>
+            </li>
+            <li><a href="farmhouse.html">🌿 Farm Houses</a></li>
+            <li><a href="lands.html">🌾 Agri Lands</a></li>
+            <li><a href="about.html">📖 About Us</a></li>
+            <li><a href="contact.html">📞 Contact Us</a></li>
+            <li>
+                <a href="#" class="dropdown-trigger" data-target="authSubmenu">🔐 Login <i class="fas fa-angle-down dropdown-icon" id="authIcon"></i></a>
+                <div class="mobile-submenu" id="authSubmenu">
+                    <a href="Login.html">🔑 Login</a><a href="register.html">📝 Register</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    
+    <script>
+        // SEARCH FUNCTIONALITY
+        const searchIndex = [
+            { keyword: 'house', url: 'Buy.html?type=house' }, { keyword: 'apartment', url: 'highriseapartments.html' }, 
+            { keyword: 'villa', url: 'villas.html' }, { keyword: 'plot', url: 'lands.html' }, 
+            { keyword: 'commercial', url: 'commercial.html' }, { keyword: 'farmhouse', url: 'farmhouse.html' }, 
+            { keyword: 'flat', url: 'Buy.html?type=flat' }, { keyword: 'buy', url: 'Buy.html' }, 
+            { keyword: 'rent', url: 'Rent.html' }, { keyword: 'sell', url: 'Sell.html' }
+        ];
+        
+        function performSearch(query) { 
+            query = query.toLowerCase().trim(); 
+            if (!query) return []; 
+            const terms = query.split(' ');
+            let matches = searchIndex.filter(item => terms.some(term => item.keyword.toLowerCase().includes(term)));
+            matches.sort((a,b)=> (b.keyword.toLowerCase()===query) - (a.keyword.toLowerCase()===query));
+            return matches;
+        }
+        
+        function handleSearch(inputId) {
+            const query = document.getElementById(inputId).value;
+            const matches = performSearch(query);
+            if(matches.length > 0) {
+                window.location.href = matches[0].url;
+            } else {
+                window.location.href = `Buy.html?search=${encodeURIComponent(query)}`;
+            }
+        }
+
+        // Handle desktop dropdown hover
+        document.addEventListener('DOMContentLoaded', function() {
+            const desktopDropdowns = document.querySelectorAll('nav:first-of-type + nav ul li');
+            desktopDropdowns.forEach(function(parent) {
+                const submenu = parent.querySelector('ul');
+                if (submenu) {
+                    parent.addEventListener('mouseenter', function() { submenu.style.display = 'block'; });
+                    parent.addEventListener('mouseleave', function() { submenu.style.display = 'none'; });
+                }
+            });
+            
+            // Search buttons
+            const searchBtn = document.getElementById('searchButtonDesktop');
+            const searchInput = document.getElementById('searchInputDesktop');
+            if(searchBtn) searchBtn.addEventListener('click', function() { handleSearch('searchInputDesktop'); });
+            if(searchInput) searchInput.addEventListener('keypress', function(e) { if(e.key === 'Enter') handleSearch('searchInputDesktop'); });
+            
+            // Mobile search
+            const mobileSearchBtn = document.getElementById('mobileSearchBtn');
+            const mobileInput = document.getElementById('mobileSearchInput');
+            if(mobileSearchBtn && mobileInput) {
+                mobileSearchBtn.addEventListener('click', function() { 
+                    const q = mobileInput.value; 
+                    const matches = performSearch(q); 
+                    window.location.href = matches.length ? matches[0].url : `Buy.html?search=${encodeURIComponent(q)}`;
+                });
+            }
+            
+            // ========== MOBILE HAMBURGER TOGGLE ==========
+            const toggleBtn = document.getElementById('mobileNavToggle');
+            const mobileMenu = document.getElementById('mobileBottomNav');
+            
+            if(toggleBtn && mobileMenu) {
+                toggleBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    mobileMenu.classList.toggle('open');
+                    toggleBtn.classList.toggle('active');
+                });
+            }
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if(mobileMenu && mobileMenu.classList.contains('open')) {
+                    if(!mobileMenu.contains(e.target) && !toggleBtn.contains(e.target)) {
+                        mobileMenu.classList.remove('open');
+                        toggleBtn.classList.remove('active');
+                    }
+                }
+            });
+            
+            // ========== MOBILE DROPDOWN TOGGLES ==========
+            const dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
+            dropdownTriggers.forEach(function(trigger) {
+                trigger.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('data-target');
+                    const submenu = document.getElementById(targetId);
+                    const icon = this.querySelector('.dropdown-icon');
+                    
+                    if(submenu) {
+                        submenu.classList.toggle('show');
+                        if(icon) icon.classList.toggle('rotated');
+                    }
+                });
+            });
+            
+            // Fix body padding for sticky navbars
+            function updateBodyPadding() {
+                const topNav = document.querySelector('nav');
+                const topHeight = topNav ? topNav.offsetHeight : 60;
+                document.body.style.paddingTop = topHeight + 'px';
+                
+                // Adjust mobile menu top position
+                if(mobileMenu) {
+                    mobileMenu.style.top = topHeight + 'px';
+                }
+            }
+            
+            updateBodyPadding();
+            window.addEventListener('resize', updateBodyPadding);
+        });
+        
+        function updateAuthNavbar() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            const authLink = document.getElementById('authLink');
+            if(authLink) {
+                if(token && user) {
+                    authLink.innerHTML = `👤 ${user.fullName || user.username || 'User'} <i class="fas fa-angle-down dropdown-arrow"></i>`;
+                    authLink.href = '#';
+                } else {
+                    authLink.innerHTML = '🔐 Login <i class="fas fa-angle-down dropdown-arrow"></i>';
+                    authLink.href = 'Login.html';
+                }
+            }
+        }
+        
+        window.addEventListener('DOMContentLoaded', updateAuthNavbar);
+        window.addEventListener('storage', updateAuthNavbar);
+    </script>
+</div>
+</body>
+</html>

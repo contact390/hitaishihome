@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard - Hitaishi Homes</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7fafc;
+      color: #111;
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* Full width container */
+    .container {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    
+    /* Top header */
+    .header {
+      background: white;
+      padding: 12px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    
+    #userInfo {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    /* Main dashboard layout */
+    .dashboard {
+      display: flex;
+      flex: 1;
+      width: 100%;
+      position: relative;
+    }
+    
+    /* Sidebar - sticky on desktop, collapsible on mobile */
+    .sidebar {
+      width: 280px;
+      background: #fff;
+      padding: 20px 0;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      height: calc(100vh - 60px); /* Full height minus header */
+      overflow-y: auto;
+      z-index: 50;
+    }
+    
+    .sidebar h3 {
+      padding: 0 20px 15px;
+      margin: 0 0 10px;
+      border-bottom: 1px solid #eee;
+      font-size: 1.1rem;
+    }
+    
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      border-radius: 0;
+      color: #333;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+    }
+    
+    .nav-item:hover {
+      background: #f5f5f5;
+      color: #059669;
+    }
+    
+    .nav-item.active {
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+      color: #059669;
+      border-left: 3px solid #10b981;
+      font-weight: bold;
+    }
+    
+    .nav-item i {
+      width: 20px;
+      text-align: center;
+    }
+    
+    /* Content area */
+    .content {
+      flex: 1;
+      background: #f9f9f9;
+      padding: 25px;
+      overflow-y: auto;
+      height: calc(100vh - 60px);
+    }
+    
+    #sectionContainer {
+      background: white;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      min-height: 400px;
+    }
+    
+    /* Mobile menu button */
+    .mobile-menu-btn {
+      display: none;
+      background: #10b981;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    /* Mobile styles */
+    @media (max-width: 768px) {
+      .header {
+        padding: 10px 15px;
+      }
+      
+      .header h1 {
+        font-size: 1.3rem;
+      }
+      
+      .mobile-menu-btn {
+        display: flex;
+      }
+      
+      .dashboard {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        position: fixed;
+        top: 60px;
+        left: -100%;
+        width: 280px;
+        height: calc(100vh - 60px);
+        transition: left 0.3s ease;
+        z-index: 1000;
+        box-shadow: 3px 0 15px rgba(0,0,0,0.1);
+      }
+      
+      .sidebar.active {
+        left: 0;
+      }
+      
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+      }
+      
+      .sidebar-overlay.active {
+        display: block;
+      }
+      
+      .content {
+        padding: 15px;
+        height: auto;
+        min-height: calc(100vh - 60px);
+      }
+      
+      #sectionContainer {
+        padding: 20px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .header h1 {
+        font-size: 1.1rem;
+      }
+      
+      #userInfo {
+        font-size: 0.8rem;
+      }
+      
+      .content {
+        padding: 10px;
+      }
+      
+      #sectionContainer {
+        padding: 15px;
+      }
+    }
+    
+    /* Home button specific styles */
+    .nav-item.home-button {
+      background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+      color: white;
+      margin: 10px 20px 20px;
+      border-radius: 8px;
+      padding: 14px 20px;
+      border-left: 3px solid #1d4ed8;
+      font-weight: bold;
+    }
+    
+    .nav-item.home-button:hover {
+      background: linear-gradient(90deg, #2563eb, #1e40af);
+    }
+    
+    .nav-item.home-button.active {
+      background: linear-gradient(90deg, #1d4ed8, #1e3a8a);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <i class="fas fa-bars"></i>
+          <span>Menu</span>
+        </button>
+        <h1>Dashboard</h1>
+      </div>
+      <div id="userInfo" class="muted">Checking user...</div>
+    </div>
+
+    <!-- Overlay for mobile menu -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="dashboard">
+      <div class="sidebar" id="sidebar">
+        <h3>Menu</h3>
+        <!-- Home button added here -->
+        <div href="index.html" class="nav-item home-button" id="menuHome">
+          <i class="fa fa-home"></i> 
+          <span>Home</span>
+        </div>
+         <div id="menuBrowse" class="nav-item">
+          <i class="fa fa-th-list"></i> 
+          <span>Browse Properties</span>
+        </div>
+        <div id="menuPost" class="nav-item active">
+          <i class="fa fa-plus-circle"></i> 
+          <span>Post Property</span>
+        </div>
+       
+        <div id="menuInterests" class="nav-item">
+          <i class="fa fa-heart"></i> 
+          <span>Interests</span>
+        </div>
+        <div id="menuHistory" class="nav-item">
+          <i class="fa fa-list"></i> 
+          <span>History</span>
+        </div>
+        <div id="menuProfile" class="nav-item">
+          <i class="fa fa-user"></i> 
+          <span>Profile</span>
+        </div>
+        <div id="menuLogout" class="nav-item">
+          <i class="fa fa-sign-out-alt"></i> 
+          <span>Logout</span>
+        </div>
+      </div>
+
+      <div class="content" id="content">
+        <div id="sectionContainer">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check if opened as file:// and redirect to http://
+    if (window.location.protocol === 'file:') {
+      var newUrl = 'http://localhost:5001/dashboard/dashboard.html';
+      console.log('Redirecting from file:// to http://', newUrl);
+      window.location.href = newUrl;
+    }
+    
+    // client-side loader to fetch section partials
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    const userInfo = document.getElementById('userInfo');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    if (!token || !user) {
+      userInfo.innerText = 'Not logged in';
+      alert('Please login first');
+      window.location.href = 'http://localhost:5001/Login.html';
+    } else {
+      userInfo.innerText = "Welcome to Hitaishi-Home, " + (user.fullName || user.username);
+    }
+
+    // Mobile menu toggle
+    mobileMenuBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      sidebarOverlay.classList.toggle('active');
+    });
+
+    sidebarOverlay.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+      sidebarOverlay.classList.remove('active');
+    });
+
+    // Close sidebar when clicking on a menu item on mobile
+    function closeMobileMenu() {
+      if (window.innerWidth <= 768) {
+        sidebar.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+      }
+    }
+
+    const sections = {
+      home: 'sections/home.html',
+      post: 'sections/post.html',
+      browse: 'sections/browse.html',
+      interests: 'sections/interests.html',
+      history: 'sections/history.html',
+      profile: 'sections/profile.html'
+    };
+
+    async function loadSection(name){
+      const container = document.getElementById('sectionContainer');
+      container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-spinner fa-spin fa-2x"></i><p>Loading...</p></div>';
+      
+      try{
+        // Resolve URL relative to current document so loader works from live-server or backend
+        const pathname = window.location.pathname;
+        const dir = pathname.substring(0, pathname.lastIndexOf('/'));
+        let url = sections[name];
+        if (!url.startsWith('http') && !url.startsWith('/')) {
+          url = dir + '/' + url;
+        }
+
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Not found');
+        const html = await res.text();
+
+        // Create temporary container to extract scripts
+        // Use DOMParser to reliably parse the fetched HTML into a document
+        // so <script> elements are real nodes we can handle deterministically.
+        const parser = new DOMParser();
+        const parsed = parser.parseFromString(html, 'text/html');
+
+        // Move non-script nodes into the container
+        container.innerHTML = '';
+        Array.from(parsed.body.childNodes).forEach(node => {
+          if (node.nodeName !== 'SCRIPT') container.appendChild(node.cloneNode(true));
+        });
+
+        // Extract scripts from the parsed document and execute them in order
+        const scripts = Array.from(parsed.querySelectorAll('script'));
+        for (const s of scripts) {
+          const newScript = document.createElement('script');
+          // preserve attributes that matter
+          if (s.src) {
+            newScript.src = s.src;
+            newScript.async = false;
+            if (s.defer) newScript.defer = true;
+            document.body.appendChild(newScript);
+            await new Promise((resolve) => newScript.addEventListener('load', resolve));
+          } else {
+            // assign text safely
+            try { newScript.text = s.textContent; } catch (e) { newScript.textContent = s.textContent; }
+            document.body.appendChild(newScript);
+          }
+        }
+
+        // Call init function if present
+        if (window['init_'+name]) window['init_'+name]();
+      }catch(e){ 
+        console.error(e); 
+        container.innerHTML = '<div style="text-align: center; padding: 40px; color: #e53e3e;"><i class="fas fa-exclamation-triangle fa-2x"></i><p>Error loading section</p></div>'; 
+      }
+    }
+
+    function activateMenu(id){
+      document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // Menu event listeners
+    document.getElementById('menuHome').addEventListener('click', ()=>{ 
+      // Navigate to site home page (not dashboard home section)
+      window.location.href = '/index.html';
+    });
+    
+    document.getElementById('menuPost').addEventListener('click', ()=>{ 
+      activateMenu('menuPost'); 
+      loadSection('post'); 
+      closeMobileMenu();
+    });
+    
+    document.getElementById('menuBrowse').addEventListener('click', ()=>{ 
+      activateMenu('menuBrowse'); 
+      loadSection('browse'); 
+      closeMobileMenu();
+    });
+    
+    document.getElementById('menuInterests').addEventListener('click', ()=>{ 
+      activateMenu('menuInterests'); 
+      loadSection('interests'); 
+      closeMobileMenu();
+    });
+    
+    document.getElementById('menuHistory').addEventListener('click', ()=>{ 
+      activateMenu('menuHistory'); 
+      loadSection('history'); 
+      closeMobileMenu();
+    });
+    
+    document.getElementById('menuProfile').addEventListener('click', ()=>{ 
+      activateMenu('menuProfile'); 
+      loadSection('profile'); 
+      closeMobileMenu();
+    });
+    
+    document.getElementById('menuLogout').addEventListener('click', ()=>{ 
+      localStorage.removeItem('token'); 
+      localStorage.removeItem('user'); 
+      window.location.href='/Login.html'; 
+    });
+
+    // Close sidebar when window is resized to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        sidebar.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+      }
+    });
+
+    // load default - open Browse Properties section by default
+    loadSection('browse');
+    
+    // Update active menu for browse
+    setTimeout(() => {
+      activateMenu('menuBrowse');
+    }, 100);
+  </script>
+</body>
+</html>

@@ -1,0 +1,363 @@
+
+<!-- Chatbot Float Button (Right Bottom) -->
+<button id="chatbot-open-btn" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 55px;
+  height: 55px;
+  background: linear-gradient(135deg, #2863e8 0%, #1e5cc4 100%);
+  border-radius: 50%;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(40, 99, 232, 0.4);
+  transition: all 0.3s ease;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+" title="Chat with us">💬</button>
+
+<!-- Chatbot Modal Overlay -->
+<div id="chatbot-modal-overlay" style="
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  z-index: 9998;
+"></div>
+
+<!-- Chatbot Modal Container -->
+<div id="chatbot-modal" style="
+  position: fixed;
+  bottom: 85px;
+  right: 20px;
+  width: 380px;
+  height: 550px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 40px rgba(0,0,0,0.3);
+  display: none;
+  flex-direction: column;
+  z-index: 9999;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+">
+  <!-- Header -->
+  <div style="
+    background: linear-gradient(135deg, #2863e8 0%, #1e5cc4 100%);
+    color: white;
+    padding: 16px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 15px;
+  ">
+    <span><span style="margin-right: 8px;">💬</span>BuildMarts Chat</span>
+    <button id="chatbot-close-btn" style="
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 20px;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease;
+    ">×</button>
+  </div>
+
+  <!-- Messages -->
+  <div id="chatbot-msgs" style="
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    background: #f9fafb;
+  ">
+    <div style="padding: 10px; text-align: center; color: #999; font-size: 12px;">
+      👋 Hi! Ask about cement, bricks, steel or any materials!
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div style="
+    display: flex;
+    padding: 12px;
+    gap: 8px;
+    border-top: 1px solid #e5e7eb;
+    background: white;
+  ">
+    <input 
+      type="text" 
+      id="chatbot-txt-input" 
+      style="
+        flex: 1;
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 13px;
+        outline: none;
+        font-family: inherit;
+      "
+      placeholder="Type message..."
+      autocomplete="off"
+    />
+    <button id="chatbot-send-btn" style="
+      padding: 10px 15px;
+      background: #2863e8;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: background 0.2s ease;
+    ">Send</button>
+  </div>
+</div>
+
+<style>
+  #chatbot-msgs::-webkit-scrollbar {
+    width: 5px;
+  }
+  #chatbot-msgs::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  #chatbot-msgs::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+  }
+  #chatbot-msgs::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .chatbot-message {
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    animation: chatMsgSlide 0.3s ease-out;
+  }
+
+  @keyframes chatMsgSlide {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .chatbot-message.user {
+    background: #e8f3ff;
+    color: #0066cc;
+    margin-left: 25px;
+    text-align: right;
+    border-bottom-right-radius: 2px;
+  }
+
+  .chatbot-message.bot {
+    background: #f0f1f3;
+    color: #19222d;
+    margin-right: 25px;
+    border-bottom-left-radius: 2px;
+  }
+
+  #chatbot-open-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(40, 99, 232, 0.6);
+  }
+
+  #chatbot-open-btn:active {
+    transform: scale(0.95);
+  }
+
+  @media (max-width: 480px) {
+    #chatbot-modal {
+      width: calc(100vw - 20px) !important;
+      height: 70vh !important;
+      max-height: 550px !important;
+      bottom: 70px !important;
+      right: 10px !important;
+    }
+
+    .chatbot-message.user {
+      margin-left: 15px;
+    }
+
+    .chatbot-message.bot {
+      margin-right: 15px;
+    }
+  }
+</style>
+
+<script>
+  // Chatbot Keywords Database
+  const chatbotDB = {
+
+  // 🔹 Greetings
+  "hi|hello|hey": "Hello! Welcome to Hitaishi Homes 🏡 How can I help you today?",
+  "how are you": "I'm doing great! 😊 How can I assist you with your property search?",
+  "good morning": "Good morning! 🌞 Looking for your dream home today?",
+  "good evening": "Good evening! 🌙 How can I help you with properties?",
+  "bye|goodbye": "Goodbye! 👋 Feel free to come back anytime for property help.",
+    // 🔹 Small Talk (NEW ✅)
+  "ok|okay|fine|hmm|alright": "👍 Got it! Let me know how I can help you with properties.",
+  "yes|yeah|yep": "Great! 😊 Tell me what you're looking for — buy or rent?",
+  "no|not now": "No problem 👍 Let me know whenever you're ready.",
+  "thanks|thank you": "You're welcome 😊 Happy to help!",
+  "good": "Nice 😊 What would you like to do next?",
+  "great|awesome": "That's great to hear! 🎉 How can I assist you further?",
+
+
+
+  // 🔹 About
+  "what is hitaishi homes|about you|who are you": "Hitaishi Homes helps you find, buy, rent, or sell properties easily. 🏠",
+
+  // 🔹 Buy / Rent
+  "buy house|purchase property|buy property |buy ": "Great! 🏡 We have many properties for sale. Tell me your city and budget.",
+  "rent house|house for rent|rental property| rent ": "Looking for rent? 🏠 Tell me your preferred location and budget.",
+  "1bhk|2bhk|3bhk|flat|apartment": "We have multiple options like 1BHK, 2BHK, 3BHK apartments. Tell me your city.",
+
+  // 🔹 Pricing
+  "price|cost|budget|rate|how much": "Prices depend on location, type, and amenities. Please tell your city & budget.",
+  "cheap house|low budget": "We have budget-friendly homes too 💰 Tell your budget and location.",
+  "luxury villa|premium house": "We offer luxury villas 🏡✨ Share your preferred city and budget.",
+
+  // 🔹 Location
+  "hyderabad|bangalore|chennai|mumbai": "Nice choice! 👍 We have properties in this city. What type are you looking for?",
+  "near me|location": "Please share your city or area so I can suggest better properties.",
+
+  // 🔹 Property Details
+  "amenities|facilities": "Amenities include parking 🚗, lift, security 🔐, water supply 💧 and more.",
+  "furnished|semi furnished|unfurnished": "We have furnished, semi-furnished and unfurnished options.",
+  "new property|ready to move": "We have ready-to-move and under-construction properties available.",
+
+  // 🔹 Sellers
+  "sell property|list property": "You can list your property easily on Hitaishi Homes. 🏠 Go to 'Post Property'.",
+  "owner contact|contact seller": "You can contact the owner directly from the property page.",
+
+  // 🔹 Loan / Finance
+  "loan|home loan|emi": "We can guide you with home loans 🏦. EMI depends on your budget and bank offers.",
+  
+  // 🔹 Legal
+  "documents|legal|registration": "Important documents include sale deed, EC, property tax receipts, and approvals.",
+
+  // 🔹 Booking
+  "visit|schedule visit": "You can schedule a site visit 🏠 from the property page.",
+  "booking|reserve property": "You can book or show interest directly from the property details page.",
+
+  // 🔹 Services
+  "agent|broker": "We connect you with verified sellers and agents 🤝.",
+  "no broker|without broker": "We also provide direct owner listings (no broker).",
+
+  // 🔹 Delivery / Process
+  "process|steps to buy": "Steps: Search → Shortlist → Visit → Finalize → Documentation → Registration ✅",
+  "how to rent": "Steps: Search → Contact owner → Visit → Agreement → Move in 🏠",
+
+  // 🔹 Support
+  "contact|support|help": "You can contact us via phone 📞 or website form for assistance.",
+  "complaint|issue": "Sorry for the inconvenience 🙏 Please contact support for quick resolution.",
+
+  // 🔹 Default
+  "default": "Sorry, I didn’t understand 🤔 Try asking about buying, renting, price, or location."
+};
+
+  // DOM Elements
+  const openBtn = document.getElementById('chatbot-open-btn');
+  const closeBtn = document.getElementById('chatbot-close-btn');
+  const modal = document.getElementById('chatbot-modal');
+  const overlay = document.getElementById('chatbot-modal-overlay');
+  const msgsDiv = document.getElementById('chatbot-msgs');
+  const inputTxt = document.getElementById('chatbot-txt-input');
+  const sendBtn = document.getElementById('chatbot-send-btn');
+
+  // Open chatbot
+  function openChat() {
+    modal.style.display = 'flex';
+    overlay.style.display = 'block';
+    inputTxt.focus();
+  }
+
+  // Close chatbot
+  function closeChat() {
+    modal.style.display = 'none';
+    overlay.style.display = 'none';
+  }
+
+  // Add message
+  function addMsg(text, isUser) {
+    const msg = document.createElement('div');
+    msg.className = `chatbot-message ${isUser ? 'user' : 'bot'}`;
+    msg.textContent = text;
+    msgsDiv.appendChild(msg);
+    msgsDiv.scrollTop = msgsDiv.scrollHeight;
+  }
+
+  // Find response
+  function getResponse(userMsg) {
+    const normalized = userMsg.trim().toLowerCase();
+    for (const [keys, response] of Object.entries(chatbotDB)) {
+      const keywordList = keys.split('|');
+      if (keywordList.some(kw => normalized.includes(kw.trim()))) {
+        return response;
+      }
+    }
+    return "I'm not sure how to respond to that. Can you try something else?";
+  }
+
+  // Send message
+  async function sendMsg() {
+    const msg = inputTxt.value.trim();
+    if (!msg) return;
+
+    inputTxt.value = '';
+    addMsg(msg, true);
+
+    await new Promise(r => setTimeout(r, 500));
+    addMsg(getResponse(msg), false);
+  }
+
+  // Event Listeners
+  openBtn.addEventListener('click', openChat);
+  closeBtn.addEventListener('click', closeChat);
+  overlay.addEventListener('click', closeChat);
+  sendBtn.addEventListener('click', sendMsg);
+  inputTxt.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendMsg();
+    }
+  });
+
+  // Close with Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.style.display === 'flex') {
+      closeChat();
+    }
+  });
+
+  // Hover effect for button
+  openBtn.addEventListener('mouseover', () => {
+    openBtn.style.transform = 'scale(1.1)';
+    openBtn.style.boxShadow = '0 6px 20px rgba(40, 99, 232, 0.6)';
+  });
+
+  openBtn.addEventListener('mouseout', () => {
+    openBtn.style.transform = 'scale(1)';
+    openBtn.style.boxShadow = '0 4px 12px rgba(40, 99, 232, 0.4)';
+  });
+</script>

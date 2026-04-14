@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<style>
+  /* Mobile hamburger & menu styles (scoped, minimal) */
+  .mobile-hamburger{display:none;flex-direction:column;justify-content:space-between;width:30px;height:22px;padding:6px;border:none;background:transparent;cursor:pointer}
+  .mobile-hamburger span{display:block;height:3px;background:#fff;border-radius:2px;transition:transform .25s,opacity .25s}
+  .mobile-hamburger.active span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+  .mobile-hamburger.active span:nth-child(2){opacity:0}
+  .mobile-hamburger.active span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+  /* mobile menu container */
+  .mobile-menu{display:none;background:#000;color:#fff;padding:8px 12px;box-shadow:0 6px 18px rgba(0,0,0,0.12);position:absolute;left:8px;right:8px;top:64px;z-index:1200;border-radius:6px;max-height:70vh;overflow:auto}
+  .mobile-menu.expanded{display:block}
+  .mobile-menu .clone-wrap a{color:#fff;text-decoration:none}
+  .mobile-menu .clone-wrap a + a{border-top:1px solid rgba(255,255,255,0.06)}
+  /* ensure hamburger shown on small screens */
+  @media (max-width: 767px){
+    nav > div { align-items: center; }
+    .mobile-hamburger{display:flex}
+    /* hide all non-logo elements inside the nav container so only logo + hamburger show */
+    nav > div > *:not(a):not(.mobile-hamburger){ display: none !important }
+    /* also hide any remaining nav ULs */
+    nav ul { display: none !important }
+  }
+</style>
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+
+  <h2 style="text-align:center;margin-bottom:20px;">Post New Property (Fresh Table)</h2>
+
+  <form id="newPropForm" enctype="multipart/form-data" style="max-width:500px;margin:0 auto;background:white;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+    
+    <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Type</label>
+    <select name="propType" required style="width:95%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+      <option value="">Select</option>
+      <option value="sell">Sell</option>
+      <option value="rent">Rent</option>
+    </select>
+
+    <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Property Type</label>
+    <select name="propPropertyType" required style="width:95%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+      <option value="">Select</option>
+      <option value="house">House</option>
+      <option value="apartment">Apartment</option>
+      <option value="villa">Villa</option>
+      <option value="land">Land</option>
+      <option value="commercial">Commercial</option>
+      <option value="farmhouse">Farmhouse</option>
+    </select>
+
+    <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Bedrooms</label>
+    <input type="text" name="propBedrooms" placeholder="e.g. 2BHK" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+
+    <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">City</label>
+    <input type="text" name="propCity" required style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+
+    <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Pincode</label>
+    <input type="text" name="propPincode" required maxlength="6" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+
+    <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Price</label>
+    <input type="text" name="propPrice" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+    
+      <!-- Extended fields -->
+      <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Locality</label>
+      <input type="text" name="locality" placeholder="Locality" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+    
+      <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Nearby Landmarks</label>
+      <input type="text" name="nearbyLandmarks" placeholder="Nearby landmarks" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+    
+      <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Built Up Area</label>
+      <input type="text" name="builtUpArea" placeholder="Built up area" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+    
+      <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Carpet Area</label>
+      <input type="text" name="carpetArea" placeholder="Carpet area" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+    
+      <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Plot Area</label>
+      <input type="text" name="plotArea" placeholder="Plot area" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+    
+      <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Bathrooms</label>
+      <input type="text" name="bathrooms" placeholder="Bathrooms" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+    
+      <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Balcony Count</label>
+      <input type="text" name="balconyCount" placeholder="Balcony" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+    
+      <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Floor Number</label>
+      <input type="text" name="floorNumber" placeholder="Floor number" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+    
+      <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Total Floors</label>
+      <input type="text" name="totalFloors" placeholder="Total floors" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+    
+      <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Maintenance Charges</label>
+      <input type="text" name="maintenanceCharges" placeholder="Maintenance charges" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+    
+      <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Deposit</label>
+      <input type="text" name="deposit" placeholder="Deposit" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+    
+      <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;"><input type="checkbox" id="negotiable" name="negotiable"/> Negotiable</label>
+    
+      <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Amenities (comma separated)</label>
+      <input type="text" name="amenities" placeholder="e.g. Lift, Gym" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+
+    <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Address</label>
+    <textarea name="propAddress" required rows="2" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;"></textarea>
+
+    <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Title</label>
+    <input type="text" name="propTitle" required style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+
+    <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Features</label>
+    <input type="text" name="propFeatures" placeholder="3 BHK, Parking, Furnished" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;">
+
+    <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Description</label>
+    <textarea name="propDesc" rows="3" style="width:90%;padding:8px;margin-bottom:10px;margin-left: 13px;"></textarea>
+
+    <label style="display:block;margin-bottom:4px;font-weight:bold;margin-left: 13px;">Image</label>
+    <input type="file" name="propImage" accept="image/*" style="width:90%;padding:8px;margin-bottom:15px;margin-left: 13px;">
+
+    <button type="submit" style="margin-left: 13px;width:95%;padding:10px;background:#2563eb;color:white;border:none;border-radius:6px;font-size:16px;cursor:pointer;">
+      Post Property
+    </button>
+
+    <div id="msg" style="margin-top:10px;font-size:14px;text-align:center;"></div>
+  </form>
+
+  <script>
+    document.getElementById('newPropForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const msgEl = document.getElementById('msg');
+
+      const fd = new FormData(form);
+      // attach userId if available
+      try {
+        const u = JSON.parse(localStorage.getItem('user') || 'null');
+        if (u && u.id) fd.append('userId', String(u.id));
+      } catch (e) {}
+
+      msgEl.textContent = 'Posting...';
+
+      try {
+        const res = await fetch('http://localhost:5001/api/newproperty', {
+          method: 'POST',
+          body: fd
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          msgEl.style.color = 'green';
+          msgEl.textContent = 'Posted successfully! ID: ' + data.propertyId;
+          form.reset();
+        } else {
+          msgEl.style.color = 'red';
+          msgEl.textContent = data.message || 'Failed to post';
+        }
+      } catch (err) {
+        console.error(err);
+        msgEl.style.color = 'red';
+        msgEl.textContent = 'Error connecting to server';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<div id="sectionInterests">
+  <h2 style="text-align:center;margin-bottom:20px;color:#111;">Your Saved Interests</h2>
+  
+  <!-- Search Bar -->
+  <div style="background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:20px;">
+    <input type="text" id="searchInterests" placeholder="Search interests..." 
+           style="width:100%;padding:10px 15px;border:1px solid #e5e7eb;border-radius:8px;">
+  </div>
+  
+  <!-- Statistics -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:25px;">
+    <div style="padding:20px;border-radius:12px;background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:white;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+      <div style="font-size:14px;color:rgba(255,255,255,0.9);">Favorite Properties</div>
+      <div id="interestsCount" style="font-size:32px;font-weight:bold;color:white;margin:5px 0;">0</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.8);"><i class="fas fa-heart"></i> Saved</div>
+    </div>
+  </div>
+  
+  <!-- Interests Grid -->
+  <div id="interestsList">
+    <div style="display:flex;justify-content:center;padding:40px;">
+      <div style="width:40px;height:40px;border:4px solid #f3f4f6;border-top:4px solid #f5576c;border-radius:50%;animation:spin 1s linear infinite;"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.interest-card {
+  background:white;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  transition:all 0.3s ease;
+  position:relative;
+  display:grid;
+  grid-template-columns:200px 1fr;
+}
+
+.interest-card:hover {
+  transform:translateY(-5px);
+  box-shadow:0 8px 25px rgba(0,0,0,0.15);
+}
+
+.interest-image {
+  width:100%;
+  height:150px;
+  object-fit:cover;
+}
+
+.interest-details {
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.no-interests {
+  text-align:center;
+  padding:60px 20px;
+  color:#6b7280;
+}
+
+.no-interests-icon {
+  font-size:64px;
+  margin-bottom:15px;
+  opacity:0.5;
+}
+
+@media (max-width:600px) {
+  .interest-card {
+    grid-template-columns:1fr;
+  }
+  
+  .interest-image {
+    height:200px;
+  }
+}
+</style>
+
+<script src="sections/interests.js"></script>

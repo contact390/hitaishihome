@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitaishi Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body style="
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+ font-family: 'Inter', sans-serif;  background-color:#f5f7fa;
+  color:#333;
+  width:100%;
+  overflow-x:hidden;
+">  
+
+ <div id="navbar"></div>
+
+<script>
+function loadNavbar() {
+  fetch("../navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      const navbarDiv = document.getElementById("navbar");
+      navbarDiv.innerHTML = data;
+
+      // Extract and execute scripts from the fetched navbar
+      const scripts = navbarDiv.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        newScript.async = false;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Wait for scripts to execute, then initialize navbar functions
+      setTimeout(() => {
+        if (typeof updateAuthNavbar === "function") updateAuthNavbar();
+        
+        // Re-setup dropdown menus after navbar is loaded
+        document.querySelectorAll('nav ul li').forEach(li => {
+          li.addEventListener('mouseenter', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'block';
+          });
+          li.addEventListener('mouseleave', () => {
+            const submenu = li.querySelector('ul');
+            if (submenu) submenu.style.display = 'none';
+          });
+        });
+      }, 200);
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+}
+
+// Load navbar when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadNavbar);
+} else {
+  loadNavbar();
+}
+</script>
+  
+  <style>
+  @keyframes slideImage {
+    0% { opacity: 0; }
+    5% { opacity: 1; }
+    30% { opacity: 1; }
+    35% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+  </style>
+<!-- Property Highlights Counter -->
+<section id="property-highlights" style="background-color:#2b2d42;color:#fff;padding:60px 20px;margin-top:-5px;">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;text-align:center;">
+        <div>
+            <div style="font-size:2.5rem;font-weight:700;margin-bottom:10px;color:#e63946;"><span class="counter" data-target="150">0</span>+</div>
+            <p>Premium Retail Spaces</p>
+        </div>
+        <div>
+            <div style="font-size:2.5rem;font-weight:700;margin-bottom:10px;color:#e63946;"><span class="counter" data-target="95">0</span>%</div>
+            <p>Occupancy Rate</p>
+        </div>
+        <div>
+            <div style="font-size:2.5rem;font-weight:700;margin-bottom:10px;color:#e63946;"><span class="counter" data-target="25">0</span></div>
+            <p>Prime Locations</p>
+        </div>
+        <div>
+            <div style="font-size:2.5rem;font-weight:700;margin-bottom:10px;color:#e63946;"><span class="counter" data-target="500">0</span>K+</div>
+            <p>Daily Foot Traffic</p>
+        </div>
+    </div>
+</section>
+<!-- Featured Retail Listings -->
+<section id="retail-listings" style="padding:80px 20px;background-color:#fff;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:60px;">
+            <h2 sstyle="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Featured Retail Spaces</h2>
+            <p style="max-width:700px;margin:0 auto;font-size:1.1rem;color:#666;">Discover our most sought-after retail properties in high-traffic locations</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:40px;align-items:stretch;"> <!-- Added align-items:stretch -->
+            <!-- Property 1 -->
+            <div style="display:flex;flex-direction:column;background-color:#fff;border-radius:15px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08);transition:transform 0.3s ease,box-shadow 0.3s ease;position:relative;height:100%;" onmouseover="this.style.transform='translateY(-10px)';this.style.boxShadow='0 15px 40px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 10px 30px rgba(0,0,0,0.08)'">
+                <div style="position:relative;overflow:hidden;flex-shrink:0;height:250px;"> <!-- Fixed height for image container -->
+                    <img loading="lazy" src="images/Downtown Flagship Space.png" alt="Luxury retail space in downtown shopping district" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                    <div style="position:absolute;top:20px;right:20px;background-color:#e63946;color:#fff;padding:5px 15px;border-radius:50px;font-weight:600;font-size:0.9rem;">Featured</div>
+                </div>
+                <div style="padding:30px;flex-grow:1;display:flex;flex-direction:column;"> <!-- Flex container for content -->
+                    <div style="flex-grow:1;"> <!-- Growable content area -->
+                        <h3 style="color:#2b2d42;font-size:1.6rem;margin-bottom:10px;">Downtown Flagship Space</h3>
+                        <p style="color:#666;margin-bottom:15px;display:flex;align-items:center;"><i class="fas fa-map-marker-alt" style="color:#e63946;margin-right:8px;"></i> 123 Prime Avenue, Downtown District</p>
+                        <p style="margin-bottom:25px;">1,800 sq ft luxury retail space with 30ft street frontage and custom build-out options in the heart of the shopping district.</p>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:25px;">
+                            <div><span style="font-weight:600;color:#2b2d42;">Size:</span> 1,800 sq ft</div>
+                            <div><span style="font-weight:600;color:#2b2d42;">Price:</span> $12,500/mo</div>
+                            <div><span style="font-weight:600;color:#2b2d42;">Type:</span> High Street</div>
+                        </div>
+                    </div>
+                    <a href="#inquiry" style="display:block;text-align:center;background-color:#2b2d42;color:#fff;padding:14px;border-radius:8px;text-decoration:none;font-weight:600;transition:background-color 0.3s ease;margin-top:auto;" onmouseover="this.style.backgroundColor='#e63946'" onmouseout="this.style.backgroundColor='#2b2d42'">Schedule Viewing</a>
+                </div>
+            </div>
+            
+            <!-- Property 2 -->
+            <div style="display:flex;flex-direction:column;background-color:#fff;border-radius:15px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08);transition:transform 0.3s ease,box-shadow 0.3s ease;position:relative;height:100%;" onmouseover="this.style.transform='translateY(-10px)';this.style.boxShadow='0 15px 40px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 10px 30px rgba(0,0,0,0.08)'">
+                <div style="position:relative;overflow:hidden;flex-shrink:0;height:250px;"> <!-- Fixed height for image container -->
+                    <img loading="lazy" src="images/Galeria _mall_realestate.png" alt="Modern shopping mall retail unit with glass facade" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                    <div style="position:absolute;top:20px;right:20px;background-color:#e63946;color:#fff;padding:5px 15px;border-radius:50px;font-weight:600;font-size:0.9rem;">New Listing</div>
+                </div>
+                <div style="padding:30px;flex-grow:1;display:flex;flex-direction:column;"> <!-- Flex container for content -->
+                    <div style="flex-grow:1;"> <!-- Growable content area -->
+                        <h3 style="color:#2b2d42;font-size:1.6rem;margin-bottom:10px;">Galleria Mall Anchor</h3>
+                        <p style="color:#666;margin-bottom:15px;display:flex;align-items:center;"><i class="fas fa-map-marker-alt" style="color:#e63946;margin-right:8px;"></i> 456 Fashion Way, Uptown</p>
+                        <p style="margin-bottom:25px;">3,500 sq ft anchor position in luxury shopping mall with 500,000+ monthly visitors and premium demographics.</p>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:25px;">
+                            <div><span style="font-weight:600;color:#2b2d42;">Size:</span> 3,500 sq ft</div>
+                            <div><span style="font-weight:600;color:#2b2d42;">Price:</span> $18,750/mo</div>
+                            <div><span style="font-weight:600;color:#2b2d42;">Type:</span> Shopping Mall</div>
+                        </div>
+                    </div>
+                    <a href="#inquiry" style="display:block;text-align:center;background-color:#2b2d42;color:#fff;padding:14px;border-radius:8px;text-decoration:none;font-weight:600;transition:background-color 0.3s ease;margin-top:auto;" onmouseover="this.style.backgroundColor='#e63946'" onmouseout="this.style.backgroundColor='#2b2d42'">Schedule Viewing</a>
+                </div>
+            </div>
+            
+            <!-- Property 3 -->
+            <div style="display:flex;flex-direction:column;background-color:#fff;border-radius:15px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08);transition:transform 0.3s ease,box-shadow 0.3s ease;position:relative;height:100%;" onmouseover="this.style.transform='translateY(-10px)';this.style.boxShadow='0 15px 40px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 10px 30px rgba(0,0,0,0.08)'">
+                <div style="position:relative;overflow:hidden;flex-shrink:0;height:250px;"> <!-- Fixed height for image container -->
+                    <img loading="lazy" src="images/historic_botique_realestate.png" alt="Charming boutique space in historic district" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                    <div style="position:absolute;top:20px;right:20px;background-color:#e63946;color:#fff;padding:5px 15px;border-radius:50px;font-weight:600;font-size:0.9rem;">Popular</div>
+                </div>
+                <div style="padding:30px;flex-grow:1;display:flex;flex-direction:column;"> <!-- Flex container for content -->
+                    <div style="flex-grow:1;"> <!-- Growable content area -->
+                        <h3 style="color:#2b2d42;font-size:1.6rem;margin-bottom:10px;">Historic District Boutique</h3>
+                        <p style="color:#666;margin-bottom:15px;display:flex;align-items:center;"><i class="fas fa-map-marker-alt" style="color:#e63946;margin-right:8px;"></i> 789 Heritage Lane, Old Town</p>
+                        <p style="margin-bottom:25px;">1,200 sq ft charming retail space with original architectural details in the historic shopping district with loyal local clientele.</p>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:25px;">
+                            <div><span style="font-weight:600;color:#2b2d42;">Size:</span> 1,200 sq ft</div>
+                            <div><span style="font-weight:600;color:#2b2d42;">Price:</span> $7,200/mo</div>
+                            <div><span style="font-weight:600;color:#2b2d42;">Type:</span> Specialty Retail</div>
+                        </div>
+                    </div>
+                    <a href="#inquiry" style="display:block;text-align:center;background-color:#2b2d42;color:#fff;padding:14px;border-radius:8px;text-decoration:none;font-weight:600;transition:background-color 0.3s ease;margin-top:auto;" onmouseover="this.style.backgroundColor='#e63946'" onmouseout="this.style.backgroundColor='#2b2d42'">Schedule Viewing</a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:50px;">
+            <a href="#all-properties" style="display:inline-flex;align-items:center;background-color:#e63946;color:#fff;padding:16px 35px;border-radius:50px;text-decoration:none;font-weight:600;transition:all 0.3s ease;" onmouseover="this.style.backgroundColor='#2b2d42';this.querySelector('i').style.transform='translateX(5px)'" onmouseout="this.style.backgroundColor='#e63946';this.querySelector('i').style.transform='translateX(0)'">View All Properties <i class="fas fa-arrow-right" style="margin-left:10px;transition:transform 0.3s ease;"></i></a>
+        </div>
+    </div>
+</section>
+<!-- Retail Location Map -->
+<section id="location-map" style="padding:80px 20px;background-color:#f8f9fa;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:60px;">
+            <h2 sstyle="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Prime Retail Locations</h2>
+            <p style="max-width:700px;margin:0 auto;font-size:1.1rem;color:#666;">Our strategically selected retail properties are positioned in high-growth commercial corridors</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:50px;align-items:center;">
+            <div>
+                <div style="height:500px;background-color:#eee;border-radius:15px;overflow:hidden;position:relative;box-shadow:0 10px 30px rgba(0,0,0,0.1);">
+                    <img loading="lazy" src="images/map_location.png" alt="Map showing prime retail locations" style="width:100%;height:100%;object-fit:cover;">
+                    <div style="position:absolute;top:20px;left:20px;background-color:rgba(255,255,255,0.9);padding:15px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.1);max-width:250px;">
+                        <h3 style="margin-top:0;margin-bottom:10px;color:#e63946;">Key Retail Districts</h3>
+                        <ul style="list-style-type:none;padding:0;margin:0;">
+                            <li style="margin-bottom:8px;padding-left:20px;position:relative;"><i style="position:absolute;left:0;color:#e63946;" class="fas fa-map-pin"></i> Downtown Core</li>
+                            <li style="margin-bottom:8px;padding-left:20px;position:relative;"><i style="position:absolute;left:0;color:#e63946;" class="fas fa-map-pin"></i> Fashion District</li>
+                            <li style="margin-bottom:8px;padding-left:20px;position:relative;"><i style="position:absolute;left:0;color:#e63946;" class="fas fa-map-pin"></i> Waterfront</li>
+                            <li style="margin-bottom:8px;padding-left:20px;position:relative;"><i style="position:absolute;left:0;color:#e63946;" class="fas fa-map-pin"></i> Historic Town Center</li>
+                            <li style="padding-left:20px;position:relative;"><i style="position:absolute;left:0;color:#e63946;" class="fas fa-map-pin"></i> Uptown Shopping Corridor</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div style="margin-bottom:30px;">
+                    <h3 style="font-size:1.8rem;margin-bottom:20px;color:#2b2d42;">Strategic Placement Advantages</h3>
+                    <p style="margin-bottom:20px;">Our retail properties are carefully selected based on comprehensive market analysis, demographic studies, and traffic patterns to ensure maximum visibility and customer access for your business.</p>
+                    <div style="background-color:#fff;border-radius:10px;padding:25px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                        <h4 style="margin-top:0;margin-bottom:15px;color:#e63946;">Location Features:</h4>
+                        <ul style="columns:2;list-style-type:none;padding:0;margin:0;">
+                            <li style="margin-bottom:12px;padding-left:25px;position:relative;"><i style="position:absolute;left:0;color:#e63946;" class="fas fa-check"></i> High pedestrian traffic</li>
+                            <li style="margin-bottom:12px;padding-left:25px;position:relative;"><i style="position:absolute;left:0;color:#e63946;" class="fas fa-check"></i> Major transportation hubs</li>
+                            <li style="margin-bottom:12px;padding-left:25px;position:relative;"><i style="position:absolute;left:0;color:#e63946;" class="fas fa-check"></i> Complementary businesses</li>
+                            <li style="margin-bottom:12px;padding-left:25px;position:relative;"><i style="position:absolute;left:0;color:#e63946;" class="fas fa-check"></i> Premium demographics</li>
+                            <li style="margin-bottom:12px;padding-left:25px;position:relative;"><i style="position:absolute;left:0;color:#e63946;" class="fas fa-check"></i> Excellent visibility</li>
+                            <li style="padding-left:25px;position:relative;"><i style="position:absolute;left:0;color:#e63946;" class="fas fa-check"></i> Ample parking</li>
+                        </ul>
+                    </div>
+                </div>
+                <a href="#location-analysis" style="display:inline-flex;align-items:center;background-color:#2b2d42;color:#fff;padding:14px 30px;border-radius:50px;text-decoration:none;font-weight:600;transition:all 0.3s ease;" onmouseover="this.style.backgroundColor='#e63946';this.querySelector('i').style.transform='translateX(5px)'" onmouseout="this.style.backgroundColor='#2b2d42';this.querySelector('i').style.transform='translateX(0)'">Request Location Analysis <i class="fas fa-arrow-right" style="margin-left:10px;transition:transform 0.3s ease;"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Retail Space Types -->
+<section id="space-types" style="padding:80px 20px;background-color:#fff;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:60px;">
+            <h2 sstyle="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Retail Space Solutions</h2>
+            <p style="max-width:700px;margin:0 auto;font-size:1.1rem;color:#666;">We offer diverse retail environments to suit every business need and budget</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;">
+            <div style="background-color:#f8f9fa;border-radius:15px;padding:40px 30px;text-align:center;transition:all 0.3s ease;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-10px)';this.style.boxShadow='0 15px 40px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <div style="width:80px;height:80px;background-color:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;color:#fff;font-size:2rem;"><i class="fas fa-store"></i></div>
+                <h3 style="font-size:1.5rem;margin-bottom:15px;color:#2b2d42;">High Street Retail</h3>
+                <p style="margin-bottom:20px;">Prime standalone storefronts in bustling shopping districts with maximum street visibility and access.</p>
+                <a href="#high-street" style="color:#e63946;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;">Learn More <i class="fas fa-chevron-right" style="margin-left:8px;font-size:0.8rem;"></i></a>
+            </div>
+            <div style="background-color:#f8f9fa;border-radius:15px;padding:40px 30px;text-align:center;transition:all 0.3s ease;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-10px)';this.style.boxShadow='0 15px 40px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <div style="width:80px;height:80px;background-color:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;color:#fff;font-size:2rem;"><i class="fas fa-shopping-bag"></i></div>
+                <h3 style="font-size:1.5rem;margin-bottom:15px;color:#2b2d42;">Shopping Mall Units</h3>
+                <p style="margin-bottom:20px;">Premium spaces within established shopping centers with built-in customer traffic and amenities.</p>
+                <a href="#mall-units" style="color:#e63946;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;">Learn More <i class="fas fa-chevron-right" style="margin-left:8px;font-size:0.8rem;"></i></a>
+            </div>
+            <div style="background-color:#f8f9fa;border-radius:15px;padding:40px 30px;text-align:center;transition:all 0.3s ease;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-10px)';this.style.boxShadow='0 15px 40px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <div style="width:80px;height:80px;background-color:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;color:#fff;font-size:2rem;"><i class="fas fa-utensils"></i></div>
+                <h3 style="font-size:1.5rem;margin-bottom:15px;color:#2b2d42;">Restaurant Spaces</h3>
+                <p style="margin-bottom:20px;">Fully equipped food service locations with proper ventilation, utilities, and high visibility.</p>
+                <a href="#restaurant-spaces" style="color:#e63946;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;">Learn More <i class="fas fa-chevron-right" style="margin-left:8px;font-size:0.8rem;"></i></a>
+            </div>
+            <div style="background-color:#f8f9fa;border-radius:15px;padding:40px 30px;text-align:center;transition:all 0.3s ease;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-10px)';this.style.boxShadow='0 15px 40px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <div style="width:80px;height:80px;background-color:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;color:#fff;font-size:2rem;"><i class="fas fa-bolt"></i></div>
+                <h3 style="font-size:1.5rem;margin-bottom:15px;color:#2b2d42;">Pop-Up Retail</h3>
+                <p style="margin-bottom:20px;">Short-term flexible locations perfect for seasonal businesses, product launches, and market testing.</p>
+                <a href="#pop-up" style="color:#e63946;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;">Learn More <i class="fas fa-chevron-right" style="margin-left:8px;font-size:0.8rem;"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Retail Investment Benefits -->
+<section id="investment-benefits" style="padding:80px 20px;background-color:#2b2d42;color:#fff;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:60px;">
+            <h2 style="font-family:'Playfair Display',serif;font-size:2.8rem;margin-bottom:15px;">Retail Real Estate Investment</h2>
+            <p style="max-width:700px;margin:0 auto;font-size:1.1rem;color:#ccc;">Why retail commercial properties are a smart investment choice</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(500px,1fr));gap:40px;align-items:center;">
+            <div>
+                <div style="background-color:rgba(255,255,255,0.1);border-radius:15px;padding:40px;backdrop-filter:blur(5px);">
+                    <h3 style="margin-top:0;font-size:1.8rem;margin-bottom:25px;color:#e63946;">Advantages of Retail Property Investment</h3>
+                    <ul style="list-style-type:none;padding:0;margin:0;">
+                        <li style="margin-bottom:20px;padding-left:35px;position:relative;">
+                            <div style="position:absolute;left:0;top:0;width:25px;height:25px;background-color:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-check" style="font-size:0.8rem;"></i></div>
+                            <h4 style="margin-bottom:8px;font-size:1.2rem;">Stable Cash Flow</h4>
+                            <p style="margin:0;color:#ccc;">Retail properties typically offer consistent rental income with long-term leases and annual increases.</p>
+                        </li>
+                        <li style="margin-bottom:20px;padding-left:35px;position:relative;">
+                            <div style="position:absolute;left:0;top:0;width:25px;height:25px;background-color:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-check" style="font-size:0.8rem;"></i></div>
+                            <h4 style="margin-bottom:8px;font-size:1.2rem;">Triple Net Leases</h4>
+                            <p style="margin:0;color:#ccc;">Tenants often cover property taxes, insurance, and maintenance, reducing owner expenses.</p>
+                        </li>
+                        <li style="padding-left:35px;position:relative;">
+                            <div style="position:absolute;left:0;top:0;width:25px;height:25px;background-color:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-check" style="font-size:0.8rem;"></i></div>
+                            <h4 style="margin-bottom:8px;font-size:1.2rem;">Appreciation Potential</h4>
+                            <p style="margin:0;color:#ccc;">Well-located retail properties historically appreciate in value over time.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div style="background-color:rgba(255,255,255,0.1);border-radius:15px;padding:40px;backdrop-filter:blur(5px);">
+                    <h3 style="margin-top:0;font-size:1.8rem;margin-bottom:25px;color:#e63946;">Our Investment Properties</h3>
+                    <ul style="list-style-type:none;padding:0;margin:0;">
+                        <li style="margin-bottom:20px;padding-left:35px;position:relative;">
+                            <div style="position:absolute;left:0;top:0;width:25px;height:25px;background-color:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-star" style="font-size:0.8rem;"></i></div>
+                            <h4 style="margin-bottom:8px;font-size:1.2rem;">Prime Locations</h4>
+                            <p style="margin:0;color:#ccc;">Carefully selected properties in high-growth commercial corridors with excellent demographics.</p>
+                        </li>
+                        <li style="margin-bottom:20px;padding-left:35px;position:relative;">
+                            <div style="position:absolute;left:0;top:0;width:25px;height:25px;background-color:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-star" style="font-size:0.8rem;"></i></div>
+                            <h4 style="margin-bottom:8px;font-size:1.2rem;">Tenant Quality</h4>
+                            <p style="margin:0;color:#ccc;">We carefully screen tenants to ensure creditworthiness and business viability.</p>
+                        </li>
+                        <li style="padding-left:35px;position:relative;">
+                            <div style="position:absolute;left:0;top:0;width:25px;height:25px;background-color:#e63946;border-radius:50%;display:flex;align-items:center;justify-content:center;"><i class="fas fa-star" style="font-size:0.8rem;"></i></div>
+                            <h4 style="margin-bottom:8px;font-size:1.2rem;">Professional Management</h4>
+                            <p style="margin:0;color:#ccc;">Our experienced team handles all aspects of property management for investors.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:50px;">
+            <a href="#investment-opportunities" style="display:inline-flex;align-items:center;background-color:#e63946;color:#fff;padding:16px 35px;border-radius:50px;text-decoration:none;font-weight:600;transition:all 0.3s ease;" onmouseover="this.style.backgroundColor='#fff';this.style.color='#2b2d42';this.querySelector('i').style.transform='translateX(5px)'" onmouseout="this.style.backgroundColor='#e63946';this.style.color='#fff';this.querySelector('i').style.transform='translateX(0)'">Explore Investment Opportunities <i class="fas fa-arrow-right" style="margin-left:10px;transition:transform 0.3s ease;"></i></a>
+        </div>
+    </div>
+</section>
+<!-- Retail Market Trends -->
+<section id="market-trends" style="padding:80px 20px;background-color:#fff;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:60px;">
+            <h2 sstyle="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Retail Market Insights</h2>
+            <p style="max-width:700px;margin:0 auto;font-size:1.1rem;color:#666;">Current trends and data shaping the retail real estate market</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;margin-bottom:50px;">
+            <div style="background-color:#f8f9fa;border-radius:15px;padding:30px;transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-10px)';this.style.boxShadow='0 15px 40px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <div style="width:60px;height:60px;background-color:#e63946;border-radius:15px;display:flex;align-items:center;justify-content:center;margin-bottom:25px;color:#fff;font-size:1.5rem;"><i class="fas fa-chart-line"></i></div>
+                <h3 style="font-size:1.5rem;margin-bottom:15px;color:#2b2d42;">Market Recovery</h3>
+                <p style="margin-bottom:20px;">Retail leasing activity has rebounded to 95% of pre-pandemic levels, with certain sectors like luxury goods and experiential retail exceeding 2019 benchmarks.</p>
+                <div style="height:5px;background-color:#eee;border-radius:5px;margin-bottom:15px;overflow:hidden;">
+                    <div style="width:95%;height:100%;background-color:#e63946;"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:0.9rem;color:#666;">
+                    <span>2020 Levels</span>
+                    <span>Current: 95%</span>
+                </div>
+            </div>
+            <div style="background-color:#f8f9fa;border-radius:15px;padding:30px;transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-10px)';this.style.boxShadow='0 15px 40px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <div style="width:60px;height:60px;background-color:#e63946;border-radius:15px;display:flex;align-items:center;justify-content:center;margin-bottom:25px;color:#fff;font-size:1.5rem;"><i class="fas fa-shopping-basket"></i></div>
+                <h3 style="font-size:1.5rem;margin-bottom:15px;color:#2b2d42;">Consumer Behavior</h3>
+                <p style="margin-bottom:20px;">78% of consumers prefer shopping in physical stores for immediate product access and experiential elements, driving demand for well-located retail spaces.</p>
+                <div style="height:5px;background-color:#eee;border-radius:5px;margin-bottom:15px;overflow:hidden;">
+                    <div style="width:78%;height:100%;background-color:#e63946;"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:0.9rem;color:#666;">
+                    <span>Online Preference</span>
+                    <span>In-Store: 78%</span>
+                </div>
+            </div>
+            <div style="background-color:#f8f9fa;border-radius:15px;padding:30px;transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-10px)';this.style.boxShadow='0 15px 40px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+                <div style="width:60px;height:60px;background-color:#e63946;border-radius:15px;display:flex;align-items:center;justify-content:center;margin-bottom:25px;color:#fff;font-size:1.5rem;"><i class="fas fa-dollar-sign"></i></div>
+                <h3 style="font-size:1.5rem;margin-bottom:15px;color:#2b2d42;">Rental Growth</h3>
+                <p style="margin-bottom:20px;">Prime retail rents have increased by 12% year-over-year in our markets, with high street locations seeing the strongest demand and price appreciation.</p>
+                <div style="height:5px;background-color:#eee;border-radius:5px;margin-bottom:15px;overflow:hidden;">
+                    <div style="width:12%;height:100%;background-color:#e63946;"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:0.9rem;color:#666;">
+                    <span>2022 Levels</span>
+                    <span>Increase: +12%</span>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center;">
+            <a href="#full-report" style="display:inline-flex;align-items:center;background-color:#2b2d42;color:#fff;padding:14px 30px;border-radius:50px;text-decoration:none;font-weight:600;transition:all 0.3s ease;" onmouseover="this.style.backgroundColor='#e63946';this.querySelector('i').style.transform='translateX(5px)'" onmouseout="this.style.backgroundColor='#2b2d42';this.querySelector('i').style.transform='translateX(0)'">Download Full Market Report <i class="fas fa-download" style="margin-left:10px;transition:transform 0.3s ease;"></i></a>
+        </div>
+    </div>
+</section>
+<!-- Tenant Success Stories -->
+<section style="padding: 80px 0; background: linear-gradient(135deg, #f0f4f8 50%, #ffffff 50%); font-family: 'Segoe UI', sans-serif;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:60px;">
+            <h2 sstyle="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Retail Tenant Success</h2>
+            <p style="max-width:700px;margin:0 auto;font-size:1.1rem;color:#666;">Businesses thriving in our retail properties</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:40px;">
+            <div style="background-color:#fff;border-radius:15px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+                <div style="position:relative;height:250px;overflow:hidden;">
+                    <img loading="lazy" src="images/chique_boutique.png" alt="Boutique owner in her successful store" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                    <div style="position:absolute;bottom:0;left:0;width:100%;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));color:#fff;">
+                        <h3 style="margin:0;font-size:1.5rem;">Chic Boutique</h3>
+                        <p style="margin:0;opacity:0.9;">Sales increase: 65%</p>
+                    </div>
+                </div>
+                <div style="padding:30px;">
+                    <div style="display:flex;align-items:center;margin-bottom:20px;">
+                        <img loading="lazy" src="images/sarahchen.png" alt="Sarah Chen, Boutique Owner" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-right:15px;border:3px solid #e63946;">
+                        <div>
+                            <h4 style="margin:0 0 5px 0;color:#2b2d42;">Sarah Chen</h4>
+                            <p style="margin:0;color:#666;font-size:0.9rem;">Owner, Chic Boutique</p>
+                        </div>
+                    </div>
+                    <p style="margin-bottom:25px;font-style:italic;position:relative;padding-left:20px;">"Moving to Hitashi's downtown location transformed our business. The foot traffic is incredible and the space perfectly showcases our brand aesthetic."</p>
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <div style="color:#e63946;font-weight:600;">★★★★★</div>
+                        <a href="#full-story" style="color:#e63946;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;">Read Full Story <i class="fas fa-chevron-right" style="margin-left:8px;font-size:0.8rem;"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div style="background-color:#fff;border-radius:15px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+                <div style="position:relative;height:250px;overflow:hidden;">
+                    <img loading="lazy" src="images/urban_cafe.png" alt="Cafe with customers enjoying coffee" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                    <div style="position:absolute;bottom:0;left:0;width:100%;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));color:#fff;">
+                        <h3 style="margin:0;font-size:1.5rem;">Urban Café</h3>
+                        <p style="margin:0;opacity:0.9;">Customer growth: 120%</p>
+                    </div>
+                </div>
+                <div style="padding:30px;">
+                    <div style="display:flex;align-items:center;margin-bottom:20px;">
+                        <img loading="lazy" src="images/urban_cafe.png" alt="Michael Rodriguez, Café Owner" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-right:15px;border:3px solid #e63946;">
+                        <div>
+                            <h4 style="margin:0 0 5px 0;color:#2b2d42;">Michael Rodriguez</h4>
+                            <p style="margin:0;color:#666;font-size:0.9rem;">Owner, Urban Café</p>
+                        </div>
+                    </div>
+                    <p style="margin-bottom:25px;font-style:italic;position:relative;padding-left:20px;">"The visibility and accessibility of our Hitashi retail space brought in customers from day one. We're now opening our third location in another of their properties."</p>
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <div style="color:#e63946;font-weight:600;">★★★★★</div>
+                        <a href="#full-story" style="color:#e63946;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;">Read Full Story <i class="fas fa-chevron-right" style="margin-left:8px;font-size:0.8rem;"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div style="background-color:#fff;border-radius:15px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+                <div style="position:relative;height:250px;overflow:hidden;">
+                    <img loading="lazy" src="images/electronic_store.png" alt="Electronics store with customers browsing" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                    <div style="position:absolute;bottom:0;left:0;width:100%;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));color:#fff;">
+                        <h3 style="margin:0;font-size:1.5rem;">Tech Haven</h3>
+                        <p style="margin:0;opacity:0.9;">Revenue growth: 85%</p>
+                    </div>
+                </div>
+                <div style="padding:30px;">
+                    <div style="display:flex;align-items:center;margin-bottom:20px;">
+                        <img loading="lazy" src="images/james_wilson_realestate.png" alt="James Wilson, Store Manager" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-right:15px;border:3px solid #e63946;">
+                        <div>
+                            <h4 style="margin:0 0 5px 0;color:#2b2d42;">James Wilson</h4>
+                            <p style="margin:0;color:#666;font-size:0.9rem;">Manager, Tech Haven</p>
+                        </div>
+                    </div>
+                    <p style="margin-bottom:25px;font-style:italic;position:relative;padding-left:20px;">"Our mall location sees over 20,000 visitors daily. The space design and location within the mall were crucial to our success as a destination retailer."</p>
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <div style="color:#e63946;font-weight:600;">★★★★☆</div>
+                        <a href="#full-story" style="color:#e63946;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;">Read Full Story <i class="fas fa-chevron-right" style="margin-left:8px;font-size:0.8rem;"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Retail Leasing Process -->
+<section id="leasing-process" style="padding:80px 20px;background-color:#fff;">
+    <div style="max-width:1400px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:60px;">
+        <h2 sstyle="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Simple Leasing Process</h2>
+        <p style="max-width:700px;margin:0 auto;font-size:1.1rem;color:#666;">Our streamlined approach to securing your perfect retail space</p>
+      </div>
+  
+      <!-- Steps Row -->
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;margin-bottom:50px;">
+        <!-- Step 1 -->
+        <div style="flex:1;min-width:200px;max-width:250px;text-align:center;">
+          <div style="width:60px;height:60px;background-color:#e63946;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;font-weight:bold;">1</div>
+          <h3 style="font-size:1.2rem;margin-bottom:10px;color:#2b2d42;">Needs Assessment</h3>
+          <p style="font-size:0.95rem;color:#555;">We discuss your business goals, location needs, and budget.</p>
+        </div>
+  
+        <!-- Step 2 -->
+        <div style="flex:1;min-width:200px;max-width:250px;text-align:center;">
+          <div style="width:60px;height:60px;background-color:#e63946;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;font-weight:bold;">2</div>
+          <h3 style="font-size:1.2rem;margin-bottom:10px;color:#2b2d42;">Property Selection</h3>
+          <p style="font-size:0.95rem;color:#555;">Tailored retail options are presented and scheduled for viewing.</p>
+        </div>
+  
+        <!-- Step 3 -->
+        <div style="flex:1;min-width:200px;max-width:250px;text-align:center;">
+          <div style="width:60px;height:60px;background-color:#e63946;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;font-weight:bold;">3</div>
+          <h3 style="font-size:1.2rem;margin-bottom:10px;color:#2b2d42;">Lease Negotiation</h3>
+          <p style="font-size:0.95rem;color:#555;">Our team negotiates favorable terms to match your needs.</p>
+        </div>
+  
+        <!-- Step 4 -->
+        <div style="flex:1;min-width:200px;max-width:250px;text-align:center;">
+          <div style="width:60px;height:60px;background-color:#e63946;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;font-weight:bold;">4</div>
+          <h3 style="font-size:1.2rem;margin-bottom:10px;color:#2b2d42;">Space Preparation</h3>
+          <p style="font-size:0.95rem;color:#555;">We coordinate modifications, fit-outs, and approvals.</p>
+        </div>
+  
+        <!-- Step 5 -->
+        <div style="flex:1;min-width:200px;max-width:250px;text-align:center;">
+          <div style="width:60px;height:60px;background-color:#e63946;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;font-weight:bold;">5</div>
+          <h3 style="font-size:1.2rem;margin-bottom:10px;color:#2b2d42;">Grand Opening</h3>
+          <p style="font-size:0.95rem;color:#555;">You launch your store and welcome customers to your new space.</p>
+        </div>
+  
+        <!-- Step 6 -->
+        <div style="flex:1;min-width:200px;max-width:250px;text-align:center;">
+          <div style="width:60px;height:60px;background-color:#e63946;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;font-weight:bold;">6</div>
+          <h3 style="font-size:1.2rem;margin-bottom:10px;color:#2b2d42;">Ongoing Support</h3>
+          <p style="font-size:0.95rem;color:#555;">We offer ongoing guidance and help with maintenance or renewals.</p>
+        </div>
+      </div>
+  
+      <!-- CTA Button -->
+      <div style="text-align:center;">
+        <a href="#start-process" style="display:inline-flex;align-items:center;background-color:#2b2d42;color:#fff;padding:16px 35px;border-radius:50px;text-decoration:none;font-weight:600;transition:all 0.3s ease;" onmouseover="this.style.backgroundColor='#e63946';this.querySelector('i').style.transform='translateX(5px)'" onmouseout="this.style.backgroundColor='#2b2d42';this.querySelector('i').style.transform='translateX(0)'">
+          Start Your Leasing Process
+          <i class="fas fa-arrow-right" style="margin-left:10px;transition:transform 0.3s ease;"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+<!-- Retail Gallery -->
+<section id="retail-gallery" style="padding:80px 20px;background-color:#f8f9fa;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:60px;">
+            <h2 sstyle="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Retail Space Gallery</h2>
+            <p style="max-width:700px;margin:0 auto;font-size:1.1rem;color:#666;">Explore our diverse retail property portfolio</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-bottom:40px;">
+            <div style="position:relative;border-radius:15px;overflow:hidden;height:300px;cursor:pointer;" onclick="openLightbox('gallery1.jpg')">
+                <img loading="lazy" src="images/downtown_store front.png" alt="Modern retail storefront with large windows" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="position:absolute;bottom:0;left:0;width:100%;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));color:#fff;">
+                    <h3 style="margin:0;font-size:1.2rem;">Downtown Storefront</h3>
+                </div>
+            </div>
+            <div style="position:relative;border-radius:15px;overflow:hidden;height:300px;cursor:pointer;" onclick="openLightbox('gallery2.jpg')">
+                <img loading="lazy" src="images/move_ready_space_realestate.png" alt="Interior of spacious retail unit ready for tenant" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="position:absolute;bottom:0;left:0;width:100%;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));color:#fff;">
+                    <h3 style="margin:0;font-size:1.2rem;">Move-In Ready Space</h3>
+                </div>
+            </div>
+            <div style="position:relative;border-radius:15px;overflow:hidden;height:300px;cursor:pointer;" onclick="openLightbox('gallery3.jpg')">
+                <img loading="lazy" src="images/mall_corridor_realestate.png" alt="Shopping mall retail corridor with stores" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="position:absolute;bottom:0;left:0;width:100%;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));color:#fff;">
+                    <h3 style="margin:0;font-size:1.2rem;">Mall Retail Corridor</h3>
+                </div>
+            </div>
+            <div style="position:relative;border-radius:15px;overflow:hidden;height:300px;cursor:pointer;" onclick="openLightbox('gallery4.jpg')">
+                <img loading="lazy" src="images/botique_retail_space_realestate.png" alt="Boutique retail space with custom fixtures" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="position:absolute;bottom:0;left:0;width:100%;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));color:#fff;">
+                    <h3 style="margin:0;font-size:1.2rem;">Boutique Interior</h3>
+                </div>
+            </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;">
+            <div style="position:relative;border-radius:15px;overflow:hidden;height:300px;cursor:pointer;" onclick="openLightbox('gallery5.jpg')">
+                <img loading="lazy" src="images/restaurant_kitchen_equip.png" alt="Restaurant space with kitchen equipment" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="position:absolute;bottom:0;left:0;width:100%;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));color:#fff;">
+                    <h3 style="margin:0;font-size:1.2rem;">Restaurant Space</h3>
+                </div>
+            </div>
+            <div style="position:relative;border-radius:15px;overflow:hidden;height:300px;cursor:pointer;" onclick="openLightbox('gallery6.jpg')">
+                <img loading="lazy" src="images/corner_location.png" alt="Corner retail unit with excellent visibility" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="position:absolute;bottom:0;left:0;width:100%;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));color:#fff;">
+                    <h3 style="margin:0;font-size:1.2rem;">Corner Location</h3>
+                </div>
+            </div>
+            <div style="position:relative;border-radius:15px;overflow:hidden;height:300px;cursor:pointer;" onclick="openLightbox('gallery7.jpg')">
+                <img loading="lazy" src="images/historic_building.png" alt="Historic retail building with character" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="position:absolute;bottom:0;left:0;width:100%;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));color:#fff;">
+                    <h3 style="margin:0;font-size:1.2rem;">Historic Building</h3>
+                </div>
+            </div>
+            <div style="position:relative;border-radius:15px;overflow:hidden;height:300px;cursor:pointer;" onclick="openLightbox('gallery8.jpg')">
+                <img loading="lazy" src="images/modern_shopping center_exterir_realestate.png" alt="Modern shopping center exterior" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="position:absolute;bottom:0;left:0;width:100%;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));color:#fff;">
+                    <h3 style="margin:0;font-size:1.2rem;">Shopping Center</h3>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:50px;">
+            <a href="#full-gallery" style="display:inline-flex;align-items:center;background-color:#e63946;color:#fff;padding:16px 35px;border-radius:50px;text-decoration:none;font-weight:600;transition:all 0.3s ease;" onmouseover="this.style.backgroundColor='#2b2d42';this.querySelector('i').style.transform='translateX(5px)'" onmouseout="this.style.backgroundColor='#e63946';this.querySelector('i').style.transform='translateX(0)'">View Full Gallery <i class="fas fa-images" style="margin-left:10px;transition:transform 0.3s ease;"></i></a>
+        </div>
+    </div>
+</section>
+<!-- Retail Resources -->
+<section style="padding: 80px 0; background: linear-gradient(135deg, #f0f4f8 50%, #ffffff 50%); font-family: 'Segoe UI', sans-serif;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:60px;">
+            <h2 sstyle="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Retail Resources</h2>
+            <p style="max-width:700px;margin:0 auto;font-size:1.1rem;color:#666;">Tools and information to help your retail business succeed</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;">
+            <div style="background-color:#fff;border-radius:15px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08);transition:transform 0.3s ease;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='translateY(0)'">
+                <img loading="lazy" src="images/retail_planning_guide.png" alt="Retail business planning guide" style="width:100%;height:200px;object-fit:cover;">
+                <div style="padding:30px;">
+                    <h3 style="font-size:1.5rem;margin-bottom:15px;color:#2b2d42;">Retail Business Planning Guide</h3>
+                    <p style="margin-bottom:25px;">Comprehensive guide covering location selection, lease negotiation, store design, and grand opening strategies for retail businesses.</p>
+                    <a href="#download" style="display:inline-flex;align-items:center;background-color:#2b2d42;color:#fff;padding:12px 25px;border-radius:50px;text-decoration:none;font-weight:600;transition:all 0.3s ease;" onmouseover="this.style.backgroundColor='#e63946';this.querySelector('i').style.transform='translateX(5px)'" onmouseout="this.style.backgroundColor='#2b2d42';this.querySelector('i').style.transform='translateX(0)'">Download Guide <i class="fas fa-download" style="margin-left:10px;transition:transform 0.3s ease;"></i></a>
+                </div>
+            </div>
+            <div style="background-color:#fff;border-radius:15px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08);transition:transform 0.3s ease;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='translateY(0)'">
+                <img loading="lazy" src="images/retail_trends_report.png" alt="Retail market trends report" style="width:100%;height:200px;object-fit:cover;">
+                <div style="padding:30px;">
+                    <h3 style="font-size:1.5rem;margin-bottom:15px;color:#2b2d42;">Market Trends Report</h3>
+                    <p style="margin-bottom:25px;">Quarterly analysis of retail market trends, consumer behavior shifts, and emerging opportunities in our property locations.</p>
+                    <a href="#download" style="display:inline-flex;align-items:center;background-color:#2b2d42;color:#fff;padding:12px 25px;border-radius:50px;text-decoration:none;font-weight:600;transition:all 0.3s ease;" onmouseover="this.style.backgroundColor='#e63946';this.querySelector('i').style.transform='translateX(5px)'" onmouseout="this.style.backgroundColor='#2b2d42';this.querySelector('i').style.transform='translateX(0)'">Download Report <i class="fas fa-download" style="margin-left:10px;transition:transform 0.3s ease;"></i></a>
+                </div>
+            </div>
+            <div style="background-color:#fff;border-radius:15px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08);transition:transform 0.3s ease;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='translateY(0)'">
+                <img loading="lazy" src="images/retail_design_inspiration.png" alt="Retail design inspiration" style="width:100%;height:200px;object-fit:cover;">
+                <div style="padding:30px;">
+                    <h3 style="font-size:1.5rem;margin-bottom:15px;color:#2b2d42;">Store Design Inspiration</h3>
+                    <p style="margin-bottom:25px;">Visual portfolio of successful retail store designs from our properties, with space planning tips and fixture recommendations.</p>
+                    <a href="#download" style="display:inline-flex;align-items:center;background-color:#2b2d42;color:#fff;padding:12px 25px;border-radius:50px;text-decoration:none;font-weight:600;transition:all 0.3s ease;" onmouseover="this.style.backgroundColor='#e63946';this.querySelector('i').style.transform='translateX(5px)'" onmouseout="this.style.backgroundColor='#2b2d42';this.querySelector('i').style.transform='translateX(0)'">View Portfolio <i class="fas fa-external-link-alt" style="margin-left:10px;transition:transform 0.3s ease;"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Retail FAQ -->
+<section id="retail-faq" style="padding:80px 20px;background-color:#fff;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:60px;">
+            <h2 sstyle="font-size: 34px; color: #003366; margin-bottom: 10px;text-align:center;margin-bottom: 50px;">Retail Space FAQs</h2>
+            <p style="max-width:700px;margin:0 auto;font-size:1.1rem;color:#666;">Answers to common questions about our retail properties</p>
+        </div>
+        <div style="max-width:800px;margin:0 auto;">
+            <div style="margin-bottom:15px;border:1px solid #eee;border-radius:10px;overflow:hidden;">
+                <button style="width:100%;padding:20px;text-align:left;border:none;background-color:#f8f9fa;cursor:pointer;font-weight:600;font-size:1.1rem;display:flex;justify-content:space-between;align-items:center;" onclick="toggleFAQ(this)">
+                    <span>What's included in a retail lease?</span>
+                    <i class="fas fa-plus" style="color:#e63946;transition:transform 0.3s ease;"></i>
+                </button>
+                <div style="padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease;">
+                    <div style="padding:20px 0;">
+                        <p>Our retail leases typically include the base rental space and common area maintenance (CAM) charges. Many locations include utilities, and some offer build-out allowances for tenant improvements. Specific inclusions vary by property and lease type (gross lease vs. net lease). Our leasing team will provide complete details for each property you're considering.</p>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-bottom:15px;border:1px solid #eee;border-radius:10px;overflow:hidden;">
+                <button style="width:100%;padding:20px;text-align:left;border:none;background-color:#f8f9fa;cursor:pointer;font-weight:600;font-size:1.1rem;display:flex;justify-content:space-between;align-items:center;" onclick="toggleFAQ(this)">
+                    <span>How is foot traffic measured at your properties?</span>
+                    <i class="fas fa-plus" style="color:#e63946;transition:transform 0.3s ease;"></i>
+                </button>
+                <div style="padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease;">
+                    <div style="padding:20px 0;">
+                        <p>We use advanced people counting technology at our properties, including infrared sensors and video analytics, to accurately measure daily, weekly, and seasonal foot traffic patterns. For mall locations, we provide verified visitor statistics from the property management. All our traffic data is available to prospective tenants to help with their location decisions.</p>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-bottom:15px;border:1px solid #eee;border-radius:10px;overflow:hidden;">
+                <button style="width:100%;padding:20px;text-align:left;border:none;background-color:#f8f9fa;cursor:pointer;font-weight:600;font-size:1.1rem;display:flex;justify-content:space-between;align-items:center;" onclick="toggleFAQ(this)">
+                    <span>What lease terms are available?</span>
+                    <i class="fas fa-plus" style="color:#e63946;transition:transform 0.3s ease;"></i>
+                </button>
+                <div style="padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease;">
+                    <div style="padding:20px 0;">
+                        <p>We offer flexible lease terms to suit different business needs: short-term 3-6 month pop-up leases, 1-2 year medium-term leases, and traditional 3-5 year leases with renewal options. Some properties offer percentage leases where rent is based partly on sales performance. Our leasing specialists can help determine the best structure for your business model.</p>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-bottom:15px;border:1px solid #eee;border-radius:10px;overflow:hidden;">
+                <button style="width:100%;padding:20px;text-align:left;border:none;background-color:#f8f9fa;cursor:pointer;font-weight:600;font-size:1.1rem;display:flex;justify-content:space-between;align-items:center;" onclick="toggleFAQ(this)">
+                    <span>Can I customize the retail space for my business?</span>
+                    <i class="fas fa-plus" style="color:#e63946;transition:transform 0.3s ease;"></i>
+                </button>
+                <div style="padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease;">
+                    <div style="padding:20px 0;">
+                        <p>Most of our spaces can be customized to suit your brand. We offer tenant improvement allowances on many properties (typically $10-$50 per sq ft depending on location and lease term). We have preferred contractors who understand our buildings' requirements for efficient build-outs. All modifications require approval to ensure they meet building codes and property standards.</p>
+                    </div>
+                </div>
+            </div>
+            <div style="border:1px solid #eee;border-radius:10px;overflow:hidden;">
+                <button style="width:100%;padding:20px;text-align:left;border:none;background-color:#f8f9fa;cursor:pointer;font-weight:600;font-size:1.1rem;display:flex;justify-content:space-between;align-items:center;" onclick="toggleFAQ(this)">
+                    <span>How do I apply for a retail space?</span>
+                    <i class="fas fa-plus" style="color:#e63946;transition:transform 0.3s ease;"></i>
+                </button>
+                <div style="padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease;">
+                    <div style="padding:20px 0;">
+                        <p>Start by contacting our retail leasing team to discuss your needs. After identifying suitable properties, we'll guide you through our application process which includes: business documentation (license, references), financial statements or business plan, personal financial information for guarantors, and application fee. Approval typically takes 3-5 business days after complete submission.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Retail Contact Form -->
+<section id="retail-contact" style="padding:80px 20px;background-color:#2b2d42;color:#fff;">
+    <div style="max-width:1200px;margin:0 auto;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(500px,1fr));gap:50px;align-items:center;">
+            <div>
+                <h2 style="font-family:'Playfair Display',serif;font-size:2.8rem;margin-bottom:20px;">Find Your Perfect Retail Space</h2>
+                <p style="font-size:1.1rem;margin-bottom:30px;color:#ccc;">Our retail leasing specialists are ready to help you find the ideal location for your business. Complete the form or contact us directly.</p>
+                <div style="margin-bottom:30px;">
+                    <h3 style="font-size:1.3rem;margin-bottom:15px;color:#e63946;">Contact Information</h3>
+                    <p style="margin-bottom:10px;display:flex;align-items:center;"><i class="fas fa-phone" style="margin-right:10px;color:#e63946;"></i> <a href="tel:+18005551234" style="color:#fff;text-decoration:none;">(800) 555-1234</a></p>
+                    <p style="margin-bottom:10px;display:flex;align-items:center;"><i class="fas fa-envelope" style="margin-right:10px;color:#e63946;"></i> <a href="mailto:retail@hitashi.com" style="color:#fff;text-decoration:none;">retail@hitashi.com</a></p>
+                    <p style="display:flex;align-items:center;"><i class="fas fa-map-marker-alt" style="margin-right:10px;color:#e63946;"></i> 123 Commerce Street, Suite 500, Business District</p>
+                </div>
+                <div>
+                    <h3 style="font-size:1.3rem;margin-bottom:15px;color:#e63946;">Leasing Office Hours</h3>
+                    <p style="margin-bottom:5px;">Monday-Friday: 8:30 AM - 6:00 PM</p>
+                    <p>Saturday: 10:00 AM - 4:00 PM</p>
+                </div>
+            </div>
+            <div style="background-color:#fff;border-radius:15px;padding:40px;box-shadow:0 15px 40px rgba(0,0,0,0.2);">
+                <h3 style="font-size:1.8rem;margin-bottom:25px;color:#2b2d42;">Retail Space Inquiry</h3>
+                <form style="display:grid;gap:20px;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                        <div>
+                            <label style="display:block;margin-bottom:8px;font-weight:600;color:#666;">First Name</label>
+                            <input type="text" style="width:90%;padding:12px 15px;border:1px solid #ddd;border-radius:8px;font-family:inherit;font-size:1rem;">
+                        </div>
+                        <div>
+                            <label style="display:block;margin-bottom:8px;font-weight:600;color:#666;">Last Name</label>
+                            <input type="text" style="width:90%;padding:12px 15px;border:1px solid #ddd;border-radius:8px;font-family:inherit;font-size:1rem;">
+                        </div>
+                    </div>
+                    <div>
+                        <label style="display:block;margin-bottom:8px;font-weight:600;color:#666;">Email</label>
+                        <input type="email" style="width:95%;padding:12px 15px;border:1px solid #ddd;border-radius:8px;font-family:inherit;font-size:1rem;">
+                    </div>
+                    <div>
+                        <label style="display:block;margin-bottom:8px;font-weight:600;color:#666;">Phone</label>
+                        <input type="tel" style="width:95%;padding:12px 15px;border:1px solid #ddd;border-radius:8px;font-family:inherit;font-size:1rem;">
+                    </div>
+                    <div>
+                        <label style="display:block;margin-bottom:8px;font-weight:600;color:#666;">Business Type</label>
+                        <select style="width:102%;padding:12px 15px;border:1px solid #ddd;border-radius:8px;font-family:inherit;font-size:1rem;background-color:#fff;">
+                            <option value="">Select business type</option>
+                            <option value="apparel">Apparel/Fashion</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="home">Home Goods</option>
+                            <option value="restaurant">Restaurant/Food</option>
+                            <option value="beauty">Beauty/Personal Care</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display:block;margin-bottom:8px;font-weight:600;color:#666;">Desired Space Size (sq ft)</label>
+                        <input type="text" style="width:95%;padding:12px 15px;border:1px solid #ddd;border-radius:8px;font-family:inherit;font-size:1rem;">
+                    </div>
+                    <div>
+                        <label style="display:block;margin-bottom:8px;font-weight:600;color:#666;">Message</label>
+                        <textarea rows="4" style="width:95%;padding:12px 15px;border:1px solid #ddd;border-radius:8px;font-family:inherit;font-size:1rem;"></textarea>
+                    </div>
+                    <button type="submit" style="background-color:#e63946;color:#fff;padding:16px;border:none;border-radius:10px;font-family:inherit;font-size:1rem;font-weight:600;cursor:pointer;transition:background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#2b2d42'" onmouseout="this.style.backgroundColor='#e63946'">Submit Inquiry</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Compact Retail Newsletter -->
+<section id="retail-newsletter" style="padding:50px 20px;background-color:#eeecec;color:#020202;text-align:center;">
+    <div style="max-width:800px;margin:0 auto;">
+        <h2 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:15px;">Retail Market Updates</h2>
+        <p style="font-size:1rem;margin-bottom:30px;line-height:1.4;">Subscribe to receive exclusive retail property listings, market trends, and business insights.</p>
+        <form style="display:flex;max-width:500px;margin:0 auto;">
+            <input type="email" placeholder="Your email address" style="flex:1;padding:12px 20px;border:none;border-radius:50px 0 0 50px;font-family:inherit;font-size:0.95rem;">
+            <button type="submit" style="background-color:#2b2d42;color:#fff;padding:12px 25px;border:none;border-radius:0 50px 50px 0;font-family:inherit;font-size:0.95rem;font-weight:600;cursor:pointer;transition:background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#1a1b2e'" onmouseout="this.style.backgroundColor='#2b2d42'">Subscribe</button>
+        </form>
+        <p style="font-size:0.8rem;margin-top:15px;opacity:0.7;">We respect your privacy. Unsubscribe at any time.</p>
+    </div>
+</section>
+<script>
+    // Simple counter animation for statistics
+    const counters = document.querySelectorAll('.counter');
+    const speed = 200;
+    
+    counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        const count = +counter.innerText;
+        const increment = target / speed;
+        
+        if(count < target) {
+            counter.innerText = Math.ceil(count + increment);
+            setTimeout(updateCounter, 1);
+        } else {
+            counter.innerText = target;
+        }
+        
+        function updateCounter() {
+            const count = +counter.innerText;
+            if(count < target) {
+                counter.innerText = Math.ceil(count + increment);
+                setTimeout(updateCounter, 1);
+            } else {
+                counter.innerText = target;
+            }
+        }
+    });
+    
+    // FAQ toggle functionality
+    function toggleFAQ(button) {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('i');
+        
+        if(content.style.maxHeight) {
+            content.style.maxHeight = null;
+            content.style.padding = '0 20px';
+            icon.classList.remove('fa-minus');
+            icon.classList.add('fa-plus');
+        } else {
+            content.style.maxHeight = content.scrollHeight + 'px';
+            content.style.padding = '0 20px 20px';
+            icon.classList.remove('fa-plus');
+            icon.classList.add('fa-minus');
+        }
+    }
+    
+    // Lightbox functionality for gallery
+    function openLightbox(imageSrc) {
+        // In a real implementation, this would open a lightbox/modal
+        console.log('Opening lightbox for image:', imageSrc);
+        // window.open(imageSrc, '_blank'); // Simple alternative - opens image in new tab
+    }
+</script>
+
+
+<div id="footer"></div>
+<script>
+function loadFooter() {
+  fetch("footer.html")   // 🔥 path correct cheyyali
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(err => console.error("Footer load error:", err));
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFooter);
+} else {
+  loadFooter();
+}
+</script>
+
+
+
+</body>
+</html>
