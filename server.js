@@ -20,7 +20,7 @@ const examplecontactRoutes = require('./routes/examplecontact');
 
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5003;
 const JWT_SECRET = process.env.JWT_SECRET || 'default_secret_key';
 
 // -------------------------------------------------------------------------
